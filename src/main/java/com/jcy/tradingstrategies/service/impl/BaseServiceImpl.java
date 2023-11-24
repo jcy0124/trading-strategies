@@ -3,7 +3,7 @@ package com.jcy.tradingstrategies.service.impl;
 import com.jcy.tradingstrategies.constant.UrlConstant;
 import com.jcy.tradingstrategies.service.IBaseService;
 import com.jcy.tradingstrategies.util.HttpClientUtil;
-import com.jcy.tradingstrategies.domain.req.BaseKLineReq;
+import com.jcy.tradingstrategies.domain.vo.req.BaseKLineReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

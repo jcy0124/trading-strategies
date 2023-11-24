@@ -65,15 +65,7 @@ public class ZTPoolServiceImpl implements IZTPoolService {
     @Override
     public List<ZTPoolDto> selectByDate(String date) {
         LambdaQueryWrapper<ZTPoolEntity> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(ZTPoolEntity::getTime, date)
-                .select(ZTPoolEntity::getId,    //自增id
-                        ZTPoolEntity::getCode,  //代码
-                        ZTPoolEntity::getName,  //名称
-                        ZTPoolEntity::getTurnoverRatio, //换手率
-                        ZTPoolEntity::getFirstCeilingTime,  //涨停时间
-                        ZTPoolEntity::getLbNum, //连板次数
-                        ZTPoolEntity::getTime   //时间
-                );
+        lqw.eq(ZTPoolEntity::getTime, date);
         List<ZTPoolEntity> ztPoolEntityList = ztPoolDao.selectList(lqw);
         if (CollectionUtil.isEmpty(ztPoolEntityList)) {
             return Collections.EMPTY_LIST;

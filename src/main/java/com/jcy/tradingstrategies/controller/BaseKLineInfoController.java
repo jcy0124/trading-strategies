@@ -5,7 +5,7 @@ import com.jcy.tradingstrategies.common.ResultCode;
 import com.jcy.tradingstrategies.domain.dto.BaseKLineInfoDto;
 import com.jcy.tradingstrategies.service.IBaseKLineInfoService;
 import com.jcy.tradingstrategies.service.IBaseService;
-import com.jcy.tradingstrategies.domain.req.BaseKLineReq;
+import com.jcy.tradingstrategies.domain.vo.req.BaseKLineReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

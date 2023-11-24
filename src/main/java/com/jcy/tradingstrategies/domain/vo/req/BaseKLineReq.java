@@ -1,4 +1,4 @@
-package com.jcy.tradingstrategies.domain.req;
+package com.jcy.tradingstrategies.domain.vo.req;
 
 import com.jcy.tradingstrategies.constant.BaseConstant;
 import lombok.Data;

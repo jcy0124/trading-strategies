@@ -25,9 +25,39 @@ public class ZTPoolDto {
     private String name;
 
     /**
+     * 涨跌幅%
+     */
+    private BigDecimal changeRatio;
+
+    /**
+     * 最新价
+     */
+    private BigDecimal lastPrice;
+
+    /**
+     * 成交额
+     */
+    private BigDecimal amount;
+
+    /**
+     * 流动市值
+     */
+    private BigDecimal flowCapital;
+
+    /**
+     * 总市值
+     */
+    private BigDecimal totalCapital;
+
+    /**
      * 换手率%
      */
     private BigDecimal turnoverRatio;
+
+    /**
+     * 封板资金
+     */
+    private BigDecimal ceilingAmount;
 
     /**
      * 首次封板时间
@@ -35,14 +65,49 @@ public class ZTPoolDto {
     private String firstCeilingTime;
 
     /**
+     * 最后封板时间
+     */
+    private String lastCeilingTime;
+
+    /**
+     * 炸板次数
+     */
+    private Integer bombNum;
+
+    /**
      * 连扳次数
      */
     private Integer lbNum;
 
     /**
+     * 所属行业
+     */
+    private String industry;
+
+    /**
      * 时间
      */
     private String time;
+
+    /**
+     * 概念
+     */
+    private String gl;
+
+    /**
+     * 股票涨停原因
+     */
+    private String stockReason;
+
+    /**
+     * 主题涨停原因
+     */
+    private String plateReason;
+
+    /**
+     * 涨停主题
+     */
+    private String plateName;
 
 }
 

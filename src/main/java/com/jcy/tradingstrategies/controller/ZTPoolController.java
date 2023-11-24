@@ -1,5 +1,6 @@
 package com.jcy.tradingstrategies.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -10,6 +11,7 @@ import com.jcy.tradingstrategies.common.ResultEnum;
 import com.jcy.tradingstrategies.domain.dto.ELBDto;
 import com.jcy.tradingstrategies.domain.dto.LBDto;
 import com.jcy.tradingstrategies.domain.dto.ZTPoolDto;
+import com.jcy.tradingstrategies.domain.vo.resp.ZTPoolResp;
 import com.jcy.tradingstrategies.service.IBaseService;
 import com.jcy.tradingstrategies.service.IZTPoolService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -82,8 +85,14 @@ public class ZTPoolController {
             return Result.ok(ResultEnum.NO_TODAY_DATA);
         }
 
+        List<ZTPoolResp> ztPoolRespList = new ArrayList<>();
+        for (ZTPoolDto ztPoolDto : ztPoolDtoList) {
+            ZTPoolResp ztPoolResp = BeanUtil.copyProperties(ztPoolDto, ZTPoolResp.class);
+            ztPoolRespList.add(ztPoolResp);
+        }
+
         log.info("开始查看【{}】涨停股票", date);
-        return Result.ok(ztPoolDtoList);
+        return Result.ok(ztPoolRespList);
     }
 
     /**
@@ -103,8 +112,14 @@ public class ZTPoolController {
             return Result.ok(ResultEnum.NO_TODAY_DATA);
         }
 
+        List<ZTPoolResp> ztPoolRespList = new ArrayList<>();
+        for (ZTPoolDto ztPoolDto : ztPoolDtoList) {
+            ZTPoolResp ztPoolResp = BeanUtil.copyProperties(ztPoolDto, ZTPoolResp.class);
+            ztPoolRespList.add(ztPoolResp);
+        }
+
         log.info("开始查看【{}】涨停股票", today);
-        return Result.ok(ztPoolDtoList);
+        return Result.ok(ztPoolRespList);
     }
 
     /**
