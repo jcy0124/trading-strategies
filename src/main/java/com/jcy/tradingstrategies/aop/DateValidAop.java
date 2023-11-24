@@ -3,6 +3,7 @@ package com.jcy.tradingstrategies.aop;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
 import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.service.ICalendarDataService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -61,13 +64,19 @@ public class DateValidAop {
             throw new RuntimeException("亲亲我不能预知未来哦~~");
         }
 
+        String now = new LocalTime().toString().substring(0, 8);
+        if (StrUtil.equals(date,today) && "15:30:00".compareTo(now) == 1) {
+            throw new RuntimeException("当天数据需要15:30之后才能获取哦~~");
+        }
+
         boolean isWorkDay = calendarDataService.selectWorkDayByDate(date);
         if (!isWorkDay) {
             throw new RuntimeException("【" + date + "】不是股市交易日哦~~~");
         }
     }
-}
 
+
+}
 
 
 
