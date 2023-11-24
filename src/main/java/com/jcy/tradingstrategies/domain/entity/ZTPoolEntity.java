@@ -1,4 +1,4 @@
-package com.jcy.tradingstrategies.entity;
+package com.jcy.tradingstrategies.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 
 @Data
 @ToString
-@TableName("qs_pool")
-public class QSPoolEntity {
+@TableName("zt_pool")
+public class ZTPoolEntity {
 
     /**
      * 自增id
@@ -60,24 +60,29 @@ public class QSPoolEntity {
     private BigDecimal turnoverRatio;
 
     /**
-     * 涨停统计
+     * 封板资金
      */
-    private String zttj;
+    private BigDecimal ceilingAmount;
 
     /**
-     * 涨速
+     * 首次封板时间
      */
-    private String zs;
+    private String firstCeilingTime;
 
     /**
-     * 是否新高 0-否 1-是
+     * 最后封板时间
      */
-    private String nh;
+    private String lastCeilingTime;
 
     /**
-     * 量比
+     * 炸板次数
      */
-    private String lb;
+    private Integer bombNum;
+
+    /**
+     * 连扳次数
+     */
+    private Integer lbNum;
 
     /**
      * 所属行业
@@ -94,4 +99,71 @@ public class QSPoolEntity {
      */
     private String gl;
 
+    /**
+     * 股票涨停原因
+     */
+    private String stockReason;
+
+    /**
+     * 主题涨停原因
+     */
+    private String plateReason;
+
+    /**
+     * 涨停主题
+     */
+    private String plateName;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

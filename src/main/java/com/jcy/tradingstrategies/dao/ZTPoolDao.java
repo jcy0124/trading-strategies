@@ -1,7 +1,7 @@
 package com.jcy.tradingstrategies.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jcy.tradingstrategies.entity.ZTPoolEntity;
+import com.jcy.tradingstrategies.domain.entity.ZTPoolEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

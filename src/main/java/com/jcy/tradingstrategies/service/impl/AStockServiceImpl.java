@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jcy.tradingstrategies.adaptor.AStockAdaptor;
 import com.jcy.tradingstrategies.constant.BaseConstant;
 import com.jcy.tradingstrategies.dao.AStockDao;
-import com.jcy.tradingstrategies.entity.AStockEntity;
+import com.jcy.tradingstrategies.domain.entity.AStockEntity;
 import com.jcy.tradingstrategies.service.IAStockService;
 import com.jcy.tradingstrategies.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;

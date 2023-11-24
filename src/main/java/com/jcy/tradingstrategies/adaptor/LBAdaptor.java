@@ -1,7 +1,7 @@
 package com.jcy.tradingstrategies.adaptor;
 
-import com.jcy.tradingstrategies.dto.LBDto;
-import com.jcy.tradingstrategies.entity.ZTPoolEntity;
+import com.jcy.tradingstrategies.domain.dto.LBDto;
+import com.jcy.tradingstrategies.domain.entity.ZTPoolEntity;
 
 import java.util.List;
 

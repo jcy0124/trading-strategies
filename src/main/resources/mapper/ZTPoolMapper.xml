@@ -7,7 +7,7 @@
         select 1 from zt_pool where time = #{date} limit 1
     </select>
 
-    <select id="selectLBList" resultType="com.jcy.tradingstrategies.entity.ZTPoolEntity">
+    <select id="selectLBList" resultType="com.jcy.tradingstrategies.domain.entity.ZTPoolEntity">
         select * from zt_pool
         where code = #{code}
         and  str_to_date(time, '%Y-%m-%d') &lt;= str_to_date(#{date}, '%Y-%m-%d')

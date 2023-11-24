@@ -3,7 +3,7 @@
 <mapper namespace="com.jcy.tradingstrategies.dao.CalendarDataDao">
 
 
-    <select id="selectLast14Day" resultType="com.jcy.tradingstrategies.entity.CalendarDataEntity">
+    <select id="selectLast14Day" resultType="com.jcy.tradingstrategies.domain.entity.CalendarDataEntity">
         select * from calendar_data where id &lt; #{id} order by id desc limit 14
     </select>
 </mapper>

@@ -1,6 +1,6 @@
 package com.jcy.tradingstrategies.service;
 
-import com.jcy.tradingstrategies.dto.BaseKLineInfoDto;
+import com.jcy.tradingstrategies.domain.dto.BaseKLineInfoDto;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.jcy.tradingstrategies.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jcy.tradingstrategies.entity.BaseKLineInfoEntity;
+import com.jcy.tradingstrategies.domain.entity.BaseKLineInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

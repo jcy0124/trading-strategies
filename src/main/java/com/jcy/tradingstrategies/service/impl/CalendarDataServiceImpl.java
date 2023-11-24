@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jcy.tradingstrategies.adaptor.CalendarDataAdaptor;
 import com.jcy.tradingstrategies.dao.CalendarDataDao;
-import com.jcy.tradingstrategies.entity.CalendarDataEntity;
+import com.jcy.tradingstrategies.domain.entity.CalendarDataEntity;
 import com.jcy.tradingstrategies.service.ICalendarDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -2,10 +2,10 @@ package com.jcy.tradingstrategies.controller;
 
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultCode;
-import com.jcy.tradingstrategies.dto.BaseKLineInfoDto;
+import com.jcy.tradingstrategies.domain.dto.BaseKLineInfoDto;
 import com.jcy.tradingstrategies.service.IBaseKLineInfoService;
 import com.jcy.tradingstrategies.service.IBaseService;
-import com.jcy.tradingstrategies.vo.req.BaseKLineReq;
+import com.jcy.tradingstrategies.domain.req.BaseKLineReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

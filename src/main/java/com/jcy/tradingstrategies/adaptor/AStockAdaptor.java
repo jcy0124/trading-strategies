@@ -1,7 +1,7 @@
 package com.jcy.tradingstrategies.adaptor;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jcy.tradingstrategies.entity.AStockEntity;
+import com.jcy.tradingstrategies.domain.entity.AStockEntity;
 
 public class AStockAdaptor {
 

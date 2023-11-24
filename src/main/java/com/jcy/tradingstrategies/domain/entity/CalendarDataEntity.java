@@ -1,4 +1,4 @@
-package com.jcy.tradingstrategies.entity;
+package com.jcy.tradingstrategies.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -8,17 +8,15 @@ import lombok.ToString;
 
 @Data
 @ToString
-@TableName("a_stock")
-public class AStockEntity {
+@TableName("calendar_data")
+public class CalendarDataEntity {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String code;
+    private String date;
 
-    private String jys;
+    private String week;
 
-    private String name;
-
-    private String gl;
+    private String workDay;
 }

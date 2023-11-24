@@ -1,5 +1,8 @@
-package com.jcy.tradingstrategies.dto;
+package com.jcy.tradingstrategies.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.ToString;
 
@@ -7,11 +10,13 @@ import java.math.BigDecimal;
 
 @Data
 @ToString
-public class QSPoolDto {
+@TableName("qs_pool")
+public class QSPoolEntity {
 
     /**
      * 自增id
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -40,6 +45,16 @@ public class QSPoolDto {
     private BigDecimal amount;
 
     /**
+     * 流动市值
+     */
+    private BigDecimal flowCapital;
+
+    /**
+     * 总市值
+     */
+    private BigDecimal totalCapital;
+
+    /**
      * 换手率%
      */
     private BigDecimal turnoverRatio;
@@ -65,8 +80,18 @@ public class QSPoolDto {
     private String lb;
 
     /**
+     * 所属行业
+     */
+    private String industry;
+
+    /**
      * 时间
      */
     private String time;
+
+    /**
+     * 概念
+     */
+    private String gl;
 
 }

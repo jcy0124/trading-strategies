@@ -1,6 +1,6 @@
 package com.jcy.tradingstrategies.service;
 
-import com.jcy.tradingstrategies.vo.req.BaseKLineReq;
+import com.jcy.tradingstrategies.domain.req.BaseKLineReq;
 
 public interface IBaseService {
 

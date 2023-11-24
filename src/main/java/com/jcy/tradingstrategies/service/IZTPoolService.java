@@ -1,8 +1,8 @@
 package com.jcy.tradingstrategies.service;
 
-import com.jcy.tradingstrategies.dto.ELBDto;
-import com.jcy.tradingstrategies.dto.LBDto;
-import com.jcy.tradingstrategies.dto.ZTPoolDto;
+import com.jcy.tradingstrategies.domain.dto.ELBDto;
+import com.jcy.tradingstrategies.domain.dto.LBDto;
+import com.jcy.tradingstrategies.domain.dto.ZTPoolDto;
 
 import java.util.List;
 

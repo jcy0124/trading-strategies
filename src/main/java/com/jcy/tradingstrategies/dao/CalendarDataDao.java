@@ -1,7 +1,7 @@
 package com.jcy.tradingstrategies.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jcy.tradingstrategies.entity.CalendarDataEntity;
+import com.jcy.tradingstrategies.domain.entity.CalendarDataEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

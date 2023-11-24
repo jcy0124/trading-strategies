@@ -1,7 +1,7 @@
 package com.jcy.tradingstrategies.adaptor;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jcy.tradingstrategies.entity.BaseKLineInfoEntity;
+import com.jcy.tradingstrategies.domain.entity.BaseKLineInfoEntity;
 
 import java.math.BigDecimal;
 

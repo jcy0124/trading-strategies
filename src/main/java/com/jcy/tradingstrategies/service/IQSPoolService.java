@@ -1,7 +1,6 @@
 package com.jcy.tradingstrategies.service;
 
-import com.jcy.tradingstrategies.dto.QSPoolDto;
-import com.jcy.tradingstrategies.dto.ZTPoolDto;
+import com.jcy.tradingstrategies.domain.dto.QSPoolDto;
 
 import java.util.List;
 

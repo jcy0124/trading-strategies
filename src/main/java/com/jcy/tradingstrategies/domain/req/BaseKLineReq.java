@@ -1,11 +1,10 @@
-package com.jcy.tradingstrategies.vo.req;
+package com.jcy.tradingstrategies.domain.req;
 
 import com.jcy.tradingstrategies.constant.BaseConstant;
 import lombok.Data;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Data

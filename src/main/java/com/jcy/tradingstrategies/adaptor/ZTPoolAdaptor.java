@@ -1,7 +1,7 @@
 package com.jcy.tradingstrategies.adaptor;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jcy.tradingstrategies.entity.ZTPoolEntity;
+import com.jcy.tradingstrategies.domain.entity.ZTPoolEntity;
 
 import java.math.BigDecimal;
 

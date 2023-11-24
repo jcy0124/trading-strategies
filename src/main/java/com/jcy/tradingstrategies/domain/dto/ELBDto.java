@@ -1,4 +1,4 @@
-package com.jcy.tradingstrategies.dto;
+package com.jcy.tradingstrategies.domain.dto;
 
 import lombok.Data;
 import lombok.ToString;
