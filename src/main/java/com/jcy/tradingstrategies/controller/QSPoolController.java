@@ -5,6 +5,7 @@ import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultCode;
 import com.jcy.tradingstrategies.constant.UrlConstant;
 import com.jcy.tradingstrategies.dto.QSPoolDto;
+import com.jcy.tradingstrategies.service.IBaseService;
 import com.jcy.tradingstrategies.service.IQSPoolService;
 import com.jcy.tradingstrategies.util.HttpClientUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +28,14 @@ public class QSPoolController {
     @Autowired
     private IQSPoolService qsPoolService;
 
+    @Autowired
+    private IBaseService baseService;
+
     @GetMapping("/getQsPoolByHttp/{date}")
     public Result getQsPoolByHttp(@PathVariable String date) {
         log.info("开始解析【{}】强势股票", date);
 
-        String url = UrlConstant.QS_POOL_URL + date;
-        String response = HttpClientUtil.doGet(url, "UTF-8");
-
+        String response = baseService.getQsPoolResp(date);
         qsPoolService.insert(response, date);
 
         log.info("结束解析【{}】强势股票", date);

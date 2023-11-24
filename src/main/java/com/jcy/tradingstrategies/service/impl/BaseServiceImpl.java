@@ -13,7 +13,6 @@ public class BaseServiceImpl implements IBaseService {
 
     @Override
     public String getBaseKLineResp(BaseKLineReq req) {
-        log.info("调用http请求获取k线信息");
         String url = UrlConstant.BASE_K_LINE_URL;
         url = String.format(url, req.getCode(), req.getEndDate(), req.getStartDate(), req.getCalculationCycle());
         return HttpClientUtil.doGet(url, "UTF-8");
@@ -28,6 +27,12 @@ public class BaseServiceImpl implements IBaseService {
     @Override
     public String getAllAStock() {
         String url = UrlConstant.ALL_CODE_URL;
+        return HttpClientUtil.doGet(url, "UTF-8");
+    }
+
+    @Override
+    public String getQsPoolResp(String date) {
+        String url = UrlConstant.QS_POOL_URL + date;
         return HttpClientUtil.doGet(url, "UTF-8");
     }
 }

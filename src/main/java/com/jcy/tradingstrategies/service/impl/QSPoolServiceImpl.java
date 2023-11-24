@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jcy.tradingstrategies.adaptor.QSPoolAdaptor;
+import com.jcy.tradingstrategies.constant.BaseConstant;
 import com.jcy.tradingstrategies.dao.QSPoolDao;
 import com.jcy.tradingstrategies.dto.QSPoolDto;
 import com.jcy.tradingstrategies.entity.QSPoolEntity;
@@ -29,7 +30,7 @@ public class QSPoolServiceImpl implements IQSPoolService {
     @Override
     public void insert(String response, String date) {
 
-        JSONArray data = JsonUtil.getData(response, "强势股");
+        JSONArray data = JsonUtil.getData(response, BaseConstant.QSG);
 
         List<QSPoolEntity> list = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {

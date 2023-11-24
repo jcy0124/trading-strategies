@@ -3,6 +3,7 @@ package com.jcy.tradingstrategies.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jcy.tradingstrategies.adaptor.AStockAdaptor;
+import com.jcy.tradingstrategies.constant.BaseConstant;
 import com.jcy.tradingstrategies.dao.AStockDao;
 import com.jcy.tradingstrategies.entity.AStockEntity;
 import com.jcy.tradingstrategies.service.IAStockService;
@@ -33,7 +34,7 @@ public class AStockServiceImpl implements IAStockService {
 
         aStockDao.deleteAll();
 
-        JSONArray data = JsonUtil.getData(response, "全部股票");
+        JSONArray data = JsonUtil.getData(response, BaseConstant.QBGP);
         List<AStockEntity> list = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             JSONObject jsonDetailInfo = data.getJSONObject(i);

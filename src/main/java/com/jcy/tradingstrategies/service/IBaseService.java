@@ -10,6 +10,8 @@ public interface IBaseService {
     String getZTPoolResp(String date);
 
     String getAllAStock();
+
+    String getQsPoolResp(String date);
 }
 
 

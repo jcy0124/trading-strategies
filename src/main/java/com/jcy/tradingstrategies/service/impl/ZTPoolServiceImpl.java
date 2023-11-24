@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jcy.tradingstrategies.adaptor.LBAdaptor;
 import com.jcy.tradingstrategies.adaptor.ZTPoolAdaptor;
+import com.jcy.tradingstrategies.constant.BaseConstant;
 import com.jcy.tradingstrategies.dao.ZTPoolDao;
 import com.jcy.tradingstrategies.dto.ELBDto;
 import com.jcy.tradingstrategies.dto.LBDto;
@@ -41,7 +42,7 @@ public class ZTPoolServiceImpl implements IZTPoolService {
     @Override
     public Integer insert(String response, String date) {
 
-        JSONArray data = JsonUtil.getData(response, "涨停板");
+        JSONArray data = JsonUtil.getData(response, BaseConstant.ZTB);
 
         List<ZTPoolEntity> list = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
