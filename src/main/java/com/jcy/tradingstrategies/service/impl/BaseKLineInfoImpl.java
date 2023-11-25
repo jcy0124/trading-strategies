@@ -26,12 +26,13 @@ public class BaseKLineInfoImpl implements IBaseKLineInfoService {
     @Override
     public List<BaseKLineInfoDto> getBaseKLineInfo(String response) {
 
+        System.out.println(response);
         JSONArray data = JsonUtil.getData(response, BaseConstant.KXXX);
-        List<BaseKLineInfoEntity> list = new ArrayList<>();
+        List<BaseKLineInfoDto> list = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             JSONObject jsonDetailInfo = data.getJSONObject(i);
-            BaseKLineInfoEntity baseKLineInfoEntity = BaseKLineInfoAdaptor.buildBaseKLineInfo(jsonDetailInfo);
-            list.add(baseKLineInfoEntity);
+            BaseKLineInfoDto baseKLineInfoDto = BaseKLineInfoAdaptor.buildBaseKLineInfo(jsonDetailInfo);
+            list.add(baseKLineInfoDto);
         }
 
         list.forEach(System.out::println);

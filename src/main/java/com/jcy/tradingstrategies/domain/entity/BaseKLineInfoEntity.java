@@ -32,7 +32,7 @@ public class BaseKLineInfoEntity {
     /**
      * 换手率
      */
-    private BigDecimal turnoverRatio;
+    private String turnoverRatio;
 
     /**
      * 成交额
@@ -72,7 +72,7 @@ public class BaseKLineInfoEntity {
     /**
      * 涨跌幅
      */
-    private BigDecimal changeRatio;
+    private String changeRatio;
 
     /**
      * 收盘价

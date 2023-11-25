@@ -2,6 +2,7 @@ package com.jcy.tradingstrategies.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jcy.tradingstrategies.adaptor.AStockAdaptor;
 import com.jcy.tradingstrategies.constant.BaseConstant;
 import com.jcy.tradingstrategies.dao.AStockDao;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -50,6 +52,14 @@ public class AStockServiceImpl implements IAStockService {
             }
         }
         aStockDao.insertBatch(list);
+    }
+
+    @Override
+    public List<String> getAllCode() {
+        LambdaQueryWrapper<AStockEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.select(AStockEntity::getCode);
+        List<AStockEntity> aStockEntityList = aStockDao.selectList(lqw);
+        return aStockEntityList.stream().map(AStockEntity::getCode).collect(Collectors.toList());
     }
 }
 
