@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 基础k线
+ */
 @RestController
 @RequestMapping("baseKLineInfo")
 @Slf4j

@@ -95,32 +95,6 @@ public class ZTPoolController {
         return Result.ok(ztPoolRespList);
     }
 
-    /**
-     * 获取当天的涨停股
-     *
-     * @return
-     */
-    @GetMapping("/getZtPool")
-    public Result getZtPool() {
-
-        String today = DateUtil.formatDate(new Date());
-        log.info("开始查看【{}】涨停股票", today);
-
-        List<ZTPoolDto> ztPoolDtoList = ztPoolService.selectByDate(today);
-
-        if (CollectionUtil.isEmpty(ztPoolDtoList)) {
-            return Result.ok(ResultEnum.NO_TODAY_DATA);
-        }
-
-        List<ZTPoolResp> ztPoolRespList = new ArrayList<>();
-        for (ZTPoolDto ztPoolDto : ztPoolDtoList) {
-            ZTPoolResp ztPoolResp = BeanUtil.copyProperties(ztPoolDto, ZTPoolResp.class);
-            ztPoolRespList.add(ztPoolResp);
-        }
-
-        log.info("开始查看【{}】涨停股票", today);
-        return Result.ok(ztPoolRespList);
-    }
 
     /**
      * 获取某天和前一天连扳的股票，二连板股票
@@ -143,25 +117,6 @@ public class ZTPoolController {
         return Result.ok(ResultCode.SUCCESS, "【" + date + "】二连板信息", elbDtoList);
     }
 
-    /**
-     * 获取当天和前一天连扳的股票，二连板股票
-     *
-     * @return
-     */
-    @GetMapping("/getErBan")
-    public Result getErBan() {
-        log.info("开始获取二连板信息");
-
-        String today = DateUtil.formatDate(new Date());
-        List<ELBDto> elbDtoList = ztPoolService.gerErBan(today);
-
-        if (CollectionUtil.isEmpty(elbDtoList)) {
-            return Result.ok(ResultEnum.NO_TODAY_DATA);
-        }
-
-        log.info("结束获取二连板信息");
-        return Result.ok(ResultCode.SUCCESS, "【" + today + "】二连板信息", elbDtoList);
-    }
 
     /**
      * 查看某日的前10个交易日的连扳股
@@ -182,26 +137,6 @@ public class ZTPoolController {
 
         log.info("结束获取连板信息");
         return Result.ok(ResultCode.SUCCESS, "【" + date + "】连板信息", lBanList);
-    }
-
-    /**
-     * 查看当日的前10个交易日的连扳股
-     *
-     * @return
-     */
-    @GetMapping("/getLBan")
-    public Result getLBan() {
-        log.info("开始获取连板信息");
-
-        String today = DateUtil.formatDate(new Date());
-        List<LBDto> lBanList = ztPoolService.getLBan(today);
-
-        if (CollectionUtil.isEmpty(lBanList)) {
-            return Result.ok(ResultEnum.NO_TODAY_DATA);
-        }
-
-        log.info("结束获取连板信息");
-        return Result.ok(ResultCode.SUCCESS, "【" + today + "】连板信息", lBanList);
     }
 
 }

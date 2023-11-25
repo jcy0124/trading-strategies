@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 强势股
+ * 强势股 没有任何参考价值
  */
 @RestController
 @RequestMapping("qspool")
