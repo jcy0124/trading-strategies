@@ -27,7 +27,7 @@ public class ZTPoolDto {
     /**
      * 涨跌幅%
      */
-    private BigDecimal changeRatio;
+    private String changeRatio;
 
     /**
      * 最新价
@@ -52,7 +52,7 @@ public class ZTPoolDto {
     /**
      * 换手率%
      */
-    private BigDecimal turnoverRatio;
+    private String turnoverRatio;
 
     /**
      * 封板资金

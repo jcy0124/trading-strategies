@@ -15,21 +15,21 @@ public class ZTPoolExcel {
      * 时间
      */
     @ExcelProperty("时间")
-    @ColumnWidth(20)
+    @ColumnWidth(15)
     private String time;
 
     /**
      * 代码
      */
     @ExcelProperty("代码")
-    @ColumnWidth(20)
+    @ColumnWidth(15)
     private String code;
 
     /**
      * 名称
      */
     @ExcelProperty("名称")
-    @ColumnWidth(20)
+    @ColumnWidth(15)
     private String name;
 
 
@@ -37,7 +37,7 @@ public class ZTPoolExcel {
      * 最新价
      */
     @ExcelProperty("最新价")
-    @ColumnWidth(20)
+    @ColumnWidth(15)
     private BigDecimal lastPrice;
 
 
@@ -45,30 +45,23 @@ public class ZTPoolExcel {
      * 换手率%
      */
     @ExcelProperty("换手率")
-    @ColumnWidth(20)
-    private BigDecimal turnoverRatio;
+    @ColumnWidth(15)
+    private String turnoverRatio;
 
 
     /**
      * 首次封板时间
      */
     @ExcelProperty("首次封板时间")
-    @ColumnWidth(20)
+    @ColumnWidth(15)
     private String firstCeilingTime;
 
     /**
      * 最后封板时间
      */
     @ExcelProperty("最后封板时间")
-    @ColumnWidth(20)
+    @ColumnWidth(15)
     private String lastCeilingTime;
-
-    /**
-     * 连扳次数
-     */
-    @ExcelProperty("连扳次数")
-    @ColumnWidth(20)
-    private Integer lbNum;
 
     /**
      * 所属行业

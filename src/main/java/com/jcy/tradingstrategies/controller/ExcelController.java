@@ -2,6 +2,7 @@ package com.jcy.tradingstrategies.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.jcy.tradingstrategies.adaptor.ZTPoolAdaptor;
 import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultEnum;
@@ -38,7 +39,7 @@ public class ExcelController {
     @Autowired
     private IZTPoolService ztPoolService;
 
-    public static String filePath = "C:\\Users\\78701\\Desktop\\excel\\%s.xlsx";
+    private String filePath = "C:\\Users\\78701\\Desktop\\excel\\%s.xlsx";
 
     @GetMapping("exportZTPool/{date}")
     @DateValid
@@ -53,11 +54,12 @@ public class ExcelController {
         List<ZTPoolExcel> ztPoolExcelList = new ArrayList<>();
         for (ZTPoolDto ztPoolDto : ztPoolDtoList) {
             ZTPoolExcel ztPoolExcel = BeanUtil.copyProperties(ztPoolDto, ZTPoolExcel.class);
+            ztPoolExcel = ZTPoolAdaptor.buildZTPoolExcel(ztPoolExcel);
             ztPoolExcelList.add(ztPoolExcel);
         }
 
-        filePath = String.format(filePath, "【" + date + "】涨停板股票");
-        EasyExcelUtil.exportToExcel(new ZTPoolExcel(), ztPoolExcelList, filePath, "涨停板股票");
+        String newFilePath = String.format(filePath, "【" + date + "】涨停板股票");
+        EasyExcelUtil.exportToExcel(new ZTPoolExcel(), ztPoolExcelList, newFilePath, "涨停板股票");
 
         return Result.ok();
     }
@@ -78,8 +80,8 @@ public class ExcelController {
             elbExcelList.add(elbExcel);
         }
 
-        filePath = String.format(filePath, "【" + date + "】二连板股票");
-        EasyExcelUtil.exportToExcel(new ELBExcel(), elbExcelList, filePath, "二连板股票");
+        String newFilePath = String.format(filePath, "【" + date + "】二连板股票");
+        EasyExcelUtil.exportToExcel(new ELBExcel(), elbExcelList, newFilePath, "二连板股票");
 
         return Result.ok();
     }
