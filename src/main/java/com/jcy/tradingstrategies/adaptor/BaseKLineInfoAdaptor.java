@@ -45,12 +45,12 @@ public class BaseKLineInfoAdaptor {
 
     }
 
-    public static BaseKLineReq buildBaseKLineReq(String code){
+    public static BaseKLineReq buildBaseKLineReq(String code,String date){
         BaseKLineReq baseKLineReq = new BaseKLineReq();
         baseKLineReq.setCode(code);
-        baseKLineReq.setStartDate(DateUtil.getToday());
-        baseKLineReq.setEndDate(DateUtil.getToday());
-        baseKLineReq.setCode("100");
+        baseKLineReq.setStartDate(date);
+        baseKLineReq.setEndDate(date);
+        baseKLineReq.setCalculationCycle("100");
 
         return baseKLineReq;
     }
