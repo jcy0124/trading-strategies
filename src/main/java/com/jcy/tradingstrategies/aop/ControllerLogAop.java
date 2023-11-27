@@ -25,7 +25,7 @@ public class ControllerLogAop {
 
     @Around("controller()")
     private Object aroundAdvice(ProceedingJoinPoint pjp) throws Throwable {
-        log.info("- - - 处理请求开始 - - -");
+        log.info("- - - - - - - - - 处理请求开始 - - - - - - - - -");
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String requestUrl = request.getRequestURL().toString();
         String className = pjp.getTarget().getClass().getName();
@@ -36,7 +36,7 @@ public class ControllerLogAop {
             Object obj = pjp.proceed();
             return obj;
         } finally {
-            log.info("- - - 处理请求结束 - - -");
+            log.info("- - - - - - - - -  处理请求结束 - - - - - - - - -");
         }
 
     }
