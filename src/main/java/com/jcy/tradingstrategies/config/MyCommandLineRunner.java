@@ -8,13 +8,12 @@ import com.jcy.tradingstrategies.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 @Component
 @Slf4j
+@Order(2)
 public class MyCommandLineRunner implements CommandLineRunner {
 
 
@@ -34,14 +33,17 @@ public class MyCommandLineRunner implements CommandLineRunner {
      */
     @Override
     public void run(String... args) throws Exception {
-        log.info("- - - - - - - - - 开始加载本地缓存 - - - - - - - - -");
-        String date = DateUtil.getToday();
-        String lastWorkDay = calendarDateService.selectLastWorkDay(date);
-        ztPoolCache.getZTPoolInCacheByDate(date);
-        ztPoolCache.getZTPoolInCacheByDate(lastWorkDay);
-        calendarDateCache.getCalendarDateEntityByDate(date);
-        calendarDateCache.getCalendarDateEntityByDate(lastWorkDay);
-        log.info("- - - - - - - - - 结束加载本地缓存 - - - - - - - - -");
+        try {
+            log.info("- - - - - - - - - 开始加载本地缓存 - - - - - - - - -");
+            String date = DateUtil.getToday();
+            String lastWorkDay = calendarDateService.selectLastWorkDay(date);
+            ztPoolCache.getZTPoolInCacheByDate(date);
+            ztPoolCache.getZTPoolInCacheByDate(lastWorkDay);
+            calendarDateCache.getCalendarDateEntityByDate(date);
+            calendarDateCache.getCalendarDateEntityByDate(lastWorkDay);
+        } finally {
+            log.info("- - - - - - - - - 结束加载本地缓存 - - - - - - - - -");
+        }
     }
 }
 
