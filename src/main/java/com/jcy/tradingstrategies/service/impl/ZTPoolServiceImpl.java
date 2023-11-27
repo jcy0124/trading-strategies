@@ -91,9 +91,8 @@ public class ZTPoolServiceImpl implements IZTPoolService {
     public List<ELBDto> gerErBan(String date) {
 
         //获取当天涨停股票
-        LambdaQueryWrapper<ZTPoolEntity> lqw1 = new LambdaQueryWrapper<>();
-        lqw1.eq(ZTPoolEntity::getTime, date);
-        List<ZTPoolEntity> ztPoolEntityList = ztPoolDao.selectList(lqw1);
+        List<ZTPoolEntity> ztPoolEntityList = ztPoolCache.getZTPoolInCacheByDate(date);
+
         if (CollectionUtil.isEmpty(ztPoolEntityList)) {
             return Collections.EMPTY_LIST;
         }
@@ -135,10 +134,7 @@ public class ZTPoolServiceImpl implements IZTPoolService {
     @Override
     public List<LBDto> getLBan(String date) {
 
-        LambdaQueryWrapper<ZTPoolEntity> lqw1 = new LambdaQueryWrapper();
-        lqw1.eq(ZTPoolEntity::getTime, date);
-        //【date】当天的涨停板股票
-        List<ZTPoolEntity> ztPoolEntityList = ztPoolDao.selectList(lqw1);
+        List<ZTPoolEntity> ztPoolEntityList = ztPoolCache.getZTPoolInCacheByDate(date);
 
         List<LBDto> list = new ArrayList<>();
         for (ZTPoolEntity ztPoolEntity : ztPoolEntityList) {
