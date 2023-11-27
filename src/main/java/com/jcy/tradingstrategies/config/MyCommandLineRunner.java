@@ -17,8 +17,6 @@ import javax.annotation.Resource;
 @Slf4j
 public class MyCommandLineRunner implements CommandLineRunner {
 
-    @Resource
-    ApplicationContext applicationContext;
 
     @Autowired
     private ZTPoolCache ztPoolCache;
@@ -38,10 +36,11 @@ public class MyCommandLineRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         log.info("- - - - - - - - - 开始加载本地缓存 - - - - - - - - -");
         String date = DateUtil.getToday();
-        ztPoolCache.getZTPoolInCacheByDate(date);
         String lastWorkDay = calendarDateService.selectLastWorkDay(date);
+        ztPoolCache.getZTPoolInCacheByDate(date);
         ztPoolCache.getZTPoolInCacheByDate(lastWorkDay);
         calendarDateCache.getCalendarDateEntityByDate(date);
+        calendarDateCache.getCalendarDateEntityByDate(lastWorkDay);
         log.info("- - - - - - - - - 结束加载本地缓存 - - - - - - - - -");
     }
 }
