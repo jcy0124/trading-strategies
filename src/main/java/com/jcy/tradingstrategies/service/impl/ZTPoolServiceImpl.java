@@ -13,8 +13,9 @@ import com.jcy.tradingstrategies.domain.dto.ELBDto;
 import com.jcy.tradingstrategies.domain.dto.LBDto;
 import com.jcy.tradingstrategies.domain.dto.ZTPoolDto;
 import com.jcy.tradingstrategies.domain.entity.ZTPoolEntity;
-import com.jcy.tradingstrategies.service.ICalendarDataService;
+import com.jcy.tradingstrategies.service.ICalendarDateService;
 import com.jcy.tradingstrategies.service.IZTPoolService;
+import com.jcy.tradingstrategies.service.cache.ZTPoolCache;
 import com.jcy.tradingstrategies.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,10 @@ public class ZTPoolServiceImpl implements IZTPoolService {
     private ZTPoolDao ztPoolDao;
 
     @Autowired
-    private ICalendarDataService calendarDataService;
+    private ZTPoolCache ztPoolCache;
+
+    @Autowired
+    private ICalendarDateService calendarDateService;
 
     @Override
     public String isExistByDate(String date) {
@@ -64,9 +68,8 @@ public class ZTPoolServiceImpl implements IZTPoolService {
 
     @Override
     public List<ZTPoolDto> selectByDate(String date) {
-        LambdaQueryWrapper<ZTPoolEntity> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(ZTPoolEntity::getTime, date);
-        List<ZTPoolEntity> ztPoolEntityList = ztPoolDao.selectList(lqw);
+        List<ZTPoolEntity> ztPoolEntityList = ztPoolCache.getZTPoolInCacheByDate(date);
+
         if (CollectionUtil.isEmpty(ztPoolEntityList)) {
             return Collections.EMPTY_LIST;
         }
@@ -96,9 +99,9 @@ public class ZTPoolServiceImpl implements IZTPoolService {
         }
 
         //上一个工作日日期
-        String lastWorkDay = calendarDataService.selectLastWorkDay(date);
+        String lastWorkDay = calendarDateService.selectLastWorkDay(date);
         //前一个工作日日期
-        String dayBeforeLastWorkDay = calendarDataService.selectLastWorkDay(lastWorkDay);
+        String dayBeforeLastWorkDay = calendarDateService.selectLastWorkDay(lastWorkDay);
 
         List<ELBDto> result = new ArrayList<>();
 

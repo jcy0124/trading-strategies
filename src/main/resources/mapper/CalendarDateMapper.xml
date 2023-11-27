@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jcy.tradingstrategies.dao.CalendarDataDao">
+<mapper namespace="com.jcy.tradingstrategies.dao.CalendarDateDao">
 
 
-    <select id="selectLast14Day" resultType="com.jcy.tradingstrategies.domain.entity.CalendarDataEntity">
+    <select id="selectLast14Day" resultType="com.jcy.tradingstrategies.domain.entity.CalendarDateEntity">
         select * from calendar_data where id &lt; #{id} order by id desc limit 14
     </select>
 </mapper>

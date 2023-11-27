@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @ToString
 @TableName("calendar_data")
-public class CalendarDataEntity {
+public class CalendarDateEntity {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;

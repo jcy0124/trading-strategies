@@ -4,20 +4,20 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.jcy.tradingstrategies.adaptor.CalendarDataAdaptor;
-import com.jcy.tradingstrategies.dao.CalendarDataDao;
-import com.jcy.tradingstrategies.domain.entity.CalendarDataEntity;
-import com.jcy.tradingstrategies.service.ICalendarDataService;
+import com.jcy.tradingstrategies.adaptor.CalendarDateAdaptor;
+import com.jcy.tradingstrategies.dao.CalendarDateDao;
+import com.jcy.tradingstrategies.domain.entity.CalendarDateEntity;
+import com.jcy.tradingstrategies.service.ICalendarDateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CalendarDataServiceImpl implements ICalendarDataService {
+public class CalendarDateServiceImpl implements ICalendarDateService {
 
     @Autowired
-    private CalendarDataDao calendarDataDao;
+    private CalendarDateDao calendarDateDao;
 
     @Override
     public void insert() {
@@ -393,26 +393,26 @@ public class CalendarDataServiceImpl implements ICalendarDataService {
 
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonDetailInfo = jsonArray.getJSONObject(i);
-            CalendarDataEntity calendarDataEntity = CalendarDataAdaptor.buildCalendarData(jsonDetailInfo);
-            calendarDataDao.insert(calendarDataEntity);
+            CalendarDateEntity calendarDateEntity = CalendarDateAdaptor.buildCalendarDate(jsonDetailInfo);
+            calendarDateDao.insert(calendarDateEntity);
         }
     }
 
     @Override
     public String selectLastWorkDay(String date) {
-        LambdaQueryWrapper<CalendarDataEntity> lqw1 = new LambdaQueryWrapper<>();
-        lqw1.eq(CalendarDataEntity::getDate, date);
-        CalendarDataEntity calendarDataEntity = calendarDataDao.selectOne(lqw1);
+        LambdaQueryWrapper<CalendarDateEntity> lqw1 = new LambdaQueryWrapper<>();
+        lqw1.eq(CalendarDateEntity::getDate, date);
+        CalendarDateEntity calendarDateEntity = calendarDateDao.selectOne(lqw1);
 
-        List<CalendarDataEntity> calendarDataEntityList = calendarDataDao.selectLast14Day(calendarDataEntity.getId());
+        List<CalendarDateEntity> calendarDateEntityList = calendarDateDao.selectLast14Day(calendarDateEntity.getId());
 
         String lastWorkDay = "";
-        for (CalendarDataEntity dataEntity : calendarDataEntityList) {
-            String workDay = dataEntity.getWorkDay();
-            String week = dataEntity.getWeek();
+        for (CalendarDateEntity dateEntity : calendarDateEntityList) {
+            String workDay = dateEntity.getWorkDay();
+            String week = dateEntity.getWeek();
 
             if ("1".equals(workDay) && !(StrUtil.equals(week, "星期六") || (StrUtil.equals(week, "星期日")))) {
-                lastWorkDay = dataEntity.getDate();
+                lastWorkDay = dateEntity.getDate();
                 break;
             }
         }
@@ -422,11 +422,11 @@ public class CalendarDataServiceImpl implements ICalendarDataService {
 
     @Override
     public boolean selectWorkDayByDate(String date) {
-        LambdaQueryWrapper<CalendarDataEntity> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(CalendarDataEntity::getDate, date);
-        CalendarDataEntity calendarDataEntity = calendarDataDao.selectOne(lqw);
-        String workDay = calendarDataEntity.getWorkDay();
-        String week = calendarDataEntity.getWeek();
+        LambdaQueryWrapper<CalendarDateEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(CalendarDateEntity::getDate, date);
+        CalendarDateEntity calendarDateEntity = calendarDateDao.selectOne(lqw);
+        String workDay = calendarDateEntity.getWorkDay();
+        String week = calendarDateEntity.getWeek();
         return StrUtil.equals(workDay, "1") && !(StrUtil.equals("星期六", week) || StrUtil.equals("星期日", week));
     }
 }

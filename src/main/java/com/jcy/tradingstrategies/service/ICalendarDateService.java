@@ -1,6 +1,6 @@
 package com.jcy.tradingstrategies.service;
 
-public interface ICalendarDataService {
+public interface ICalendarDateService {
 
     void insert();
 
