@@ -13,7 +13,7 @@ public class EasyExcelUtil {
         ExcelWriterBuilder writerBuilder = EasyExcel.write(filePath, t.getClass());
 
         // 定义写入的sheet名
-        WriteSheet writeSheet = EasyExcel.writerSheet("用户信息").build();
+        WriteSheet writeSheet = EasyExcel.writerSheet(sheetName).build();
 
         // 将数据写入 Excel 文件
         writerBuilder.sheet().doWrite(list);
