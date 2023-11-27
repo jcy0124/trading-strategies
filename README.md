@@ -1,4 +1,7 @@
 # trading-strategies
+
+相关技术栈：jdk8，springboot，mybatis-plus，hutool，mysql，caffeine，线程池等。项目中所有技术点纯个人搭建，技术不复杂，复杂的是背后的计算逻辑。
+
 当前仅提供了获取某日涨停板，某日强势股，二连板，连板等功能。
 
 其他具体量化策略相关接口以及交易策略目前暂时不提供。
