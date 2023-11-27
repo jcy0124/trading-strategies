@@ -23,7 +23,7 @@ public class CacheConfig extends CachingConfigurerSupport {
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .expireAfterWrite(1, TimeUnit.DAYS)
                 .initialCapacity(100)
-                .maximumSize(200));
+                .maximumSize(1000));
         return cacheManager;
     }
 
