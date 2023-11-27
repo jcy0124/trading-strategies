@@ -2,6 +2,7 @@ package com.jcy.tradingstrategies.config;
 
 
 import com.jcy.tradingstrategies.service.ICalendarDateService;
+import com.jcy.tradingstrategies.service.cache.CalendarDateCache;
 import com.jcy.tradingstrategies.service.cache.ZTPoolCache;
 import com.jcy.tradingstrategies.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,9 @@ public class MyCommandLineRunner implements CommandLineRunner {
     @Autowired
     private ICalendarDateService calendarDateService;
 
+    @Autowired
+    private CalendarDateCache calendarDateCache;
+
     /**
      * 在项目启动时，加载涨停板数据
      * @param args
@@ -37,6 +41,7 @@ public class MyCommandLineRunner implements CommandLineRunner {
         ztPoolCache.getZTPoolInCacheByDate(date);
         String lastWorkDay = calendarDateService.selectLastWorkDay(date);
         ztPoolCache.getZTPoolInCacheByDate(lastWorkDay);
+        calendarDateCache.getCalendarDateEntityByDate(date);
         log.info("- - - - - - - - - 结束加载本地缓存 - - - - - - - - -");
     }
 }

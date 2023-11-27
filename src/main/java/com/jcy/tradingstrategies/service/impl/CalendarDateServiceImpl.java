@@ -8,6 +8,7 @@ import com.jcy.tradingstrategies.adaptor.CalendarDateAdaptor;
 import com.jcy.tradingstrategies.dao.CalendarDateDao;
 import com.jcy.tradingstrategies.domain.entity.CalendarDateEntity;
 import com.jcy.tradingstrategies.service.ICalendarDateService;
+import com.jcy.tradingstrategies.service.cache.CalendarDateCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,9 @@ public class CalendarDateServiceImpl implements ICalendarDateService {
 
     @Autowired
     private CalendarDateDao calendarDateDao;
+
+    @Autowired
+    private CalendarDateCache calendarDateCache;
 
     @Override
     public void insert() {
@@ -422,9 +426,8 @@ public class CalendarDateServiceImpl implements ICalendarDateService {
 
     @Override
     public boolean selectWorkDayByDate(String date) {
-        LambdaQueryWrapper<CalendarDateEntity> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(CalendarDateEntity::getDate, date);
-        CalendarDateEntity calendarDateEntity = calendarDateDao.selectOne(lqw);
+        CalendarDateEntity calendarDateEntity = calendarDateCache.getCalendarDateEntityByDate(date);
+
         String workDay = calendarDateEntity.getWorkDay();
         String week = calendarDateEntity.getWeek();
         return StrUtil.equals(workDay, "1") && !(StrUtil.equals("星期六", week) || StrUtil.equals("星期日", week));
