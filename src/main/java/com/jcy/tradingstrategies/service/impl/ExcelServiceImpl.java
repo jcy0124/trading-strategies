@@ -1,6 +1,7 @@
 package com.jcy.tradingstrategies.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import com.jcy.tradingstrategies.domain.dto.RenQiDto;
 import com.jcy.tradingstrategies.domain.excel.RenQiExcel;
 import com.jcy.tradingstrategies.service.IBaseService;
@@ -38,11 +39,13 @@ public class ExcelServiceImpl implements IExcelService {
             RenQiExcel renQiExcel = BeanUtil.copyProperties(renQiDto, RenQiExcel.class);
             renQiExcelList.add(renQiExcel);
         }
+        log.info("人气股票：{}",renQiExcelList);
 
-        String newFilePath = String.format(filePath, "人气股票");
+        String newFilePath = String.format(filePath, "【"+ DateUtil.now() +"】人气股票");
         EasyExcelUtil.exportToExcel(new RenQiExcel(), renQiExcelList, newFilePath, "人气股票");
 
     }
+
 }
 
 
