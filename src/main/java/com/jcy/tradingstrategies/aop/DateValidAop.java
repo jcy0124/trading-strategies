@@ -62,7 +62,7 @@ public class DateValidAop {
         }
 
         String now = DateUtil.getTime();
-        if (StrUtil.equals(date, today) && "15:30:00".compareTo(now) == 1) {
+        if (StrUtil.equals(date, today) && "15:30:00".compareTo(now) > 0) {
             throw new RuntimeException("当天数据需要15:30之后才能获取哦~~");
         }
 

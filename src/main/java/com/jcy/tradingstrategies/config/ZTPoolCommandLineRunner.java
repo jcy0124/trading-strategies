@@ -35,8 +35,9 @@ public class ZTPoolCommandLineRunner implements CommandLineRunner {
                 log.info("- - - - - - - - - 非工作日 - - - - - - - - -");
                 return;
             }
+
             String now = DateUtil.getTime();
-            if ("15:40:00".compareTo(now) == 1) {
+            if ("15:30:00".compareTo(now) >= 0) {
                 log.info("- - - - - - - - - 非三点半之后 - - - - - - - - -");
                 return;
             }
@@ -55,5 +56,8 @@ public class ZTPoolCommandLineRunner implements CommandLineRunner {
             log.info("- - - - - - - - - 结束新增当日涨停板 - - - - - - - - -");
         }
     }
-
 }
+
+
+
+

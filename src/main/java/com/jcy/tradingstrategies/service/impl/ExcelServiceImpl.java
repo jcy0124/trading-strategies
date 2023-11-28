@@ -1,6 +1,7 @@
 package com.jcy.tradingstrategies.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.jcy.tradingstrategies.domain.dto.RenQiDto;
 import com.jcy.tradingstrategies.domain.excel.RenQiExcel;
@@ -31,19 +32,27 @@ public class ExcelServiceImpl implements IExcelService {
     @Override
     @Scheduled(cron = "59 0/30 9-16 * * ?")
     public void exportRenQiPool() {
-        String response = baseService.getRenQiPoolResp();
-        List<RenQiDto> renQiDtoList = renQiService.convert(response);
+        log.info("- - - - - - - - - 开始人气股票导出定时任务 - - - - - - - - - ");
+        try {
+            String response = baseService.getRenQiPoolResp();
+            List<RenQiDto> renQiDtoList = renQiService.convert(response);
 
-        List<RenQiExcel> renQiExcelList = new ArrayList<>();
-        for (RenQiDto renQiDto : renQiDtoList) {
-            RenQiExcel renQiExcel = BeanUtil.copyProperties(renQiDto, RenQiExcel.class);
-            renQiExcelList.add(renQiExcel);
+            List<RenQiExcel> renQiExcelList = new ArrayList<>();
+            for (RenQiDto renQiDto : renQiDtoList) {
+                RenQiExcel renQiExcel = BeanUtil.copyProperties(renQiDto, RenQiExcel.class);
+                renQiExcelList.add(renQiExcel);
+            }
+
+
+            String time = DateUtil.format(DateUtil.date(), "yyyy-MM-dd-HHmm");
+
+            String newFilePath = String.format(filePath, "【" + time + "】人气股票");
+            EasyExcelUtil.exportToExcel(new RenQiExcel(), renQiExcelList, newFilePath, "人气股票");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            log.info("- - - - - - - - - 结束人气股票导出定时任务 - - - - - - - - - ");
         }
-        log.info("人气股票：{}",renQiExcelList);
-
-        String newFilePath = String.format(filePath, "【"+ DateUtil.now() +"】人气股票");
-        EasyExcelUtil.exportToExcel(new RenQiExcel(), renQiExcelList, newFilePath, "人气股票");
-
     }
 
 }
