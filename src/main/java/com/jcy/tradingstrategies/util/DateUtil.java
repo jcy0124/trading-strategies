@@ -1,5 +1,7 @@
 package com.jcy.tradingstrategies.util;
 
+import org.joda.time.LocalTime;
+
 import java.util.Date;
 
 public class DateUtil {
@@ -18,5 +20,9 @@ public class DateUtil {
 
     public static String getToday(){
         return cn.hutool.core.date.DateUtil.formatDate(new Date());
+    }
+
+    public static String getTime(){
+        return new LocalTime().toString().substring(0, 8);
     }
 }

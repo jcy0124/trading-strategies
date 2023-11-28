@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-@Order(2)
+@Order(3)
 public class MyCommandLineRunner implements CommandLineRunner {
 
 

@@ -5,7 +5,6 @@ import com.jcy.tradingstrategies.domain.entity.AStockEntity;
 
 public class AStockAdaptor {
 
-
     public static AStockEntity buildAStockEntity(JSONObject jsonDetailInfo) {
         String code = jsonDetailInfo.getString("api_code");
         String jys = jsonDetailInfo.getString("jys");
@@ -23,4 +22,5 @@ public class AStockAdaptor {
         aStockEntity.setName(name);
         return aStockEntity;
     }
+
 }

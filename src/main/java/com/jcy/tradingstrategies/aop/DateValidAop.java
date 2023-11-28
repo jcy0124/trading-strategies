@@ -1,23 +1,21 @@
 package com.jcy.tradingstrategies.aop;
 
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.service.ICalendarDateService;
+import com.jcy.tradingstrategies.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.Date;
 
 
 @Component
@@ -58,13 +56,13 @@ public class DateValidAop {
             throw new RuntimeException("日期格式不正确哦~~，请正确输入，如【2023-11-23】");
         }
 
-        String today = DateUtil.formatDate(new Date());
+        String today = DateUtil.getToday();
         if (date.compareTo(today) == 1) {
             throw new RuntimeException("亲亲我不能预知未来哦~~");
         }
 
-        String now = new LocalTime().toString().substring(0, 8);
-        if (StrUtil.equals(date,today) && "15:30:00".compareTo(now) == 1) {
+        String now = DateUtil.getTime();
+        if (StrUtil.equals(date, today) && "15:30:00".compareTo(now) == 1) {
             throw new RuntimeException("当天数据需要15:30之后才能获取哦~~");
         }
 

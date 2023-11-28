@@ -35,6 +35,12 @@ public class BaseServiceImpl implements IBaseService {
         String url = UrlConstant.QS_POOL_URL + date;
         return HttpClientUtil.doGet(url, "UTF-8");
     }
+
+    @Override
+    public String getRenQiPoolResp() {
+        String url = UrlConstant.REN_QI_URL;
+        return HttpClientUtil.doGet(url, "UTF-8");
+    }
 }
 
 

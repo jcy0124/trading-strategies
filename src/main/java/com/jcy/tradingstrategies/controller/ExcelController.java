@@ -7,10 +7,14 @@ import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultEnum;
 import com.jcy.tradingstrategies.domain.dto.ELBDto;
+import com.jcy.tradingstrategies.domain.dto.FBDto;
 import com.jcy.tradingstrategies.domain.dto.ZTPoolDto;
 import com.jcy.tradingstrategies.domain.excel.ELBExcel;
+import com.jcy.tradingstrategies.domain.excel.FBExcel;
 import com.jcy.tradingstrategies.domain.excel.ZTPoolExcel;
 import com.jcy.tradingstrategies.service.IExcelService;
+import com.jcy.tradingstrategies.service.IQuantitativeStrategiesService;
+import com.jcy.tradingstrategies.service.IRenQiService;
 import com.jcy.tradingstrategies.service.IZTPoolService;
 import com.jcy.tradingstrategies.util.EasyExcelUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +42,12 @@ public class ExcelController {
 
     @Autowired
     private IZTPoolService ztPoolService;
+
+    @Autowired
+    private IQuantitativeStrategiesService quantitativeStrategiesService;
+
+    @Autowired
+    private IRenQiService renQiService;
 
     private String filePath = "C:\\Users\\78701\\Desktop\\excel\\%s.xlsx";
 
@@ -82,6 +92,29 @@ public class ExcelController {
 
         String newFilePath = String.format(filePath, "【" + date + "】二连板股票");
         EasyExcelUtil.exportToExcel(new ELBExcel(), elbExcelList, newFilePath, "二连板股票");
+
+        return Result.ok();
+    }
+
+
+    @GetMapping("exportFBPool/{date}")
+    @DateValid
+    public Result exportFBPool(@PathVariable String date) throws IOException {
+
+
+        List<FBDto> list = quantitativeStrategiesService.quantitativeStrategiesV2(date);
+        if (CollectionUtil.isEmpty(list)) {
+            return Result.ok(ResultEnum.NO_TODAY_DATA);
+        }
+
+        List<FBExcel> fbExcelList = new ArrayList<>();
+        for (FBDto fbDto : list) {
+            FBExcel fbExcel = BeanUtil.copyProperties(fbDto, FBExcel.class);
+            fbExcelList.add(fbExcel);
+        }
+
+        String newFilePath = String.format(filePath, "【" + date + "】反包潜力股");
+        EasyExcelUtil.exportToExcel(new FBExcel(), fbExcelList, newFilePath, "反包潜力股");
 
         return Result.ok();
     }

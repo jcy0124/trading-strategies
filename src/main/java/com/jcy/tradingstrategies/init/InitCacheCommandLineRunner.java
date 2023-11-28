@@ -13,7 +13,7 @@ import java.util.Map;
 @Component
 @Order(2)
 @Slf4j
-public class InitCache implements CommandLineRunner {
+public class InitCacheCommandLineRunner implements CommandLineRunner {
 
     @Resource
     ApplicationContext applicationContext;

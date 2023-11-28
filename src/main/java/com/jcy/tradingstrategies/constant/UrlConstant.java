@@ -32,6 +32,11 @@ public class UrlConstant {
     public static final String ALL_CODE_URL_WITHOUT_TOKEN = "https://stockapi.com.cn/v1/base/all";
 
 
+    /**
+     * 获取当天人气股票（30分钟一次）
+     */
+    public static final String REN_QI_URL = "https://stockapi.com.cn/v1/change/renQi?token=" + TokenConstant.TOKEN;
+    public static final String REN_QI_URL_WITHOUT_TOKEN = "https://stockapi.com.cn/v1/change/renQi";
 }
 
 
