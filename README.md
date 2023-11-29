@@ -4,7 +4,7 @@
 
 当前仅提供了获取某日涨停板，某日强势股，二连板，连板等功能。
 
-其他具体量化策略相关接口以及交易策略目前暂时不提供。
+其他具体量化策略相关接口以及交易策略目前暂时不提供，如果有兴趣，可以自己实现IQuantitativeStrategiesService，写自己的策略。
 
 由于token是付费获取，所以当前工程中没有提供token，如果想使用该工程，需要使用UrlConstant中没有token的url路径替换BaseServiceImpl里面的url路径。
 
