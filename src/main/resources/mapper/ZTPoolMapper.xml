@@ -14,5 +14,13 @@
         ORDER BY str_to_date(time, '%Y-%m-%d') DESC
         limit 10
     </select>
+
+    <select id="selectLastZTByCode" resultType="com.jcy.tradingstrategies.domain.dto.ZTPoolDto">
+        select *
+        from zt_pool
+        where code = #{code}
+          and str_to_date(time, '%Y-%m-%d') &lt; str_to_date(#{date}, '%Y-%m-%d')
+        ORDER BY str_to_date(time, '%Y-%m-%d') DESC limit 1
+    </select>
 </mapper>
 

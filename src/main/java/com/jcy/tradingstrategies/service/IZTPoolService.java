@@ -17,4 +17,6 @@ public interface IZTPoolService{
     String isExistByDate(String date);
 
     List<LBDto> getLBan(String date);
+
+    ZTPoolDto selectLastZTByCode(String code,String date);
 }

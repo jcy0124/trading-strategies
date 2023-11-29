@@ -17,4 +17,6 @@ public class BaseConstant {
     public static final String KXXX ="k线信息";
 
     public static final String RQGP ="人气股票";
+
+    public static final String YOUZI = "柚子信息";
 }

@@ -123,8 +123,8 @@ public class ExcelController {
             fbExcelList.add(fbExcel);
         }
 
-        String newFilePath = String.format(filePath, date, "【" + date + "】a股复盘交易策略1");
-        EasyExcelUtil.exportToExcel(new FBExcel(), fbExcelList, newFilePath, "a股复盘交易策略1");
+        String newFilePath = String.format(filePath, "【" + date + "】a股复盘交易策略2");
+        EasyExcelUtil.exportToExcel(new FBExcel(), fbExcelList, newFilePath, "a股复盘交易策略2");
 
         return Result.ok();
     }

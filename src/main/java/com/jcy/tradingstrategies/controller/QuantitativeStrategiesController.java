@@ -1,9 +1,14 @@
 package com.jcy.tradingstrategies.controller;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.common.Result;
+import com.jcy.tradingstrategies.common.ResultEnum;
 import com.jcy.tradingstrategies.constant.TimeConstant;
+import com.jcy.tradingstrategies.domain.dto.CommonDto;
 import com.jcy.tradingstrategies.domain.dto.FBDto;
+import com.jcy.tradingstrategies.domain.vo.resp.CommonResp;
 import com.jcy.tradingstrategies.service.IQuantitativeStrategiesService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +28,7 @@ public class QuantitativeStrategiesController {
     private IQuantitativeStrategiesService quantitativeStrategiesService;
 
     /**
-     *  当日N字的股票
+     *  7个工作日内有两个涨停的情况，且第二个涨停板高于第一个涨停板
      * @param date
      * @return
      */
@@ -50,10 +55,35 @@ public class QuantitativeStrategiesController {
 
         List<FBDto> list = quantitativeStrategiesService.quantitativeStrategiesV2(date);
 
-        return Result.ok(list);
+        if (CollectionUtil.isEmpty(list)){
+            return Result.ok(ResultEnum.NO_TODAY_DATA);
+        }
+
+        List<CommonResp> resp = BeanUtil.copyToList(list, CommonResp.class);
+
+        return Result.ok(resp);
     }
 
 
+    /**
+     *  第二个涨停板高于第一个涨停板
+     * @param date
+     * @return
+     */
+    @GetMapping("quantitativeStrategiesV3/{date}")
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
+    public Result quantitativeStrategiesV3(@PathVariable String date) {
+
+        List<CommonDto> commonDtoList = quantitativeStrategiesService.quantitativeStrategiesV3(date);
+
+        if (CollectionUtil.isEmpty(commonDtoList)){
+            return Result.ok(ResultEnum.NO_TODAY_DATA);
+        }
+
+        List<CommonResp> resp = BeanUtil.copyToList(commonDtoList, CommonResp.class);
+
+        return Result.ok(resp);
+    }
 
 
 

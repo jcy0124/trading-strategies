@@ -144,6 +144,11 @@ public class ZTPoolServiceImpl implements IZTPoolService {
         list = list.stream().sorted(Comparator.comparing(LBDto::getLbcs)).collect(Collectors.toList());
         return list;
     }
+
+    @Override
+    public ZTPoolDto selectLastZTByCode(String code,String date) {
+        return ztPoolDao.selectLastZTByCode(code,date);
+    }
 }
 
 

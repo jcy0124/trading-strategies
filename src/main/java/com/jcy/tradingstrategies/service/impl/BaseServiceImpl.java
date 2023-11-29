@@ -41,6 +41,12 @@ public class BaseServiceImpl implements IBaseService {
         String url = UrlConstant.REN_QI_URL;
         return HttpClientUtil.doGet(url, "UTF-8");
     }
+
+    @Override
+    public String getYouZiResp(String date) {
+        String url = UrlConstant.YOU_ZI_URL + date;
+        return HttpClientUtil.doGet(url, "UTF-8");
+    }
 }
 
 
