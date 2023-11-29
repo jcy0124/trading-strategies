@@ -6,7 +6,7 @@
 
 其他具体量化策略相关接口以及交易策略目前暂时不提供。
 
-由于token是付费获取，所以当前工程中没有提供token，如果想使用该工程，需要使用UrlConstant中没有token的url路径。
+由于token是付费获取，所以当前工程中没有提供token，如果想使用该工程，需要使用UrlConstant中没有token的url路径替换BaseServiceImpl里面的url路径。
 
 新增接口文档支持~：http://127.0.0.1:8080/doc.html#/home 
 
