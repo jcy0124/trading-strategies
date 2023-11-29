@@ -27,10 +27,10 @@ public class ExcelServiceImpl implements IExcelService {
     @Autowired
     private IRenQiService renQiService;
 
-    private String filePath = "C:\\Users\\78701\\Desktop\\excel\\%s.xlsx";
+    private String filePath = "C:\\Users\\78701\\Desktop\\excel\\人气股票\\%s.xlsx";
 
     @Override
-    @Scheduled(cron = "59 0/30 9-16 * * ?")
+    @Scheduled(cron = "59 0/30 9-15 * * ?")
     public void exportRenQiPool() {
         log.info("- - - - - - - - - 开始人气股票导出定时任务 - - - - - - - - - ");
         try {

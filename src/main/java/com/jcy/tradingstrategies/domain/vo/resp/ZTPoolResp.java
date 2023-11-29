@@ -29,8 +29,5 @@ public class ZTPoolResp {
      */
     private BigDecimal turnoverRatio;
 
-    /**
-     * 连扳次数
-     */
-    private Integer lbNum;
+
 }

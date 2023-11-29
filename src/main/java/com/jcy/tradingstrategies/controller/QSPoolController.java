@@ -1,11 +1,16 @@
 package com.jcy.tradingstrategies.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultCode;
 import com.jcy.tradingstrategies.domain.dto.QSPoolDto;
 import com.jcy.tradingstrategies.service.IBaseService;
 import com.jcy.tradingstrategies.service.IQSPoolService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("qspool")
 @Slf4j
+@Api(tags = "强势股票接口-QSPoolController")
 public class QSPoolController {
 
     @Autowired
@@ -30,6 +36,11 @@ public class QSPoolController {
     private IBaseService baseService;
 
     @GetMapping("/getQsPoolByHttp/{date}")
+    @DateValid
+    @ApiOperation(value = "http同步强势股票-getQsPoolByHttp")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
+    })
     public Result getQsPoolByHttp(@PathVariable String date) {
         log.info("开始解析【{}】强势股票", date);
 
@@ -47,6 +58,11 @@ public class QSPoolController {
      * @return
      */
     @GetMapping("/getQsPool/{date}")
+    @DateValid
+    @ApiOperation(value = "查看强势股票-getQsPool")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
+    })
     public Result getQsPool(@PathVariable String date) {
 
         log.info("开始查看【{}】强势股票", date);

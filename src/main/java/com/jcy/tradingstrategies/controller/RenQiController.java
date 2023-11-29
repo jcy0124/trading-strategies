@@ -1,11 +1,14 @@
 package com.jcy.tradingstrategies.controller;
 
-import com.jcy.tradingstrategies.annotation.DateValid;
+import cn.hutool.core.bean.BeanUtil;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.domain.dto.RenQiDto;
+import com.jcy.tradingstrategies.domain.vo.resp.RenQiResp;
 import com.jcy.tradingstrategies.service.IBaseService;
 import com.jcy.tradingstrategies.service.IRenQiService;
 import com.jcy.tradingstrategies.util.DateUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("renqi")
 @Slf4j
+@Api(tags = "人气股票接口-RenQiController")
 public class RenQiController {
 
     @Autowired
@@ -26,7 +30,7 @@ public class RenQiController {
     private IBaseService baseService;
 
     @GetMapping("/getRenQiPoolByHttp")
-    @DateValid
+    @ApiOperation(value = "http同步当天人气股票-getRenQiPoolByHttp")
     public Result getRenQiPoolByHttp() {
 
         String today = DateUtil.getToday();
@@ -37,8 +41,10 @@ public class RenQiController {
 
         List<RenQiDto> renQiDtoList = renQiService.convert(response);
 
+        List<RenQiResp> resp = BeanUtil.copyToList(renQiDtoList, RenQiResp.class);
+
         log.info("结束解析【{}】人气股票", today);
-        return Result.ok(renQiDtoList);
+        return Result.ok(resp);
     }
 }
 

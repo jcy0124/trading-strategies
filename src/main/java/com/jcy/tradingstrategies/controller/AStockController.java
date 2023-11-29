@@ -3,6 +3,8 @@ package com.jcy.tradingstrategies.controller;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.service.IAStockService;
 import com.jcy.tradingstrategies.service.IBaseService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("astock")
 @Slf4j
+@Api(tags = "a股市场股票接口-AStockController")
 public class AStockController {
 
     @Autowired
@@ -21,6 +24,7 @@ public class AStockController {
     private IBaseService baseService;
 
     @GetMapping("getAllAStock")
+    @ApiOperation(value = "http同步全量a股市场股票-getAllAStock")
     public Result getAllAStock() {
 
         log.info("开始获取全部a股市场股票");

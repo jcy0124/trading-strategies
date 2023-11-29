@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @Order(3)
-public class MyCommandLineRunner implements CommandLineRunner {
+public class CacheCommandLineRunner implements CommandLineRunner {
 
 
     @Autowired
@@ -37,9 +37,13 @@ public class MyCommandLineRunner implements CommandLineRunner {
             log.info("- - - - - - - - - 开始加载本地缓存 - - - - - - - - -");
             String date = DateUtil.getToday();
             String lastWorkDay = calendarDateService.selectLastWorkDay(date);
+            log.info("- - - - - - - - - 加载今日涨停板 - - - - - - - - -");
             ztPoolCache.getZTPoolInCacheByDate(date);
+            log.info("- - - - - - - - - 加载上一个工作日涨停板 - - - - - - - - -");
             ztPoolCache.getZTPoolInCacheByDate(lastWorkDay);
+            log.info("- - - - - - - - - 加载当日日期 - - - - - - - - -");
             calendarDateCache.getCalendarDateEntityByDate(date);
+            log.info("- - - - - - - - - 加载上一个工作日日期 - - - - - - - - -");
             calendarDateCache.getCalendarDateEntityByDate(lastWorkDay);
         } finally {
             log.info("- - - - - - - - - 结束加载本地缓存 - - - - - - - - -");

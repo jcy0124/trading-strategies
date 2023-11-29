@@ -66,11 +66,9 @@ public class QSPoolServiceImpl implements IQSPoolService {
         if (CollectionUtil.isEmpty(qsPoolEntityList)) {
             return Collections.EMPTY_LIST;
         }
-        List<QSPoolDto> qsPoolDtoList = new ArrayList<>();
-        for (QSPoolEntity qsPoolEntity : qsPoolEntityList) {
-            QSPoolDto qsPoolDto = BeanUtil.copyProperties(qsPoolEntity, QSPoolDto.class);
-            qsPoolDtoList.add(qsPoolDto);
-        }
+
+        List<QSPoolDto> qsPoolDtoList = BeanUtil.copyToList(qsPoolEntityList,QSPoolDto.class);
+
         return qsPoolDtoList;
     }
 }

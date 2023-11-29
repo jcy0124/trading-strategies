@@ -73,11 +73,9 @@ public class ZTPoolServiceImpl implements IZTPoolService {
         if (CollectionUtil.isEmpty(ztPoolEntityList)) {
             return Collections.EMPTY_LIST;
         }
-        List<ZTPoolDto> ztPoolDtoList = new ArrayList<>();
-        for (ZTPoolEntity ztPoolEntity : ztPoolEntityList) {
-            ZTPoolDto ztPoolDto = BeanUtil.copyProperties(ztPoolEntity, ZTPoolDto.class);
-            ztPoolDtoList.add(ztPoolDto);
-        }
+
+        List<ZTPoolDto> ztPoolDtoList = BeanUtil.copyToList(ztPoolEntityList, ZTPoolDto.class);
+
         return ztPoolDtoList;
     }
 

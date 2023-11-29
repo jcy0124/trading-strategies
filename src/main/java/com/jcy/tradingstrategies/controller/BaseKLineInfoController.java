@@ -1,11 +1,15 @@
 package com.jcy.tradingstrategies.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultCode;
 import com.jcy.tradingstrategies.domain.dto.BaseKLineInfoDto;
+import com.jcy.tradingstrategies.domain.vo.req.BaseKLineReq;
+import com.jcy.tradingstrategies.domain.vo.resp.BaseKLineInfoResp;
 import com.jcy.tradingstrategies.service.IBaseKLineInfoService;
 import com.jcy.tradingstrategies.service.IBaseService;
-import com.jcy.tradingstrategies.domain.vo.req.BaseKLineReq;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("baseKLineInfo")
 @Slf4j
+@Api(tags = "股票基础k线接口-BaseKLineInfoController")
 public class BaseKLineInfoController {
 
     @Autowired
@@ -31,6 +37,7 @@ public class BaseKLineInfoController {
     private IBaseService baseService;
 
     @PostMapping("getBaseKLineInfo")
+    @ApiOperation(value = "http同步股票基础k线-getBaseKLineInfo")
     public Result getBaseKLineInfo(@RequestBody @Validated BaseKLineReq req) {
 
         log.info("开始获取【{}】k线信息", req.getCode());
@@ -39,8 +46,14 @@ public class BaseKLineInfoController {
 
         List<BaseKLineInfoDto> baseKLineInfoDtoList = baseKLineInfoService.getBaseKLineInfo(response);
 
+        List<BaseKLineInfoResp> resp = new ArrayList<>();
+        for (BaseKLineInfoDto baseKLineInfoDto : baseKLineInfoDtoList) {
+            BaseKLineInfoResp baseKLineInfoResp = BeanUtil.copyProperties(baseKLineInfoDto, BaseKLineInfoResp.class);
+            resp.add(baseKLineInfoResp);
+        }
+
         log.info("结束获取【{}】k线信息", req.getCode());
-        return Result.ok(ResultCode.SUCCESS, "【" + req.getCode() + "】的K线信息", baseKLineInfoDtoList);
+        return Result.ok(ResultCode.SUCCESS, "【" + req.getCode() + "】的K线信息", resp);
     }
 }
 
