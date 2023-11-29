@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultCode;
+import com.jcy.tradingstrategies.constant.TimeConstant;
 import com.jcy.tradingstrategies.domain.dto.QSPoolDto;
 import com.jcy.tradingstrategies.service.IBaseService;
 import com.jcy.tradingstrategies.service.IQSPoolService;
@@ -36,7 +37,7 @@ public class QSPoolController {
     private IBaseService baseService;
 
     @GetMapping("/getQsPoolByHttp/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "http同步强势股票-getQsPoolByHttp")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
@@ -58,7 +59,7 @@ public class QSPoolController {
      * @return
      */
     @GetMapping("/getQsPool/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "查看强势股票-getQsPool")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),

@@ -2,6 +2,7 @@ package com.jcy.tradingstrategies.controller;
 
 import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.common.Result;
+import com.jcy.tradingstrategies.constant.TimeConstant;
 import com.jcy.tradingstrategies.domain.dto.FBDto;
 import com.jcy.tradingstrategies.service.IQuantitativeStrategiesService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class QuantitativeStrategiesController {
      * @return
      */
     @GetMapping("quantitativeStrategiesV1/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     public Result quantitativeStrategiesV1(@PathVariable String date) {
 
         quantitativeStrategiesService.quantitativeStrategiesV1(date);
@@ -44,7 +45,7 @@ public class QuantitativeStrategiesController {
      * @return
      */
     @GetMapping("quantitativeStrategiesV2/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     public Result quantitativeStrategiesV2(@PathVariable String date) {
 
         List<FBDto> list = quantitativeStrategiesService.quantitativeStrategiesV2(date);
@@ -57,7 +58,7 @@ public class QuantitativeStrategiesController {
 
 
     @GetMapping("computeZTBSFHPGP/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     public Result computeZTBSFHPGP(@PathVariable String date) {
         log.info("开始计算第一个涨停板最高价横盘股票");
 

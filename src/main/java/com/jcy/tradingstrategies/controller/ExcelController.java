@@ -6,6 +6,7 @@ import com.jcy.tradingstrategies.adaptor.ZTPoolAdaptor;
 import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultEnum;
+import com.jcy.tradingstrategies.constant.TimeConstant;
 import com.jcy.tradingstrategies.domain.dto.ELBDto;
 import com.jcy.tradingstrategies.domain.dto.FBDto;
 import com.jcy.tradingstrategies.domain.dto.ZTPoolDto;
@@ -49,7 +50,7 @@ public class ExcelController {
     private String filePath = "C:\\Users\\78701\\Desktop\\excel\\%s.xlsx";
 
     @GetMapping("exportZTPool/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "Excel涨停板股票导出-exportZTPool")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
@@ -76,7 +77,7 @@ public class ExcelController {
     }
 
     @GetMapping("exportEBPool/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "Excel二连板股票导出-exportEBPool")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
@@ -103,7 +104,7 @@ public class ExcelController {
 
 
     @GetMapping("exportFBPool/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "Excel具有反包条件股票导出-exportFBPool")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),

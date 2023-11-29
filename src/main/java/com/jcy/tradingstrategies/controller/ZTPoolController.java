@@ -7,6 +7,7 @@ import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultCode;
 import com.jcy.tradingstrategies.common.ResultEnum;
+import com.jcy.tradingstrategies.constant.TimeConstant;
 import com.jcy.tradingstrategies.domain.dto.ELBDto;
 import com.jcy.tradingstrategies.domain.dto.LBDto;
 import com.jcy.tradingstrategies.domain.dto.ZTPoolDto;
@@ -52,7 +53,7 @@ public class ZTPoolController {
      * @return
      */
     @GetMapping("/getZtPoolByHttp/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "http同步涨停股-getZtPoolByHttp")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date", value = "日期：yyyy-MM-dd", dataType = "String", required = true),
@@ -82,7 +83,7 @@ public class ZTPoolController {
      * @return
      */
     @GetMapping("/getZtPool/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "查看涨停股-getZtPool")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date", value = "日期：yyyy-MM-dd", dataType = "String", required = true),
@@ -111,7 +112,7 @@ public class ZTPoolController {
      * @return
      */
     @GetMapping("/getErBan/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "查看二连板股票-getErBan")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date", value = "日期：yyyy-MM-dd", dataType = "String", required = true),
@@ -139,7 +140,7 @@ public class ZTPoolController {
      * @return
      */
     @GetMapping("/getLBan/{date}")
-    @DateValid
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "查看十个交易日连扳股票-getLBan")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date", value = "日期：yyyy-MM-dd", dataType = "String", required = true),

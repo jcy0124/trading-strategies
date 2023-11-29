@@ -43,13 +43,15 @@ public class DateValidAop {
             return;
         }
 
+        DateValid dateValid = method.getAnnotation(DateValid.class);
+        String afterTime = dateValid.afterTime();
         for (Object arg : args) {
-            validDate(arg);
+            validDate(arg, afterTime);
         }
 
     }
 
-    private void validDate(Object arg) {
+    private void validDate(Object arg, String afterTime) {
         String date = arg.toString();
 
         if (!ReUtil.isMatch(DAY_REGEX, date)) {
@@ -62,8 +64,8 @@ public class DateValidAop {
         }
 
         String now = DateUtil.getTime();
-        if (StrUtil.equals(date, today) && "15:30:00".compareTo(now) > 0) {
-            throw new RuntimeException("当天数据需要15:30之后才能获取哦~~");
+        if (StrUtil.equals(date, today) && afterTime.compareTo(now) > 0) {
+            throw new RuntimeException("当天数据需要【" + afterTime + "】之后才能获取哦~~");
         }
 
         boolean isWorkDay = calendarDateService.selectWorkDayByDate(date);
