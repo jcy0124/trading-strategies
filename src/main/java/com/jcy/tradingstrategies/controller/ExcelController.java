@@ -7,9 +7,11 @@ import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultEnum;
 import com.jcy.tradingstrategies.constant.TimeConstant;
+import com.jcy.tradingstrategies.domain.dto.CommonDto;
 import com.jcy.tradingstrategies.domain.dto.ELBDto;
 import com.jcy.tradingstrategies.domain.dto.FBDto;
 import com.jcy.tradingstrategies.domain.dto.ZTPoolDto;
+import com.jcy.tradingstrategies.domain.excel.CommonExcel;
 import com.jcy.tradingstrategies.domain.excel.ELBExcel;
 import com.jcy.tradingstrategies.domain.excel.FBExcel;
 import com.jcy.tradingstrategies.domain.excel.ZTPoolExcel;
@@ -90,11 +92,7 @@ public class ExcelController {
             return Result.ok(ResultEnum.NO_TODAY_DATA);
         }
 
-        List<ELBExcel> elbExcelList = new ArrayList<>();
-        for (ELBDto elbDto : elbDtoList) {
-            ELBExcel elbExcel = BeanUtil.copyProperties(elbDto, ELBExcel.class);
-            elbExcelList.add(elbExcel);
-        }
+        List<ELBExcel> elbExcelList = BeanUtil.copyToList(elbDtoList, ELBExcel.class);
 
         String newFilePath = String.format(filePath, "【" + date + "】二连板股票");
         EasyExcelUtil.exportToExcel(new ELBExcel(), elbExcelList, newFilePath, "二连板股票");
@@ -103,13 +101,13 @@ public class ExcelController {
     }
 
 
-    @GetMapping("exportFBPool/{date}")
+    @GetMapping("exportQuantitativeStrategiesV2/{date}")
     @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
-    @ApiOperation(value = "Excel具有反包条件股票导出-exportFBPool")
+    @ApiOperation(value = "策略2-exportQuantitativeStrategiesV2")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
     })
-    public Result exportFBPool(@PathVariable String date) throws IOException {
+    public Result exportQuantitativeStrategiesV2(@PathVariable String date) throws IOException {
 
 
         List<FBDto> list = quantitativeStrategiesService.quantitativeStrategiesV2(date);
@@ -117,14 +115,32 @@ public class ExcelController {
             return Result.ok(ResultEnum.NO_TODAY_DATA);
         }
 
-        List<FBExcel> fbExcelList = new ArrayList<>();
-        for (FBDto fbDto : list) {
-            FBExcel fbExcel = BeanUtil.copyProperties(fbDto, FBExcel.class);
-            fbExcelList.add(fbExcel);
-        }
+        List<FBExcel> fbExcelList = BeanUtil.copyToList(list, FBExcel.class);
 
         String newFilePath = String.format(filePath, "【" + date + "】a股复盘交易策略2");
         EasyExcelUtil.exportToExcel(new FBExcel(), fbExcelList, newFilePath, "a股复盘交易策略2");
+
+        return Result.ok();
+    }
+
+    @GetMapping("exportQuantitativeStrategiesV3/{date}")
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
+    @ApiOperation(value = "策略3-quantitativeStrategiesV3")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
+    })
+    public Result exportQuantitativeStrategiesV3(@PathVariable String date) throws IOException {
+
+
+        List<CommonDto> commonDtoList = quantitativeStrategiesService.quantitativeStrategiesV3(date);
+        if (CollectionUtil.isEmpty(commonDtoList)) {
+            return Result.ok(ResultEnum.NO_TODAY_DATA);
+        }
+
+        List<CommonExcel> commonExcelList = BeanUtil.copyToList(commonDtoList, CommonExcel.class);
+
+        String newFilePath = String.format(filePath, "【" + date + "】a股复盘交易策略3");
+        EasyExcelUtil.exportToExcel(new CommonExcel(), commonExcelList, newFilePath, "a股复盘交易策略3");
 
         return Result.ok();
     }

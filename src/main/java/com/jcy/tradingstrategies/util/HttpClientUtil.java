@@ -41,7 +41,7 @@ public class HttpClientUtil {
             int statusCode = httpClient.executeMethod(getMethod);
             //4.判断访问的状态码
             if (statusCode != HttpStatus.SC_OK) {
-                System.err.println("请求出错：" + getMethod.getStatusLine());
+                throw new RuntimeException("请求出错：" + getMethod.getStatusLine());
             }
             //5.处理HTTP响应内容
             //HTTP响应头部信息，这里简单打印
@@ -58,11 +58,10 @@ public class HttpClientUtil {
             //InputStream response = getMethod.getResponseBodyAsStream();
         } catch (HttpException e) {
             //发生致命的异常，可能是协议不对或者返回的内容有问题
-            System.out.println("请检查输入的URL!");
-            e.printStackTrace();
+            throw new RuntimeException("解析失败，请检查输入的URL！！！");
         } catch (IOException e) {
             //发生网络异常
-            System.out.println("发生网络异常!");
+            throw new RuntimeException("解析失败，发生网络异常！！！");
         } finally {
             //6.释放连接
             getMethod.releaseConnection();

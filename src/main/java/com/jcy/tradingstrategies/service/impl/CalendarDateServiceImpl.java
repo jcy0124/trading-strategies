@@ -425,12 +425,39 @@ public class CalendarDateServiceImpl implements ICalendarDateService {
     }
 
     @Override
+    public String selectNextWorkDay(String startDate) {
+        LambdaQueryWrapper<CalendarDateEntity> lqw1 = new LambdaQueryWrapper<>();
+        lqw1.eq(CalendarDateEntity::getDate, startDate);
+        CalendarDateEntity calendarDateEntity = calendarDateDao.selectOne(lqw1);
+
+        List<CalendarDateEntity> calendarDateEntityList = calendarDateDao.selectNext14Day(calendarDateEntity.getId());
+
+        String nextWorkDay = "";
+        for (CalendarDateEntity dateEntity : calendarDateEntityList) {
+            String workDay = dateEntity.getWorkDay();
+            String week = dateEntity.getWeek();
+
+            if ("1".equals(workDay) && !(StrUtil.equals(week, "星期六") || (StrUtil.equals(week, "星期日")))) {
+                nextWorkDay = dateEntity.getDate();
+                break;
+            }
+        }
+
+        return nextWorkDay;
+    }
+
+    @Override
     public boolean selectWorkDayByDate(String date) {
         CalendarDateEntity calendarDateEntity = calendarDateCache.getCalendarDateEntityByDate(date);
 
         String workDay = calendarDateEntity.getWorkDay();
         String week = calendarDateEntity.getWeek();
         return StrUtil.equals(workDay, "1") && !(StrUtil.equals("星期六", week) || StrUtil.equals("星期日", week));
+    }
+
+    @Override
+    public List<String> selectWorkDateBetween(String startDate, String endDate) {
+       return calendarDateDao.selectWorkDateBetween(startDate,endDate);
     }
 }
 

@@ -13,4 +13,6 @@ public interface IQuantitativeStrategiesService {
     List<FBDto> quantitativeStrategiesV2(String date);
 
     List<CommonDto> quantitativeStrategiesV3(String date);
+
+    List<CommonDto> quantitativeStrategiesV4(String startDate);
 }

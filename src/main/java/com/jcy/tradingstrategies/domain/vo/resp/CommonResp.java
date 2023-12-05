@@ -10,4 +10,8 @@ public class CommonResp {
     private String code;
 
     private String name;
+
+    private String lastZTDate;
+
+    private String nowZTDate;
 }

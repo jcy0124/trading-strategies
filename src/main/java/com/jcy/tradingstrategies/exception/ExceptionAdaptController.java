@@ -32,13 +32,13 @@ public class ExceptionAdaptController {
 
     @ExceptionHandler({RuntimeException.class})
     public Result runTimeException(RuntimeException exception) {
-        log.error("runtimeException:", exception);
+        log.error("统一异常处理：runtimeException, 异常原因：", exception);
         return Result.fail(ResultCode.ERROR, exception.getMessage());
     }
 
     @ExceptionHandler({Exception.class})
     public Result exception(Exception exception) {
-        log.error("Exception:", exception);
+        log.error("统一异常处理：Exception, 异常原因：", exception);
         return Result.fail(ResultCode.ERROR, exception.getMessage());
     }
 }

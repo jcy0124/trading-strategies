@@ -15,6 +15,7 @@ import com.jcy.tradingstrategies.domain.vo.resp.ELBResp;
 import com.jcy.tradingstrategies.domain.vo.resp.LBResp;
 import com.jcy.tradingstrategies.domain.vo.resp.ZTPoolResp;
 import com.jcy.tradingstrategies.service.IBaseService;
+import com.jcy.tradingstrategies.service.ICalendarDateService;
 import com.jcy.tradingstrategies.service.IZTPoolService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -45,6 +46,8 @@ public class ZTPoolController {
     @Autowired
     private IBaseService baseService;
 
+    @Autowired
+    private ICalendarDateService calendarDateService;
 
     /**
      * 获取当天涨停板股票
@@ -160,6 +163,24 @@ public class ZTPoolController {
         return Result.ok(ResultCode.SUCCESS, "【" + date + "】连板信息", lbRespList);
     }
 
+    @GetMapping("/getZtPoolListByHttp")
+    public Result getZtPoolListByHttp() {
+        String startDate = "2023-11-29";
+        String endDate = "2023-06-01";
+        List<String> dateList = calendarDateService.selectWorkDateBetween(startDate, endDate);
+
+        for (String date : dateList) {
+            log.info("开始【{}】解析",date);
+            String response = baseService.getZTPoolResp(date);
+            try {
+                ztPoolService.insert(response, date);
+            } catch (Exception e) {
+                log.error("调用远程解析出问题：",e);
+            }
+        }
+
+        return Result.ok();
+    }
 }
 
 

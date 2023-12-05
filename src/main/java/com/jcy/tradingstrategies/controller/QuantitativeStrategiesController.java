@@ -9,6 +9,7 @@ import com.jcy.tradingstrategies.constant.TimeConstant;
 import com.jcy.tradingstrategies.domain.dto.CommonDto;
 import com.jcy.tradingstrategies.domain.dto.FBDto;
 import com.jcy.tradingstrategies.domain.vo.resp.CommonResp;
+import com.jcy.tradingstrategies.service.ICalendarDateService;
 import com.jcy.tradingstrategies.service.IQuantitativeStrategiesService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class QuantitativeStrategiesController {
 
     @Autowired
     private IQuantitativeStrategiesService quantitativeStrategiesService;
+
+    @Autowired
+    private ICalendarDateService calendarDateService;
 
     /**
      *  7个工作日内有两个涨停的情况，且第二个涨停板高于第一个涨停板
@@ -85,7 +89,32 @@ public class QuantitativeStrategiesController {
         return Result.ok(resp);
     }
 
+    /**
+     * 涨停板之后至少3个工作日波动不大
+     *
+     * @param date
+     * @return
+     */
+    @GetMapping("quantitativeStrategiesV4/{date}")
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
+    public Result quantitativeStrategiesV4(@PathVariable String date) {
 
+        String startDate = date;
+
+        for (int i = 0; i < 3; i++) {
+            startDate = calendarDateService.selectLastWorkDay(startDate);
+        }
+
+        List<CommonDto> commonDtoList = quantitativeStrategiesService.quantitativeStrategiesV4(startDate);
+
+        if (CollectionUtil.isEmpty(commonDtoList)){
+            return Result.ok(ResultEnum.NO_TODAY_DATA);
+        }
+
+        List<CommonResp> resp = BeanUtil.copyToList(commonDtoList, CommonResp.class);
+
+        return Result.ok(resp);
+    }
 
     @GetMapping("computeZTBSFHPGP/{date}")
     @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)

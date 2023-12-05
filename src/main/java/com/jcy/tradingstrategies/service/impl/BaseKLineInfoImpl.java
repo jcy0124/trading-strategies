@@ -6,8 +6,9 @@ import com.jcy.tradingstrategies.adaptor.BaseKLineInfoAdaptor;
 import com.jcy.tradingstrategies.constant.BaseConstant;
 import com.jcy.tradingstrategies.dao.BaseKLineInfoDao;
 import com.jcy.tradingstrategies.domain.dto.BaseKLineInfoDto;
-import com.jcy.tradingstrategies.domain.entity.BaseKLineInfoEntity;
+import com.jcy.tradingstrategies.domain.vo.req.BaseKLineReq;
 import com.jcy.tradingstrategies.service.IBaseKLineInfoService;
+import com.jcy.tradingstrategies.service.IBaseService;
 import com.jcy.tradingstrategies.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class BaseKLineInfoImpl implements IBaseKLineInfoService {
 
     @Autowired
     private BaseKLineInfoDao baseKLineInfoDao;
+
+    @Autowired
+    private IBaseService baseService;
 
     @Override
     public List<BaseKLineInfoDto> getBaseKLineInfo(String response) {
@@ -38,6 +42,23 @@ public class BaseKLineInfoImpl implements IBaseKLineInfoService {
         list.forEach(System.out::println);
         return null;
     }
+
+    @Override
+    public BaseKLineInfoDto getBaseKLineInfoByDay(BaseKLineReq req) {
+        String resp = baseService.getBaseKLineResp(req);
+        JSONArray data = JsonUtil.getData(resp, BaseConstant.KXXX);
+
+        BaseKLineInfoDto baseKLineInfoDto = null;
+
+        for (int i = 0; i < data.size(); i++) {
+            JSONObject jsonDetailInfo = data.getJSONObject(i);
+            baseKLineInfoDto = BaseKLineInfoAdaptor.buildBaseKLineInfo(jsonDetailInfo);
+        }
+
+        return baseKLineInfoDto;
+    }
+
+
 }
 
 

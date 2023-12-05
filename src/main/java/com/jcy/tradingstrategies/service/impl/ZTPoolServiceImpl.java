@@ -149,6 +149,15 @@ public class ZTPoolServiceImpl implements IZTPoolService {
     public ZTPoolDto selectLastZTByCode(String code,String date) {
         return ztPoolDao.selectLastZTByCode(code,date);
     }
+
+    @Override
+    public ZTPoolDto selectByCodeAndDate(String code, String lastWorkDay) {
+        LambdaQueryWrapper<ZTPoolEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ZTPoolEntity::getCode,code)
+                .eq(ZTPoolEntity::getTime,lastWorkDay);
+        ZTPoolEntity ztPoolEntity = ztPoolDao.selectOne(lqw);
+        return BeanUtil.copyProperties(ztPoolEntity, ZTPoolDto.class);
+    }
 }
 
 

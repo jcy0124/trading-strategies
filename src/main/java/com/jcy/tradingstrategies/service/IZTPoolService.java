@@ -19,4 +19,6 @@ public interface IZTPoolService{
     List<LBDto> getLBan(String date);
 
     ZTPoolDto selectLastZTByCode(String code,String date);
+
+    ZTPoolDto selectByCodeAndDate(String code, String lastWorkDay);
 }

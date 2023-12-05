@@ -6,5 +6,17 @@
     <select id="selectLast14Day" resultType="com.jcy.tradingstrategies.domain.entity.CalendarDateEntity">
         select * from calendar_data where id &lt; #{id} order by id desc limit 14
     </select>
+
+    <select id="selectWorkDateBetween" resultType="java.lang.String">
+        select date from calendar_data
+        where work_day ='1'
+        and
+        str_to_date(`date`, '%Y-%m-%d')  &lt;= str_to_date(#{startDate}, '%Y-%m-%d')
+    </select>
+
+    <select id="selectNext14Day" resultType="com.jcy.tradingstrategies.domain.entity.CalendarDateEntity">
+        select * from calendar_data where id &gt; #{id} order by id limit 14
+
+    </select>
 </mapper>
 
