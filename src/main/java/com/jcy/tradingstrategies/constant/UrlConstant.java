@@ -51,6 +51,13 @@ public class UrlConstant {
      */
     public static final String YOU_ZI_URL = "https://stockapi.com.cn/v1/youzi/all?token=" + TokenConstant.TOKEN + "&date=";
     public static final String YOU_ZI_URL_WITHOUT_TOKEN = "https://stockapi.com.cn/v1/youzi/all?date=";
+
+
+    /**
+     * 分时成交量
+     */
+    public static final String FSCJL_URL = "https://stockapi.com.cn/v1/base/min?token=" + TokenConstant.TOKEN + "&code=%s&all=1";
+    public static final String FSCJL_URL_WITHOUT_TOKEN = "https://stockapi.com.cn/v1/base/min?code=%s&all=1";
 }
 
 

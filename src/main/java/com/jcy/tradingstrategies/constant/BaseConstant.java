@@ -22,4 +22,6 @@ public class BaseConstant {
 
     public static final String YOUZI = "柚子信息";
 
+    public static final String FSCJL = "分时成交量";
+
 }

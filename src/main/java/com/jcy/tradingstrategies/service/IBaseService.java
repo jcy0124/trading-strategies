@@ -16,6 +16,8 @@ public interface IBaseService {
     String getRenQiPoolResp();
 
     String getYouZiResp(String date);
+
+    String getFSCJLResp(String code);
 }
 
 

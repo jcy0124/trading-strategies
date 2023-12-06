@@ -1,9 +1,9 @@
 package com.jcy.tradingstrategies.service.impl;
 
 import com.jcy.tradingstrategies.constant.UrlConstant;
+import com.jcy.tradingstrategies.domain.vo.req.BaseKLineReq;
 import com.jcy.tradingstrategies.service.IBaseService;
 import com.jcy.tradingstrategies.util.HttpClientUtil;
-import com.jcy.tradingstrategies.domain.vo.req.BaseKLineReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +45,13 @@ public class BaseServiceImpl implements IBaseService {
     @Override
     public String getYouZiResp(String date) {
         String url = UrlConstant.YOU_ZI_URL + date;
+        return HttpClientUtil.doGet(url, "UTF-8");
+    }
+
+    @Override
+    public String getFSCJLResp(String code) {
+        String url = UrlConstant.FSCJL_URL;
+        url = String.format(url, code);
         return HttpClientUtil.doGet(url, "UTF-8");
     }
 }
