@@ -11,6 +11,8 @@ public class CommonResp {
 
     private String name;
 
+    private String reason;
+
     private String lastZTDate;
 
     private String nowZTDate;

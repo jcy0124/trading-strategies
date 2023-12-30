@@ -7,16 +7,10 @@ import com.jcy.tradingstrategies.annotation.DateValid;
 import com.jcy.tradingstrategies.common.Result;
 import com.jcy.tradingstrategies.common.ResultEnum;
 import com.jcy.tradingstrategies.constant.TimeConstant;
-import com.jcy.tradingstrategies.domain.dto.CommonDto;
 import com.jcy.tradingstrategies.domain.dto.ELBDto;
-import com.jcy.tradingstrategies.domain.dto.FBDto;
 import com.jcy.tradingstrategies.domain.dto.ZTPoolDto;
-import com.jcy.tradingstrategies.domain.excel.CommonExcel;
 import com.jcy.tradingstrategies.domain.excel.ELBExcel;
-import com.jcy.tradingstrategies.domain.excel.FBExcel;
 import com.jcy.tradingstrategies.domain.excel.ZTPoolExcel;
-import com.jcy.tradingstrategies.service.IExcelService;
-import com.jcy.tradingstrategies.service.IQuantitativeStrategiesService;
 import com.jcy.tradingstrategies.service.IZTPoolService;
 import com.jcy.tradingstrategies.util.EasyExcelUtil;
 import io.swagger.annotations.Api;
@@ -41,13 +35,7 @@ import java.util.List;
 public class ExcelController {
 
     @Autowired
-    private IExcelService excelService;
-
-    @Autowired
     private IZTPoolService ztPoolService;
-
-    @Autowired
-    private IQuantitativeStrategiesService quantitativeStrategiesService;
 
     private String filePath = "C:\\Users\\78701\\Desktop\\excel\\%s.xlsx";
 
@@ -55,7 +43,7 @@ public class ExcelController {
     @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "Excel涨停板股票导出-exportZTPool")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
+            @ApiImplicitParam(name = "date", value = "日期：yyyy-MM-dd", dataType = "String", required = true),
     })
     public Result exportZTPool(@PathVariable String date) throws IOException {
 
@@ -82,7 +70,7 @@ public class ExcelController {
     @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "Excel二连板股票导出-exportEBPool")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
+            @ApiImplicitParam(name = "date", value = "日期：yyyy-MM-dd", dataType = "String", required = true),
     })
     public Result exportEBPool(@PathVariable String date) throws IOException {
 
@@ -99,52 +87,6 @@ public class ExcelController {
 
         return Result.ok();
     }
-
-
-    @GetMapping("exportQuantitativeStrategiesV2/{date}")
-    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
-    @ApiOperation(value = "策略2-exportQuantitativeStrategiesV2")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
-    })
-    public Result exportQuantitativeStrategiesV2(@PathVariable String date) throws IOException {
-
-
-        List<FBDto> list = quantitativeStrategiesService.quantitativeStrategiesV2(date);
-        if (CollectionUtil.isEmpty(list)) {
-            return Result.ok(ResultEnum.NO_TODAY_DATA);
-        }
-
-        List<FBExcel> fbExcelList = BeanUtil.copyToList(list, FBExcel.class);
-
-        String newFilePath = String.format(filePath, "【" + date + "】a股复盘交易策略2");
-        EasyExcelUtil.exportToExcel(new FBExcel(), fbExcelList, newFilePath, "a股复盘交易策略2");
-
-        return Result.ok();
-    }
-
-    @GetMapping("exportQuantitativeStrategiesV3/{date}")
-    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
-    @ApiOperation(value = "策略3-quantitativeStrategiesV3")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "date",value = "日期：yyyy-MM-dd",dataType = "String",required = true),
-    })
-    public Result exportQuantitativeStrategiesV3(@PathVariable String date) throws IOException {
-
-
-        List<CommonDto> commonDtoList = quantitativeStrategiesService.quantitativeStrategiesV3(date);
-        if (CollectionUtil.isEmpty(commonDtoList)) {
-            return Result.ok(ResultEnum.NO_TODAY_DATA);
-        }
-
-        List<CommonExcel> commonExcelList = BeanUtil.copyToList(commonDtoList, CommonExcel.class);
-
-        String newFilePath = String.format(filePath, "【" + date + "】a股复盘交易策略3");
-        EasyExcelUtil.exportToExcel(new CommonExcel(), commonExcelList, newFilePath, "a股复盘交易策略3");
-
-        return Result.ok();
-    }
-
 }
 
 
