@@ -2,12 +2,11 @@ package com.jcy.tradingstrategies.service.qsV1;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
-import com.jcy.tradingstrategies.adaptor.CommonDtoAdaptor;
+import com.jcy.tradingstrategies.service.adaptor.CommonDtoAdaptor;
 import com.jcy.tradingstrategies.constant.TimeConstant;
 import com.jcy.tradingstrategies.domain.dto.CommonDto;
 import com.jcy.tradingstrategies.domain.dto.ZTPoolDto;
 import com.jcy.tradingstrategies.service.ICalendarDateService;
-import com.jcy.tradingstrategies.service.qsV1.IQuantitativeStrategiesV1Service;
 import com.jcy.tradingstrategies.service.IZTPoolService;
 import com.jcy.tradingstrategies.util.BigDecimalUtils;
 import lombok.extern.slf4j.Slf4j;

@@ -2,7 +2,7 @@ package com.jcy.tradingstrategies.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.jcy.tradingstrategies.adaptor.BaseKLineInfoAdaptor;
+import com.jcy.tradingstrategies.service.adaptor.BaseKLineInfoAdaptor;
 import com.jcy.tradingstrategies.constant.BaseConstant;
 import com.jcy.tradingstrategies.dao.BaseKLineInfoDao;
 import com.jcy.tradingstrategies.domain.dto.BaseKLineInfoDto;

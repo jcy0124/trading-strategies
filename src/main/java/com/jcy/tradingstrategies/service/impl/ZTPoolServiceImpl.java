@@ -5,8 +5,8 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.jcy.tradingstrategies.adaptor.LBAdaptor;
-import com.jcy.tradingstrategies.adaptor.ZTPoolAdaptor;
+import com.jcy.tradingstrategies.service.adaptor.LBAdaptor;
+import com.jcy.tradingstrategies.service.adaptor.ZTPoolAdaptor;
 import com.jcy.tradingstrategies.constant.BaseConstant;
 import com.jcy.tradingstrategies.dao.ZTPoolDao;
 import com.jcy.tradingstrategies.domain.dto.ELBDto;
@@ -76,7 +76,7 @@ public class ZTPoolServiceImpl implements IZTPoolService {
 
         List<ZTPoolDto> ztPoolDtoList = BeanUtil.copyToList(ztPoolEntityList, ZTPoolDto.class);
 
-        return ztPoolDtoList;
+        return ztPoolDtoList.stream().filter(item -> Objects.equals(1,item.getLbNum())).collect(Collectors.toList());
     }
 
     /**

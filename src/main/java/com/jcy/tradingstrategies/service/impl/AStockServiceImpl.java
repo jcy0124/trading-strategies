@@ -3,7 +3,7 @@ package com.jcy.tradingstrategies.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.jcy.tradingstrategies.adaptor.AStockAdaptor;
+import com.jcy.tradingstrategies.service.adaptor.AStockAdaptor;
 import com.jcy.tradingstrategies.constant.BaseConstant;
 import com.jcy.tradingstrategies.dao.AStockDao;
 import com.jcy.tradingstrategies.domain.entity.AStockEntity;
