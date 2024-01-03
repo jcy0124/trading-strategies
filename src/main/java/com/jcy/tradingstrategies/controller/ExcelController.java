@@ -8,8 +8,11 @@ import com.jcy.tradingstrategies.common.ResultEnum;
 import com.jcy.tradingstrategies.constant.TimeConstant;
 import com.jcy.tradingstrategies.domain.dto.ELBDto;
 import com.jcy.tradingstrategies.domain.dto.ZTPoolDto;
+import com.jcy.tradingstrategies.domain.entity.UserTradeInfoEntity;
 import com.jcy.tradingstrategies.domain.excel.ELBExcel;
+import com.jcy.tradingstrategies.domain.excel.UserTradeInfoExcel;
 import com.jcy.tradingstrategies.domain.excel.ZTPoolExcel;
+import com.jcy.tradingstrategies.service.IUserTradeInfoService;
 import com.jcy.tradingstrategies.service.IZTPoolService;
 import com.jcy.tradingstrategies.service.adaptor.ZTPoolAdaptor;
 import com.jcy.tradingstrategies.util.EasyExcelUtil;
@@ -44,9 +47,14 @@ public class ExcelController {
     @Autowired
     private ThreadPoolTaskExecutor executor;
 
+    @Autowired
+    private IUserTradeInfoService userTradeInfoService;
+
     private String filePath = "C:\\Users\\78701\\Desktop\\excel\\%s.xlsx";
 
     private String txtFilePath = "C:\\Users\\78701\\Desktop\\txt\\%s.txt";
+
+    private String userInfoPath = "C:\\Users\\78701\\Desktop\\%s.xlsx";
 
     @GetMapping("exportZTPool/{date}")
     @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
@@ -134,6 +142,28 @@ public class ExcelController {
 
         String newFilePath = String.format(filePath, "【" + date + "】二连板股票");
         EasyExcelUtil.exportToExcel(new ELBExcel(), elbExcelList, newFilePath, "二连板股票");
+
+        return Result.ok();
+    }
+
+
+    @GetMapping("exportUserTradeInfo")
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
+    @ApiOperation(value = "Excel用户交易记录导出-exportUserTradeInfo")
+    public Result exportUserTradeInfo() {
+
+
+        List<UserTradeInfoEntity> userTradeInfoEntities = userTradeInfoService.getAll();
+
+        if (CollectionUtil.isEmpty(userTradeInfoEntities)) {
+            return Result.ok(ResultEnum.NO_TODAY_DATA);
+        }
+
+        List<UserTradeInfoExcel> result = BeanUtil.copyToList(userTradeInfoEntities, UserTradeInfoExcel.class);
+
+
+        String newFilePath = String.format(userInfoPath, "3w小姜交易记录");
+        EasyExcelUtil.exportToExcel(new UserTradeInfoExcel(), result, newFilePath, "用户交易记录");
 
         return Result.ok();
     }

@@ -26,6 +26,8 @@ public class UserTradeInfoEntity {
 
     private String buyPrice;
 
+    private String todayClosePrice;
+
     private String sellPrice;
 
     private String stockNumber;
@@ -33,4 +35,16 @@ public class UserTradeInfoEntity {
     private String todayProfit;
 
     private String totalProfit;
+
+    private String lossPoint;
+
+    private String lossRatio;
+
+    private String lossPrice;
+
+    private String profitPoint;
+
+    private String profitRatio;
+
+    private String profitPrice;
 }

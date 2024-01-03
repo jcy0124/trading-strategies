@@ -8,4 +8,6 @@ public interface IUserInfoService {
     void add(UserInfoInsertReq userInfoReq);
 
     void update(UserInfoUpdateReq req);
+
+    void updateAmount(String userName, String todayProfit);
 }

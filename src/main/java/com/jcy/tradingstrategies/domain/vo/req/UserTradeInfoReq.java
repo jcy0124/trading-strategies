@@ -29,4 +29,6 @@ public class UserTradeInfoReq {
     private String todayProfit;
 
     private String totalProfit;
+
+    private String lossPoint;
 }
