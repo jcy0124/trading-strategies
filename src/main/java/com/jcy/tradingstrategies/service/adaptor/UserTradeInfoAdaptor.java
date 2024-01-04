@@ -16,6 +16,7 @@ public class UserTradeInfoAdaptor {
         userTradeInfoEntity.setBuyPrice(req.getBuyPrice());
         userTradeInfoEntity.setStockNumber(req.getStockNumber());
         userTradeInfoEntity.setLossPoint(req.getLossPoint());
+        userTradeInfoEntity.setFinishFlag("0");
         return userTradeInfoEntity;
     }
 
@@ -28,6 +29,7 @@ public class UserTradeInfoAdaptor {
         userTradeInfoEntity.setCodeStatus(req.getCodeStatus());
         userTradeInfoEntity.setSellPrice(req.getSellPrice());
         userTradeInfoEntity.setStockNumber(req.getStockNumber());
+        userTradeInfoEntity.setFinishFlag("1");
         return userTradeInfoEntity;
     }
 
@@ -38,6 +40,7 @@ public class UserTradeInfoAdaptor {
         userTradeInfoEntity.setName(req.getName());
         userTradeInfoEntity.setDate(req.getDate());
         userTradeInfoEntity.setCodeStatus(req.getCodeStatus());
+        userTradeInfoEntity.setFinishFlag("0");
         return userTradeInfoEntity;
     }
 }

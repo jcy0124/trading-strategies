@@ -9,7 +9,6 @@ import com.jcy.tradingstrategies.domain.enums.CodeStatusEnum;
 import com.jcy.tradingstrategies.domain.vo.req.BaseKLineReq;
 import com.jcy.tradingstrategies.domain.vo.req.UserTradeInfoReq;
 import com.jcy.tradingstrategies.service.IBaseKLineInfoService;
-import com.jcy.tradingstrategies.service.IUserInfoService;
 import com.jcy.tradingstrategies.service.IUserTradeInfoService;
 import com.jcy.tradingstrategies.service.adaptor.BaseKLineInfoAdaptor;
 import com.jcy.tradingstrategies.service.adaptor.UserTradeInfoAdaptor;
@@ -31,9 +30,6 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
     private UserTradeInfoDao userTradeInfoDao;
 
     @Autowired
-    private IUserInfoService userInfoService;
-
-    @Autowired
     private IBaseKLineInfoService baseKLineInfoService;
 
 
@@ -46,46 +42,53 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(UserTradeInfoReq req) {
+    public UserTradeInfoEntity add(UserTradeInfoReq req) {
         if (StrUtil.equals(req.getCodeStatus(), CodeStatusEnum.BUY.getCode())) {
             UserTradeInfoEntity userTradeInfoEntity = UserTradeInfoAdaptor.buildBuyInfo(req);
             computeTodayProfit(userTradeInfoEntity);
             computeLossPrice(userTradeInfoEntity);
             computeProfitPoint(userTradeInfoEntity);
             userTradeInfoDao.insert(userTradeInfoEntity);
-            return;
+            return userTradeInfoEntity;
         }
 
         if (StrUtil.equals(req.getCodeStatus(), CodeStatusEnum.HOLD.getCode())) {
             LambdaQueryWrapper<UserTradeInfoEntity> lqw = new LambdaQueryWrapper<>();
             lqw.eq(UserTradeInfoEntity::getUserName, req.getUserName());
             lqw.eq(UserTradeInfoEntity::getCode, req.getCode());
-            lqw.eq(UserTradeInfoEntity::getCodeStatus, CodeStatusEnum.BUY.getCode());
+            lqw.eq(UserTradeInfoEntity::getFinishFlag, "0");
             lqw.orderByDesc(UserTradeInfoEntity::getDate);
             lqw.last("limit 1");
-            UserTradeInfoEntity userTradeInfoInTable = userTradeInfoDao.selectOne(lqw);
+            UserTradeInfoEntity userTradeInfoLastDay = userTradeInfoDao.selectOne(lqw);
 
             UserTradeInfoEntity userTradeInfoEntity = UserTradeInfoAdaptor.buildHoldInfo(req);
-            userTradeInfoEntity = computeTodayProfit(userTradeInfoInTable, userTradeInfoEntity);
+            userTradeInfoEntity.setStockNumber(userTradeInfoLastDay.getStockNumber());
+            userTradeInfoEntity.setBuyPrice(userTradeInfoLastDay.getBuyPrice());
+            userTradeInfoEntity = computeTodayProfit(userTradeInfoLastDay, userTradeInfoEntity);
 
             userTradeInfoDao.insert(userTradeInfoEntity);
-            return;
+            return userTradeInfoEntity;
         }
 
         if (StrUtil.equals(req.getCodeStatus(), CodeStatusEnum.SELL.getCode())) {
             LambdaQueryWrapper<UserTradeInfoEntity> lqw = new LambdaQueryWrapper<>();
             lqw.eq(UserTradeInfoEntity::getUserName, req.getUserName());
             lqw.eq(UserTradeInfoEntity::getCode, req.getCode());
-            lqw.eq(UserTradeInfoEntity::getCodeStatus, CodeStatusEnum.BUY.getCode());
+            lqw.eq(UserTradeInfoEntity::getFinishFlag, "0");
             lqw.orderByDesc(UserTradeInfoEntity::getDate);
             lqw.last("limit 1");
             UserTradeInfoEntity userTradeInfoInTable = userTradeInfoDao.selectOne(lqw);
 
             UserTradeInfoEntity userTradeInfoEntity = UserTradeInfoAdaptor.buildSellInfo(req);
+
+            userTradeInfoEntity.setBuyPrice(userTradeInfoEntity.getBuyPrice());
             userTradeInfoEntity = computeTotalProfit(userTradeInfoInTable, userTradeInfoEntity);
 
             userTradeInfoDao.insert(userTradeInfoEntity);
+            userTradeInfoDao.updateFinishFlag(userTradeInfoEntity);
+            return userTradeInfoEntity;
         }
+        return null;
     }
 
 
@@ -135,21 +138,21 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
 
         userTradeInfoEntity.setTodayProfit(todayProfit);
         userTradeInfoEntity.setTodayClosePrice(close.toString());
+        userTradeInfoEntity.setTotalProfit(todayProfit);
     }
 
-    private UserTradeInfoEntity computeTodayProfit(UserTradeInfoEntity userTradeInfoInTable, UserTradeInfoEntity userTradeInfoEntity) {
-        BigDecimal buyPrice = new BigDecimal(userTradeInfoInTable.getBuyPrice());
+    private UserTradeInfoEntity computeTodayProfit(UserTradeInfoEntity userTradeInfoLastDay, UserTradeInfoEntity userTradeInfoEntity) {
+
 
         BaseKLineReq req = BaseKLineInfoAdaptor.buildBaseKLineReq(userTradeInfoEntity.getCode(), userTradeInfoEntity.getDate());
         BaseKLineInfoDto kLine = baseKLineInfoService.getBaseKLineInfoByDay(req);
+        BigDecimal change = kLine.getChange();
 
-        BigDecimal close = kLine.getClose();
-
-        BigDecimal subtract = BigDecimalUtils.subtract(close, buyPrice);
-        String todayProfit = BigDecimalUtils.multiply(subtract, new BigDecimal(userTradeInfoEntity.getStockNumber())).toString();
+        String todayProfit = BigDecimalUtils.multiply(change, new BigDecimal(userTradeInfoLastDay.getStockNumber())).toString();
 
         userTradeInfoEntity.setTodayProfit(todayProfit);
-        userTradeInfoEntity.setTodayClosePrice(close.toString());
+        userTradeInfoEntity.setTodayClosePrice(kLine.getClose().toString());
+        userTradeInfoEntity.setTotalProfit(BigDecimalUtils.add(new BigDecimal(userTradeInfoLastDay.getTotalProfit()), new BigDecimal(todayProfit)).toString());
         return userTradeInfoEntity;
     }
 
@@ -160,6 +163,7 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
         BigDecimal subtract = BigDecimalUtils.subtract(sellPrice, buyPrice);
         String totalProfit = BigDecimalUtils.multiply(subtract, new BigDecimal(userTradeInfoEntity.getStockNumber())).toString();
 
+        userTradeInfoEntity.setTodayProfit(BigDecimalUtils.multiply(BigDecimalUtils.subtract(sellPrice, new BigDecimal(userTradeInfoInTable.getTodayClosePrice())), new BigDecimal(userTradeInfoEntity.getStockNumber())).toString());
         userTradeInfoEntity.setTotalProfit(totalProfit);
         return userTradeInfoEntity;
     }

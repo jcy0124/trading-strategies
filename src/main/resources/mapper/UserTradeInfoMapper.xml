@@ -3,5 +3,8 @@
 <mapper namespace="com.jcy.tradingstrategies.dao.UserTradeInfoDao">
 
 
+    <update id="updateFinishFlag">
+        update user_trade_info set finish_flag = "1" where user_name = #{userName} and code = #{code} and finish_flag = "0"
+    </update>
 </mapper>
 

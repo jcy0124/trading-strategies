@@ -37,7 +37,7 @@ public class UserTradeInfoExcel {
     private String buyPrice;
 
     @ExcelProperty("当日收盘价格")
-    @ColumnWidth(15)
+    @ColumnWidth(20)
     private String todayClosePrice;
 
     @ExcelProperty("卖出价格")
@@ -69,14 +69,14 @@ public class UserTradeInfoExcel {
     private String lossPrice;
 
     @ExcelProperty("建议盈利价格")
-    @ColumnWidth(15)
+    @ColumnWidth(20)
     private String profitPoint;
 
     @ExcelProperty("建议盈利点")
-    @ColumnWidth(15)
+    @ColumnWidth(20)
     private String profitRatio;
 
     @ExcelProperty("建议盈利金额")
-    @ColumnWidth(15)
+    @ColumnWidth(20)
     private String profitPrice;
 }

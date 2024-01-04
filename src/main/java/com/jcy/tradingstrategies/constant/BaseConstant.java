@@ -10,6 +10,8 @@ public class BaseConstant {
 
     public static final String CODE_REGEX= "^\\d{6}$";
 
+    public static final String CODE_STATUS_REGEX= "^(1|2)$";
+
     public static final String CALCULATION_CYCLE_REGEX ="[1][0][0-2]";
 
     public static final String ZTB = "涨停板";

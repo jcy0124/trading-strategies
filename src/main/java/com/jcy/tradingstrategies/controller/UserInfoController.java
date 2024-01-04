@@ -2,6 +2,7 @@ package com.jcy.tradingstrategies.controller;
 
 
 import com.jcy.tradingstrategies.common.Result;
+import com.jcy.tradingstrategies.domain.entity.UserTradeInfoEntity;
 import com.jcy.tradingstrategies.domain.vo.req.UserInfoInsertReq;
 import com.jcy.tradingstrategies.domain.vo.req.UserInfoUpdateReq;
 import com.jcy.tradingstrategies.domain.vo.req.UserTradeInfoReq;
@@ -53,9 +54,9 @@ public class UserInfoController {
     public Result addUserTradeInfo(@RequestBody UserTradeInfoReq req) {
 
         log.info("开始新增用户信息");
-        userTradeInfoService.add(req);
+        UserTradeInfoEntity result = userTradeInfoService.add(req);
         log.info("结束新增用户信息");
-        return Result.ok();
+        return Result.ok(result);
     }
 
 }

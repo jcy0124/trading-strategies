@@ -6,4 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserTradeInfoDao extends BaseMapper<UserTradeInfoEntity> {
+    void updateFinishFlag(UserTradeInfoEntity userTradeInfoEntity);
 }

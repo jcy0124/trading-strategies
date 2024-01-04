@@ -47,4 +47,6 @@ public class UserTradeInfoEntity {
     private String profitRatio;
 
     private String profitPrice;
+
+    private String finishFlag;
 }
