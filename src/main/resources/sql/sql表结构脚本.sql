@@ -43,7 +43,29 @@ CREATE TABLE `zt_pool`
     KEY                  `ide_time` (`time`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10180 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='涨停板信息';
 
-
+CREATE TABLE `user_trade_info`
+(
+    `id`                int                                                           NOT NULL AUTO_INCREMENT,
+    `user_name`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '账号',
+    `code`              varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '股票代码',
+    `name`              varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '股票名称',
+    `date`              varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '日期',
+    `code_status`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '股票买入状态（1买入，2持有，3卖出）',
+    `buy_price`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '买入价格',
+    `today_close_price` varchar(255)                                                  DEFAULT NULL COMMENT '当日收盘价',
+    `sell_price`        varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '卖出价格',
+    `stock_number`      varchar(255)                                                  DEFAULT NULL COMMENT '买入数量',
+    `today_profit`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '当日盈亏',
+    `total_profit`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '总盈亏',
+    `loss_point`        varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '止损价格',
+    `loss_ratio`        varchar(255)                                                  DEFAULT NULL COMMENT '止损点',
+    `loss_price`        varchar(255)                                                  DEFAULT NULL COMMENT '止损金额',
+    `profit_point`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '建议获利离场价格',
+    `profit_ratio`      varchar(255)                                                  DEFAULT NULL COMMENT '建议获利离场点',
+    `profit_price`      varchar(255)                                                  DEFAULT NULL COMMENT '建议获利离场金额',
+    `finish_flag`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '交易完成标识（0未完成，1完成）',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
