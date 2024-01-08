@@ -1,5 +1,6 @@
 package com.jcy.tradingstrategies.service.qsV2.strategy;
 
+import cn.hutool.core.util.StrUtil;
 import com.jcy.tradingstrategies.service.adaptor.BaseKLineInfoAdaptor;
 import com.jcy.tradingstrategies.dao.QuantitativeStrategiesV2Dao;
 import com.jcy.tradingstrategies.domain.dto.BaseKLineInfoDto;
@@ -125,9 +126,43 @@ public class FirstZtStrategy implements Strategy {
             //==========================================================================================================
         } else { //如果第二个工作日是涨停，判断第三个工作日的收盘价是否在第一个工作日涨停上方
 
-            return null;
+            //获取第二个工作日的k线
+            BaseKLineInfoDto kLineSecondDay = getKLine(ztPoolDtoFirstDay.getCode(), secondDay);
+
+            BigDecimal secondDayOpen = kLineSecondDay.getOpen();
+            BigDecimal multiply = BigDecimalUtils.multiply(ztFirstLastPrice, new BigDecimal(1.03));
+            if (BigDecimalUtils.compare(secondDayOpen, multiply) >= 0) {
+                return null;
+            }
+
+            //获取第三个工作日日期
+            String thirdDay = calendarDateService.selectNextWorkDay(secondDay);
+            BaseKLineInfoDto kLineThirdDay = getKLine(ztPoolDtoFirstDay.getCode(), thirdDay);
+
+            if (BigDecimalUtils.compare(kLineThirdDay.getHigh(), ztSecondDay.getLastPrice()) < 0){
+                return null;
+            }
+
+                //判断第三个工作日的收盘价在第一个工作日的上方和第二个工作日中间
+                Boolean isOK = compare3CloseIn1HighAnd2Mid(ztFirstLastPrice, ztSecondDay.getLastPrice(), kLineThirdDay);
+            if (!isOK) {
+                return null;
+            }
+            QuantitativeStrategiesV2Dto quantitativeStrategiesV2Dto = QuantitativeStrategiesV2Adaptor.buildQuantitativeStrategiesV2Dto(ztPoolDtoFirstDay.getCode(), ztPoolDtoFirstDay.getName(), QuantitativeStrategiesV2Enum.REASON_4);
+
+            return quantitativeStrategiesV2Dto;
         }
     }
+
+    private Boolean compare3CloseIn1HighAnd2Mid(BigDecimal ztFirstLastPrice, BigDecimal ztSecondLastPrice, BaseKLineInfoDto kLineThirdDay) {
+        ztSecondLastPrice = BigDecimalUtils.subtract(ztSecondLastPrice, BigDecimalUtils.multiply(BigDecimalUtils.subtract(ztSecondLastPrice, ztFirstLastPrice), new BigDecimal(0.5)));
+        BigDecimal thirdDayClose = kLineThirdDay.getClose();
+        if (BigDecimalUtils.compare(thirdDayClose, ztFirstLastPrice) >= 0 && BigDecimalUtils.compare(ztSecondLastPrice, thirdDayClose) >= 0) {
+            return true;
+        }
+        return false;
+    }
+
 
     private Boolean compare2OpenHighLast(BigDecimal open, BigDecimal lastPrice) {
         return BigDecimalUtils.compare(open, lastPrice) > 0;
