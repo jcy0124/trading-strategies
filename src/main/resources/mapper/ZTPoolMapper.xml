@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jcy.tradingstrategies.dao.ZTPoolDao">
+<mapper namespace="com.jcy.tradingstrategies.business.dao.ZTPoolDao">
 
 
     <select id="isExistByDate" resultType="java.lang.String">
         select 1 from zt_pool where time = #{date} limit 1
     </select>
 
-    <select id="selectLBList" resultType="com.jcy.tradingstrategies.domain.entity.ZTPoolEntity">
+    <select id="selectLBList" resultType="com.jcy.tradingstrategies.business.domain.entity.ZTPoolEntity">
         select * from zt_pool
         where code = #{code}
         and  str_to_date(time, '%Y-%m-%d') &lt;= str_to_date(#{date}, '%Y-%m-%d')
@@ -15,7 +15,7 @@
         limit 10
     </select>
 
-    <select id="selectLastZTByCode" resultType="com.jcy.tradingstrategies.domain.dto.ZTPoolDto">
+    <select id="selectLastZTByCode" resultType="com.jcy.tradingstrategies.business.domain.dto.ZTPoolDto">
         select *
         from zt_pool
         where code = #{code}

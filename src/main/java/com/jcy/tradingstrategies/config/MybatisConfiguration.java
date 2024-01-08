@@ -2,7 +2,7 @@ package com.jcy.tradingstrategies.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.jcy.tradingstrategies.interceptor.SqlBeautyInterceptor;
+import com.jcy.tradingstrategies.config.interceptor.SqlBeautyInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
