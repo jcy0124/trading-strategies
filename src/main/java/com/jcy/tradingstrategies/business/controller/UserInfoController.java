@@ -1,13 +1,13 @@
 package com.jcy.tradingstrategies.business.controller;
 
 
-import com.jcy.tradingstrategies.common.base.Result;
 import com.jcy.tradingstrategies.business.domain.entity.UserTradeInfoEntity;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserInfoInsertReq;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserInfoUpdateReq;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserTradeInfoReq;
 import com.jcy.tradingstrategies.business.service.IUserInfoService;
 import com.jcy.tradingstrategies.business.service.IUserTradeInfoService;
+import com.jcy.tradingstrategies.common.base.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

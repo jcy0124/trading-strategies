@@ -1,7 +1,6 @@
 package com.jcy.tradingstrategies.config.thread;
 
 
-import com.jcy.tradingstrategies.config.thread.MyThreadFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;

@@ -14,16 +14,9 @@ public class BaseConstant {
 
     public static final String ZTB = "涨停板";
 
-    public static final String QSG = "强势股";
-
     public static final String QBGP = "全部股票";
 
     public static final String KXXX ="k线信息";
 
     public static final String RQGP ="人气股票";
-
-    public static final String YOUZI = "柚子信息";
-
-    public static final String FSCJL = "分时成交量";
-
 }

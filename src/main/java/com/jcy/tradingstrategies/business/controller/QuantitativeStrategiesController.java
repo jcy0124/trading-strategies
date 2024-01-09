@@ -2,16 +2,17 @@ package com.jcy.tradingstrategies.business.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import com.jcy.tradingstrategies.common.annotation.DateValid;
-import com.jcy.tradingstrategies.common.base.Result;
-import com.jcy.tradingstrategies.common.base.ResultEnum;
-import com.jcy.tradingstrategies.common.constant.TimeConstant;
 import com.jcy.tradingstrategies.business.domain.dto.CommonDto;
 import com.jcy.tradingstrategies.business.domain.vo.resp.CommonResp;
 import com.jcy.tradingstrategies.business.service.ICalendarDateService;
 import com.jcy.tradingstrategies.business.service.qsV1.IQuantitativeStrategiesV1Service;
 import com.jcy.tradingstrategies.business.service.qsV2.IQuantitativeStrategiesV2Service;
 import com.jcy.tradingstrategies.business.service.qsV2.QuantitativeStrategiesV2Dto;
+import com.jcy.tradingstrategies.common.annotation.DateValid;
+import com.jcy.tradingstrategies.common.base.Result;
+import com.jcy.tradingstrategies.common.base.ResultEnum;
+import com.jcy.tradingstrategies.common.constant.TimeConstant;
+import com.jcy.tradingstrategies.common.util.FIleUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,13 +70,7 @@ public class QuantitativeStrategiesController {
                 String newTxtFilePath = String.format(qs1FilePath, "【" + date + "】qs1股票策略");
                 BufferedWriter bw;
                 try {
-                    bw = new BufferedWriter(new FileWriter(newTxtFilePath));
-                    for (String code : codeList) {
-                        bw.write(code);
-                        bw.newLine();
-                        bw.flush();
-                    }
-                    bw.close();
+                    FIleUtil.writeTxt(codeList, newTxtFilePath);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -116,13 +110,7 @@ public class QuantitativeStrategiesController {
                 String newTxtFilePath = String.format(qs2FilePath, "【" + date + "】qs2股票策略");
                 BufferedWriter bw;
                 try {
-                    bw = new BufferedWriter(new FileWriter(newTxtFilePath));
-                    for (String code : codeList) {
-                        bw.write(code);
-                        bw.newLine();
-                        bw.flush();
-                    }
-                    bw.close();
+                    FIleUtil.writeTxt(codeList, newTxtFilePath);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

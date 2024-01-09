@@ -1,13 +1,13 @@
 package com.jcy.tradingstrategies.business.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.jcy.tradingstrategies.common.base.Result;
-import com.jcy.tradingstrategies.common.base.ResultCode;
 import com.jcy.tradingstrategies.business.domain.dto.BaseKLineInfoDto;
 import com.jcy.tradingstrategies.business.domain.vo.req.BaseKLineReq;
 import com.jcy.tradingstrategies.business.domain.vo.resp.BaseKLineInfoResp;
 import com.jcy.tradingstrategies.business.service.IBaseKLineInfoService;
 import com.jcy.tradingstrategies.business.service.IBaseService;
+import com.jcy.tradingstrategies.common.base.Result;
+import com.jcy.tradingstrategies.common.base.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.util.List;
  * 基础k线
  */
 @RestController
-@RequestMapping("baseKLineInfo")
+@RequestMapping("baseKlineinfo")
 @Slf4j
 @Api(tags = "股票基础k线接口-BaseKLineInfoController")
 public class BaseKLineInfoController {
@@ -36,8 +36,8 @@ public class BaseKLineInfoController {
     @Autowired
     private IBaseService baseService;
 
-    @PostMapping("getBaseKLineInfo")
-    @ApiOperation(value = "http同步股票基础k线-getBaseKLineInfo")
+    @PostMapping("getkline")
+    @ApiOperation(value = "http同步股票基础k线")
     public Result getBaseKLineInfo(@RequestBody @Validated BaseKLineReq req) {
 
         log.info("开始获取【{}】k线信息", req.getCode());
@@ -56,26 +56,3 @@ public class BaseKLineInfoController {
         return Result.ok(ResultCode.SUCCESS, "【" + req.getCode() + "】的K线信息", resp);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

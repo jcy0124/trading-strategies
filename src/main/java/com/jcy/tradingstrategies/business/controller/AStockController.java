@@ -1,8 +1,8 @@
 package com.jcy.tradingstrategies.business.controller;
 
-import com.jcy.tradingstrategies.common.base.Result;
 import com.jcy.tradingstrategies.business.service.IAStockService;
 import com.jcy.tradingstrategies.business.service.IBaseService;
+import com.jcy.tradingstrategies.common.base.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +23,8 @@ public class AStockController {
     @Autowired
     private IBaseService baseService;
 
-    @GetMapping("getAllAStock")
-    @ApiOperation(value = "http同步全量a股市场股票-getAllAStock")
+    @GetMapping("getall")
+    @ApiOperation(value = "http同步全量a股市场股票")
     public Result getAllAStock() {
 
         log.info("开始获取全部a股市场股票");

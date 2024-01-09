@@ -3,11 +3,6 @@ package com.jcy.tradingstrategies.business.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import com.jcy.tradingstrategies.common.annotation.DateValid;
-import com.jcy.tradingstrategies.common.base.Result;
-import com.jcy.tradingstrategies.common.base.ResultCode;
-import com.jcy.tradingstrategies.common.base.ResultEnum;
-import com.jcy.tradingstrategies.common.constant.TimeConstant;
 import com.jcy.tradingstrategies.business.domain.dto.ELBDto;
 import com.jcy.tradingstrategies.business.domain.dto.LBDto;
 import com.jcy.tradingstrategies.business.domain.dto.ZTPoolDto;
@@ -17,6 +12,11 @@ import com.jcy.tradingstrategies.business.domain.vo.resp.ZTPoolResp;
 import com.jcy.tradingstrategies.business.service.IBaseService;
 import com.jcy.tradingstrategies.business.service.ICalendarDateService;
 import com.jcy.tradingstrategies.business.service.IZTPoolService;
+import com.jcy.tradingstrategies.common.annotation.DateValid;
+import com.jcy.tradingstrategies.common.base.Result;
+import com.jcy.tradingstrategies.common.base.ResultCode;
+import com.jcy.tradingstrategies.common.base.ResultEnum;
+import com.jcy.tradingstrategies.common.constant.TimeConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -50,7 +50,7 @@ public class ZTPoolController {
     private ICalendarDateService calendarDateService;
 
     /**
-     * 获取当天涨停板股票
+     * Http获取当天涨停板股票
      *
      * @param date
      * @return
@@ -170,12 +170,12 @@ public class ZTPoolController {
         List<String> dateList = calendarDateService.selectWorkDateBetween(startDate, endDate);
 
         for (String date : dateList) {
-            log.info("开始【{}】解析",date);
+            log.info("开始【{}】解析", date);
             String response = baseService.getZTPoolResp(date);
             try {
                 ztPoolService.insert(response, date);
             } catch (Exception e) {
-                log.error("调用远程解析出问题：",e);
+                log.error("调用远程解析出问题：", e);
             }
         }
 

@@ -53,14 +53,6 @@ public class AStockServiceImpl implements IAStockService {
         }
         aStockDao.insertBatch(list);
     }
-
-    @Override
-    public List<String> getAllCode() {
-        LambdaQueryWrapper<AStockEntity> lqw = new LambdaQueryWrapper<>();
-        lqw.select(AStockEntity::getCode);
-        List<AStockEntity> aStockEntityList = aStockDao.selectList(lqw);
-        return aStockEntityList.stream().map(AStockEntity::getCode).collect(Collectors.toList());
-    }
 }
 
 

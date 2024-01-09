@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 日期
  */
 @RestController
-@RequestMapping("calendarDate")
+@RequestMapping("calendardate")
 @Slf4j
 @Api(tags = "日期相关接口-CalendarDateController")
 public class CalendarDateController {

@@ -11,13 +11,8 @@ public interface IBaseService {
 
     String getAllAStock();
 
-    String getQsPoolResp(String date);
-
     String getRenQiPoolResp();
 
-    String getYouZiResp(String date);
-
-    String getFSCJLResp(String code);
 }
 
 

@@ -31,27 +31,8 @@ public class BaseServiceImpl implements IBaseService {
     }
 
     @Override
-    public String getQsPoolResp(String date) {
-        String url = UrlConstant.QS_POOL_URL + date;
-        return HttpClientUtil.doGet(url, "UTF-8");
-    }
-
-    @Override
     public String getRenQiPoolResp() {
         String url = UrlConstant.REN_QI_URL;
-        return HttpClientUtil.doGet(url, "UTF-8");
-    }
-
-    @Override
-    public String getYouZiResp(String date) {
-        String url = UrlConstant.YOU_ZI_URL + date;
-        return HttpClientUtil.doGet(url, "UTF-8");
-    }
-
-    @Override
-    public String getFSCJLResp(String code) {
-        String url = UrlConstant.FSCJL_URL;
-        url = String.format(url, code);
         return HttpClientUtil.doGet(url, "UTF-8");
     }
 }

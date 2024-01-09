@@ -10,7 +10,7 @@ public interface ICalendarDateService {
 
     boolean selectWorkDayByDate(String date);
 
-    List<String> selectWorkDateBetween(String startDate, String endDate);
-
     String selectNextWorkDay(String startDate);
+
+    List<String> selectWorkDateBetween(String startDate, String endDate);
 }

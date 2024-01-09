@@ -8,7 +8,7 @@ import java.util.List;
 
 public class EasyExcelUtil {
 
-    public static <T> void exportToExcel(T t, List<T> list, String filePath,String sheetName) {
+    public static <T> void exportToExcel(T t, List<T> list, String filePath, String sheetName) {
         // 创建 ExcelWriterBuilder
         ExcelWriterBuilder writerBuilder = EasyExcel.write(filePath, t.getClass());
 

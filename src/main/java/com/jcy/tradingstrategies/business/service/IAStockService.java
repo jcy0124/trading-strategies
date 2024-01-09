@@ -6,6 +6,4 @@ public interface IAStockService {
 
     void insert(String response);
 
-    List<String> getAllCode();
-
 }

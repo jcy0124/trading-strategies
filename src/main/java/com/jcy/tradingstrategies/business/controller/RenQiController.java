@@ -1,11 +1,11 @@
 package com.jcy.tradingstrategies.business.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.jcy.tradingstrategies.common.base.Result;
 import com.jcy.tradingstrategies.business.domain.dto.RenQiDto;
 import com.jcy.tradingstrategies.business.domain.vo.resp.RenQiResp;
 import com.jcy.tradingstrategies.business.service.IBaseService;
 import com.jcy.tradingstrategies.business.service.IRenQiService;
+import com.jcy.tradingstrategies.common.base.Result;
 import com.jcy.tradingstrategies.common.util.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +30,7 @@ public class RenQiController {
     private IBaseService baseService;
 
     @GetMapping("/getRenQiPoolByHttp")
-    @ApiOperation(value = "http同步当天人气股票-getRenQiPoolByHttp")
+    @ApiOperation(value = "http同步当天人气股票")
     public Result getRenQiPoolByHttp() {
 
         String today = DateUtil.getToday();
@@ -47,19 +47,3 @@ public class RenQiController {
         return Result.ok(resp);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

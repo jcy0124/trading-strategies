@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 public class TraceInterceptor implements HandlerInterceptor {
 
 
-
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         MDC.put("TRACE_ID", RandomUtil.randomNumbers(10));
