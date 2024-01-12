@@ -8,7 +8,7 @@ public class BaseConstant {
 
     public static final String CODE_REGEX= "^\\d{6}$";
 
-    public static final String CODE_STATUS_REGEX= "^(1|2)$";
+    public static final String CODE_STATUS_REGEX= "^(1|2|3)$";
 
     public static final String CALCULATION_CYCLE_REGEX ="[1][0][0-2]";
 
@@ -19,4 +19,6 @@ public class BaseConstant {
     public static final String KXXX ="k线信息";
 
     public static final String RQGP ="人气股票";
+
+    public static final String SSGP ="实时股票";
 }

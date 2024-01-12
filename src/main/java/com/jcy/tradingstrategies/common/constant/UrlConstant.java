@@ -58,6 +58,11 @@ public class UrlConstant {
      */
     public static final String FSCJL_URL = "https://stockapi.com.cn/v1/base/min?token=" + TokenConstant.TOKEN + "&code=%s&all=1";
     public static final String FSCJL_URL_WITHOUT_TOKEN = "https://stockapi.com.cn/v1/base/min?code=%s&all=1";
+
+    /**
+     * 实时五档委托单
+     */
+    public static final String SSWT_URL = "https://stockapi.com.cn/v1/base/wudang?code=%s&token="+TokenConstant.TOKEN;
 }
 
 

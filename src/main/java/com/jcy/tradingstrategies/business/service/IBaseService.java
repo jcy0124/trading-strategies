@@ -13,6 +13,7 @@ public interface IBaseService {
 
     String getRenQiPoolResp();
 
+    String getSSJGResp(String code);
 }
 
 

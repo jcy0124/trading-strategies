@@ -6,4 +6,6 @@ public interface IAStockService {
 
     void insert(String response);
 
+    String selectNameByCode(String code);
+
 }

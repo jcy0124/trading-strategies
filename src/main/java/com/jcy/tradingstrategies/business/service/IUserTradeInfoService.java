@@ -10,4 +10,5 @@ public interface IUserTradeInfoService {
 
     List<UserTradeInfoEntity> getAll();
 
+    UserTradeInfoEntity getLastCode(UserTradeInfoReq req);
 }

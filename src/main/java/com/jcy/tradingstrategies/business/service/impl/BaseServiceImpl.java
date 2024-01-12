@@ -35,6 +35,13 @@ public class BaseServiceImpl implements IBaseService {
         String url = UrlConstant.REN_QI_URL;
         return HttpClientUtil.doGet(url, "UTF-8");
     }
+
+    @Override
+    public String getSSJGResp(String code) {
+        String url = UrlConstant.SSWT_URL;
+        url = String.format(url,code);
+        return HttpClientUtil.doGet(url, "UTF-8");
+    }
 }
 
 

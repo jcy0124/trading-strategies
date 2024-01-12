@@ -21,8 +21,7 @@ public class UserTradeInfoReq {
     @Pattern(regexp = BaseConstant.CODE_REGEX, message = "请正确输入六位股票代码")
     private String code;
 
-    @ApiModelProperty(name = "股票名称",required = true)
-    @NotBlank(message = "股票名称不能为空")
+
     private String name;
 
     @ApiModelProperty(name = "日期：yyyy-MM-dd",required = true)
@@ -30,9 +29,9 @@ public class UserTradeInfoReq {
     @NotBlank(message = "日期不能为空")
     private String date;
 
-    @ApiModelProperty(name = "买入状态（1买入，2持有，3卖出",required = true)
+    @ApiModelProperty(name = "买入状态（1买入，2持有，3卖出)",required = true)
     @NotBlank(message = "买入状态不能为空")
-    @Pattern(regexp = BaseConstant.CODE_STATUS_REGEX, message = "请正确输入六位股票代码")
+    @Pattern(regexp = BaseConstant.CODE_STATUS_REGEX, message = "买入状态（1买入，2持有，3卖出)")
     private String codeStatus;
 
     private String buyPrice;

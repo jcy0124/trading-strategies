@@ -1,25 +1,20 @@
 package com.jcy.tradingstrategies.business.service.impl;
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jcy.tradingstrategies.business.dao.UserTradeInfoDao;
-import com.jcy.tradingstrategies.business.domain.dto.BaseKLineInfoDto;
 import com.jcy.tradingstrategies.business.domain.entity.UserTradeInfoEntity;
-import com.jcy.tradingstrategies.business.domain.enums.CodeStatusEnum;
-import com.jcy.tradingstrategies.business.domain.vo.req.BaseKLineReq;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserTradeInfoReq;
-import com.jcy.tradingstrategies.business.service.IBaseKLineInfoService;
+import com.jcy.tradingstrategies.business.service.IAStockService;
 import com.jcy.tradingstrategies.business.service.IUserTradeInfoService;
-import com.jcy.tradingstrategies.business.service.adaptor.BaseKLineInfoAdaptor;
-import com.jcy.tradingstrategies.business.service.adaptor.UserTradeInfoAdaptor;
-import com.jcy.tradingstrategies.common.util.BigDecimalUtils;
+import com.jcy.tradingstrategies.business.service.pattern.usertrade.UserTradeInfoStrategy;
+import com.jcy.tradingstrategies.business.service.pattern.usertrade.UserTradeInfoStrategyHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -30,8 +25,10 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
     private UserTradeInfoDao userTradeInfoDao;
 
     @Autowired
-    private IBaseKLineInfoService baseKLineInfoService;
+    private IAStockService iaStockService;
 
+    @Autowired
+    private UserTradeInfoStrategyHolder userTradeInfoStrategyHolder;
 
     @Override
     public List<UserTradeInfoEntity> getAll() {
@@ -41,9 +38,35 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
     }
 
     @Override
+    public UserTradeInfoEntity getLastCode(UserTradeInfoReq req) {
+        LambdaQueryWrapper<UserTradeInfoEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(UserTradeInfoEntity::getUserName, req.getUserName());
+        lqw.eq(UserTradeInfoEntity::getCode, req.getCode());
+        lqw.eq(UserTradeInfoEntity::getFinishFlag, "0");
+        lqw.orderByDesc(UserTradeInfoEntity::getDate);
+        lqw.last("limit 1");
+        return userTradeInfoDao.selectOne(lqw);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public UserTradeInfoEntity add(UserTradeInfoReq req) {
-        if (StrUtil.equals(req.getCodeStatus(), CodeStatusEnum.BUY.getCode())) {
+        String name = iaStockService.selectNameByCode(req.getCode());
+        req.setName(name);
+
+        UserTradeInfoStrategy userTradeInfoStrategy = userTradeInfoStrategyHolder.of(req.getCodeStatus());
+        if (Objects.isNull(userTradeInfoStrategy)) {
+            return null;
+        }
+
+        return userTradeInfoStrategy.addUserTradeInfo(req);
+    }
+}
+
+
+
+
+/*        if (StrUtil.equals(req.getCodeStatus(), CodeStatusEnum.BUY.getCode())) {
             UserTradeInfoEntity userTradeInfoEntity = UserTradeInfoAdaptor.buildBuyInfo(req);
             computeTodayProfit(userTradeInfoEntity);
             computeLossPrice(userTradeInfoEntity);
@@ -88,9 +111,7 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
             userTradeInfoDao.updateFinishFlag(userTradeInfoEntity);
             return userTradeInfoEntity;
         }
-        return null;
     }
-
 
     private void computeProfitPoint(UserTradeInfoEntity userTradeInfoEntity) {
         BigDecimal lossPoint = new BigDecimal(userTradeInfoEntity.getLossPoint());
@@ -168,27 +189,4 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
         return userTradeInfoEntity;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
