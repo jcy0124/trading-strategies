@@ -3,5 +3,11 @@
 <mapper namespace="com.jcy.tradingstrategies.business.dao.LowWarningDao">
 
 
+    <insert id="insertBatch">
+        insert into low_warning(code,time,low_warning,is_alert) values
+        <foreach collection="list" separator="," item="item">
+            (#{item.code},#{time},#{item.lowLimitWarning},"0")
+        </foreach>
+    </insert>
 </mapper>
 

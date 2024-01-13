@@ -1,33 +1,19 @@
 package com.jcy.tradingstrategies.common.util;
 
-import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
 import java.io.IOException;
 
 
 public class HttpClientUtil {
-    /**
-     * httpClient的get请求方式
-     * 使用GetMethod来访问一个URL对应的网页实现步骤：
-     * 1.生成一个HttpClient对象并设置相应的参数；
-     * 2.生成一个GetMethod对象并设置响应的参数；
-     * 3.用HttpClient生成的对象来执行GetMethod生成的Get方法；
-     * 4.处理响应状态码；
-     * 5.若响应正常，处理HTTP响应内容；
-     * 6.释放连接。
-     *
-     * @param url
-     * @param charset
-     * @return
-     */
+
+
     public static String doGet(String url, String charset) {
         //1.生成HttpClient对象并设置参数
         HttpClient httpClient = new HttpClient();
@@ -57,9 +43,6 @@ public class HttpClientUtil {
             //读取为字节数组
             byte[] responseBody = getMethod.getResponseBody();
             response = new String(responseBody, charset);
-//            System.out.println("-----------response:" + response);
-            //读取为InputStream，在网页内容数据量大时候推荐使用
-            //InputStream response = getMethod.getResponseBodyAsStream();
         } catch (HttpException e) {
             //发生致命的异常，可能是协议不对或者返回的内容有问题
             throw new RuntimeException("解析失败，请检查输入的URL！！！");

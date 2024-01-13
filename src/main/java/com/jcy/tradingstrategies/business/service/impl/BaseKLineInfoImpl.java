@@ -9,7 +9,6 @@ import com.jcy.tradingstrategies.business.service.IBaseKLineInfoService;
 import com.jcy.tradingstrategies.business.service.IBaseService;
 import com.jcy.tradingstrategies.business.service.adaptor.BaseKLineInfoAdaptor;
 import com.jcy.tradingstrategies.common.constant.BaseConstant;
-import com.jcy.tradingstrategies.common.exception.BusinessException;
 import com.jcy.tradingstrategies.common.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +97,8 @@ public class BaseKLineInfoImpl implements IBaseKLineInfoService {
         long t2 = System.currentTimeMillis();
         log.info("多线程结束http同步请求，同步时间：{}，同步数量：{}", (t2 - t1), result.size());
         if (codeList.size() != result.size()) {
-            throw new BusinessException("多线程同步http请求异常");
+            log.error("多线程同步http请求数量发生异常，重新发起请求");
+            return getBaseKLineMap(codeList, date);
         }
         return result;
     }

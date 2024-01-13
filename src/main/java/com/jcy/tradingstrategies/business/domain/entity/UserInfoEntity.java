@@ -22,4 +22,7 @@ public class UserInfoEntity {
 
     private String changeAmount;
 
+    private String baseAmount;
+
+    private Integer profitLossRatio;
 }

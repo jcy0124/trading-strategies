@@ -6,6 +6,7 @@ import com.jcy.tradingstrategies.business.domain.entity.UserTradeInfoEntity;
 import com.jcy.tradingstrategies.business.domain.vo.req.BaseKLineReq;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserTradeInfoReq;
 import com.jcy.tradingstrategies.business.service.IBaseKLineInfoService;
+import com.jcy.tradingstrategies.business.service.IUserInfoService;
 import com.jcy.tradingstrategies.business.service.adaptor.BaseKLineInfoAdaptor;
 import com.jcy.tradingstrategies.business.service.adaptor.UserTradeInfoAdaptor;
 import com.jcy.tradingstrategies.common.util.BigDecimalUtils;
@@ -21,6 +22,9 @@ public class BuyStrategy implements UserTradeInfoStrategy {
 
     @Autowired
     private UserTradeInfoDao userTradeInfoDao;
+
+    @Autowired
+    private IUserInfoService userInfoService;
 
     @Autowired
     private IBaseKLineInfoService baseKLineInfoService;

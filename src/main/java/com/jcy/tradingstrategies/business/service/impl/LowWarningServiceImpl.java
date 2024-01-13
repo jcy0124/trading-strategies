@@ -3,7 +3,9 @@ package com.jcy.tradingstrategies.business.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jcy.tradingstrategies.business.dao.LowWarningDao;
 import com.jcy.tradingstrategies.business.domain.entity.LowWarningEntity;
+import com.jcy.tradingstrategies.business.domain.vo.req.LowWarningReq;
 import com.jcy.tradingstrategies.business.service.ILowWarningService;
+import com.jcy.tradingstrategies.common.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,4 +32,29 @@ public class LowWarningServiceImpl implements ILowWarningService {
         lowWarningEntity.setIsAlert("1");
         lowWarningDao.updateById(lowWarningEntity);
     }
+
+    @Override
+    public void insertBatch(List<LowWarningReq> list) {
+        String time = DateUtil.getToday();
+        lowWarningDao.insertBatch(list,time);
+    }
+
+    @Override
+    public List<LowWarningEntity> selectNoAlertList() {
+        LambdaQueryWrapper<LowWarningEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(LowWarningEntity::getIsAlert,"0");
+        return lowWarningDao.selectList(lqw);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+

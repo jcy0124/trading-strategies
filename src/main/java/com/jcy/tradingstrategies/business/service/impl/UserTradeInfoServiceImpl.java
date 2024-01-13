@@ -20,7 +20,7 @@ import java.util.Objects;
 @Slf4j
 public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
 
-    public static final int PROFIT_LOSS_RATIO = 3;
+
     @Autowired
     private UserTradeInfoDao userTradeInfoDao;
 
