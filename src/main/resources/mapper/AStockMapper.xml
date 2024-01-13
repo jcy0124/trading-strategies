@@ -11,7 +11,7 @@
     </insert>
 
     <delete id="deleteAll">
-        delete from a_stock
+        truncate table a_stock
     </delete>
 </mapper>
 

@@ -3,11 +3,11 @@ package com.jcy.tradingstrategies.business.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.jcy.tradingstrategies.business.service.adaptor.AStockAdaptor;
-import com.jcy.tradingstrategies.common.constant.BaseConstant;
 import com.jcy.tradingstrategies.business.dao.AStockDao;
 import com.jcy.tradingstrategies.business.domain.entity.AStockEntity;
 import com.jcy.tradingstrategies.business.service.IAStockService;
+import com.jcy.tradingstrategies.business.service.adaptor.AStockAdaptor;
+import com.jcy.tradingstrategies.common.constant.BaseConstant;
 import com.jcy.tradingstrategies.common.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -47,26 +48,28 @@ public class AStockServiceImpl implements IAStockService {
             }
 
             list.add(aStockEntity);
-            if (list.size() >= MAX_INSERT_SIZE) {
-                aStockDao.insertBatch(list);
-                list.clear();
-            }
+//            if (list.size() >= MAX_INSERT_SIZE) {
+//                aStockDao.insertBatch(list);
+//                list.clear();
+//            }
         }
+
+        list = list.stream().sorted(Comparator.comparing(AStockEntity::getCode)).collect(Collectors.toList());
         aStockDao.insertBatch(list);
     }
 
     @Override
     public String selectNameByCode(String code) {
         LambdaQueryWrapper<AStockEntity> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(AStockEntity::getCode,code);
+        lqw.eq(AStockEntity::getCode, code);
         lqw.select(AStockEntity::getName);
         return aStockDao.selectOne(lqw).getName();
     }
 
     @Override
     public Map<String, String> selectNameByCodeList(List<String> codeList) {
-        LambdaQueryWrapper<AStockEntity>lqw = new LambdaQueryWrapper<>();
-        lqw.in(AStockEntity::getCode,codeList);
+        LambdaQueryWrapper<AStockEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.in(AStockEntity::getCode, codeList);
         List<AStockEntity> aStockEntities = aStockDao.selectList(lqw);
         return aStockEntities.stream().collect(Collectors.toMap(AStockEntity::getCode, AStockEntity::getName));
     }
