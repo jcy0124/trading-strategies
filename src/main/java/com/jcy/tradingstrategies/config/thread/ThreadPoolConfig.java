@@ -36,7 +36,7 @@ public class ThreadPoolConfig implements AsyncConfigurer {
         //线程池优雅停机 spring的线程池继承了DisposableBean，将线程池交由spring管理，在destroy方法中调用了showdown方法，实现优雅停机
         executor.setWaitForTasksToCompleteOnShutdown(true);
 
-        executor.setCorePoolSize(8);   //核心线程
+        executor.setCorePoolSize(3);   //核心线程
         executor.setMaxPoolSize(8);    //最大线程
         executor.setQueueCapacity(200); //等待队列
         executor.setThreadNamePrefix("trading-strategies-executor-");

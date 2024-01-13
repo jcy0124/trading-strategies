@@ -149,7 +149,7 @@ public class ExcelController {
         List<UserTradeInfoExcel> result = BeanUtil.copyToList(userTradeInfoEntities, UserTradeInfoExcel.class);
 
 
-        String newFilePath = String.format(userInfoPath, "3w小姜交易记录");
+        String newFilePath = String.format(userInfoPath, "3w小姜_trading info");
         EasyExcelUtil.exportToExcel(new UserTradeInfoExcel(), result, newFilePath, "用户交易记录");
 
         return Result.ok();
