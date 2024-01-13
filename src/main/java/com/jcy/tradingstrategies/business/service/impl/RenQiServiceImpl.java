@@ -20,7 +20,7 @@ public class RenQiServiceImpl implements IRenQiService {
 
     @Override
     public List<RenQiDto> convert(String response) {
-        JSONArray data = JsonUtil.getData(response, BaseConstant.RQGP);
+        JSONArray data = JsonUtil.getDataArray(response, BaseConstant.RQGP);
 
         List<RenQiDto> list = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {

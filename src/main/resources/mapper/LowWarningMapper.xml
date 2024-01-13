@@ -4,10 +4,13 @@
 
 
     <insert id="insertBatch">
-        insert into low_warning(code,time,low_warning,is_alert) values
+        insert into low_warning(code,name,time,low_limit_warning,is_alert) values
         <foreach collection="list" separator="," item="item">
-            (#{item.code},#{time},#{item.lowLimitWarning},"0")
+            (#{item.code},#{item.name},#{time},#{item.lowLimitWarning},"0")
         </foreach>
     </insert>
+    <update id="updateAlert">
+        update low_warning set is_alert = '1',update_time = now() where id = #{id}
+    </update>
 </mapper>
 

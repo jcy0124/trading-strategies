@@ -1,6 +1,7 @@
 package com.jcy.tradingstrategies.business.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IAStockService {
 
@@ -8,4 +9,5 @@ public interface IAStockService {
 
     String selectNameByCode(String code);
 
+    Map<String, String> selectNameByCodeList(List<String> codeList);
 }

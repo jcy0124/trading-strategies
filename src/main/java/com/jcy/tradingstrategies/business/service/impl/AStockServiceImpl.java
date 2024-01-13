@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class AStockServiceImpl implements IAStockService {
 
         aStockDao.deleteAll();
 
-        JSONArray data = JsonUtil.getData(response, BaseConstant.QBGP);
+        JSONArray data = JsonUtil.getDataArray(response, BaseConstant.QBGP);
         List<AStockEntity> list = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             JSONObject jsonDetailInfo = data.getJSONObject(i);
@@ -60,6 +61,14 @@ public class AStockServiceImpl implements IAStockService {
         lqw.eq(AStockEntity::getCode,code);
         lqw.select(AStockEntity::getName);
         return aStockDao.selectOne(lqw).getName();
+    }
+
+    @Override
+    public Map<String, String> selectNameByCodeList(List<String> codeList) {
+        LambdaQueryWrapper<AStockEntity>lqw = new LambdaQueryWrapper<>();
+        lqw.in(AStockEntity::getCode,codeList);
+        List<AStockEntity> aStockEntities = aStockDao.selectList(lqw);
+        return aStockEntities.stream().collect(Collectors.toMap(AStockEntity::getCode, AStockEntity::getName));
     }
 }
 

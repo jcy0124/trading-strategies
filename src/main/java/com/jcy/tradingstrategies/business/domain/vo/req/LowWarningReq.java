@@ -19,6 +19,7 @@ public class LowWarningReq {
     @Pattern(regexp = BaseConstant.CODE_REGEX, message = "请正确输入六位股票代码")
     private String code;
 
+    private String name;
 
     @ApiModelProperty(name = "预警价位",required = true)
     @NotNull(message = "预警价位不能为空")

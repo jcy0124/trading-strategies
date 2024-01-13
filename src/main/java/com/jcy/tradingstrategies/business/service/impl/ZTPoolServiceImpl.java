@@ -46,7 +46,7 @@ public class ZTPoolServiceImpl implements IZTPoolService {
     @Override
     public Integer insert(String response, String date) {
 
-        JSONArray data = JsonUtil.getData(response, BaseConstant.ZTB);
+        JSONArray data = JsonUtil.getDataArray(response, BaseConstant.ZTB);
 
         List<ZTPoolEntity> list = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {

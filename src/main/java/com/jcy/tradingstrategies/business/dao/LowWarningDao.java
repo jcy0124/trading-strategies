@@ -11,4 +11,6 @@ import java.util.List;
 @Mapper
 public interface LowWarningDao extends BaseMapper<LowWarningEntity> {
     void insertBatch(@Param("list") List<LowWarningReq> list, @Param("time") String time);
+
+    void updateAlert(@Param("id") Integer id);
 }

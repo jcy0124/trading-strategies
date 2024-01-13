@@ -1,4 +1,4 @@
-package com.jcy.tradingstrategies.config;
+package com.jcy.tradingstrategies.config.mybatis;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;

@@ -37,7 +37,7 @@ public class BaseKLineInfoImpl implements IBaseKLineInfoService {
     @Override
     public List<BaseKLineInfoDto> getBaseKLineInfo(String response) {
 
-        JSONArray data = JsonUtil.getData(response, BaseConstant.KXXX);
+        JSONArray data = JsonUtil.getDataArray(response, BaseConstant.KXXX);
 
         List<BaseKLineInfoDto> list = new ArrayList<>();
 
@@ -53,7 +53,7 @@ public class BaseKLineInfoImpl implements IBaseKLineInfoService {
     @Override
     public BaseKLineInfoDto getBaseKLineInfoByDay(BaseKLineReq req) {
         String resp = baseService.getBaseKLineResp(req);
-        JSONArray data = JsonUtil.getData(resp, BaseConstant.KXXX);
+        JSONArray data = JsonUtil.getDataArray(resp, BaseConstant.KXXX);
 
         BaseKLineInfoDto baseKLineInfoDto = null;
 
