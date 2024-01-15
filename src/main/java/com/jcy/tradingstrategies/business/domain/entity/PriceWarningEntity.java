@@ -13,8 +13,8 @@ import java.util.Date;
 
 @Data
 @ToString
-@TableName("low_warning")
-public class LowWarningEntity {
+@TableName("price_warning")
+public class PriceWarningEntity {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -25,11 +25,13 @@ public class LowWarningEntity {
 
     private String time;
 
-    private BigDecimal lowLimitWarning;
+    private BigDecimal priceLimitWarning;
 
     private String reason;
 
     private String isAlert;
+
+    private Date createTime;
 
     @TableField(fill = FieldFill.UPDATE)
     private Date updateTime;

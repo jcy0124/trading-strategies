@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 @Data
 @ToString
-public class LowWarningReq {
+public class PriceWarningReq {
 
     @ApiModelProperty(name = "股票代码",required = true)
     @NotBlank(message = "股票代码不能为空")
@@ -23,5 +23,24 @@ public class LowWarningReq {
 
     @ApiModelProperty(name = "预警价位",required = true)
     @NotNull(message = "预警价位不能为空")
-    private BigDecimal lowLimitWarning;
+    private BigDecimal priceLimitWarning;
+
+    @ApiModelProperty(name = "原因",required = false)
+    private String reason;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

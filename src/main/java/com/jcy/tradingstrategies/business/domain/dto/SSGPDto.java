@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 @ToString
 public class SSGPDto {
 
+    private BigDecimal current;
+
     private BigDecimal buy5;
 
     private BigDecimal sell5;

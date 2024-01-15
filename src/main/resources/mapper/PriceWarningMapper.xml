@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcy.tradingstrategies.business.dao.PriceWarningDao">
+
+
+    <insert id="insertBatch">
+        insert into price_warning(code,name,time,price_limit_warning,reason,is_alert,create_time) values
+        <foreach collection="list" separator="," item="item">
+            (#{item.code},#{item.name},#{time},#{item.priceLimitWarning},#{item.reason},"0",now())
+        </foreach>
+    </insert>
+
+    <update id="updateAlert">
+        update price_warning set is_alert = '1',update_time = now() where id = #{id}
+    </update>
+</mapper>
+
