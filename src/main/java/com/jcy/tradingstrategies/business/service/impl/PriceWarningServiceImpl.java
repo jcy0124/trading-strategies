@@ -44,6 +44,9 @@ public class PriceWarningServiceImpl implements IPriceWarningService {
     @Override
     public void insertBatch(List<PriceWarningReq> list) {
 
+        //
+
+
         Map<String, String> codeNameMap = iaStockService.selectNameByCodeList(list.stream().map(PriceWarningReq::getCode).collect(Collectors.toList()));
 
         String time = DateUtil.getToday();

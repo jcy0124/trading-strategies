@@ -27,6 +27,8 @@ public class PriceWarningEntity {
 
     private BigDecimal current;
 
+    private BigDecimal comparePrice;
+
     private BigDecimal priceLimitWarning;
 
     private String reason;
