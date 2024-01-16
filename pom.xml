@@ -139,6 +139,13 @@
             <version>3.3.2</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version> <!-- 请根据实际情况选择版本 -->
+        </dependency>
+
     </dependencies>
 
     <build>

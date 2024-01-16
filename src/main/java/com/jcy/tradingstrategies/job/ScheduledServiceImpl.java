@@ -2,6 +2,7 @@ package com.jcy.tradingstrategies.job;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.util.concurrent.RateLimiter;
 import com.jcy.tradingstrategies.business.domain.dto.SSGPDto;
 import com.jcy.tradingstrategies.business.domain.entity.PriceWarningEntity;
 import com.jcy.tradingstrategies.business.service.IBaseService;
@@ -9,6 +10,7 @@ import com.jcy.tradingstrategies.business.service.IPriceWarningService;
 import com.jcy.tradingstrategies.business.service.adaptor.SSGPAdaptor;
 import com.jcy.tradingstrategies.common.constant.BaseConstant;
 import com.jcy.tradingstrategies.common.util.BigDecimalUtils;
+import com.jcy.tradingstrategies.common.util.DateUtil;
 import com.jcy.tradingstrategies.common.util.JOptionPaneUtil;
 import com.jcy.tradingstrategies.common.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +47,10 @@ public class ScheduledServiceImpl implements IScheduledService {
     @Override
     @Scheduled(cron = "0/10 30/1 9,10,11 ? * 1-5 ")
     public void lowWarningMorning() {
+        String time = DateUtil.getTime();
+        if (time.compareTo("11:30:00") >= 0) {
+            return;
+        }
         log.info("发起定时任务，执行上午预警");
         List<PriceWarningEntity> list = lowWarning();
 
@@ -95,12 +101,12 @@ public class ScheduledServiceImpl implements IScheduledService {
         long t1 = System.currentTimeMillis();
         log.info("多线程发起http同步请求，需同步数量：{}", priceWarningEntityList.size());
 
-        if (priceWarningEntityList.size() > 5){
-
-        }
+        // 设置每秒最多允许5个请求
+        RateLimiter rateLimiter = RateLimiter.create(5.0);
 
         for (PriceWarningEntity priceWarningEntity : priceWarningEntityList) {
             executor.submit(() -> {
+                rateLimiter.acquire();
                 String code = priceWarningEntity.getCode();
                 try {
                     String response = iBaseService.getSSJGResp(code);
@@ -127,45 +133,51 @@ public class ScheduledServiceImpl implements IScheduledService {
 
         List<PriceWarningEntity> result = new ArrayList<>();
 
-        transactionTemplate.executeWithoutResult((status) -> {
-            for (PriceWarningEntity priceWarningEntity : priceWarningEntityList) {
-                String code = priceWarningEntity.getCode();
-                BigDecimal priceLimitWarning = priceWarningEntity.getPriceLimitWarning();
+
+        for (PriceWarningEntity priceWarningEntity : priceWarningEntityList) {
+            String code = null;
+            BigDecimal priceLimitWarning = null;
+            BigDecimal current = null;
+            BigDecimal buy5 = null;
+            BigDecimal sell5 = null;
+            try {
+                code = priceWarningEntity.getCode();
+                priceLimitWarning = priceWarningEntity.getPriceLimitWarning();
                 SSGPDto ssgpDto = ssgpDtoMap.get(code);
-                BigDecimal current = ssgpDto.getCurrent();
-                BigDecimal buy5 = ssgpDto.getBuy5();
-                BigDecimal sell5 = ssgpDto.getSell5();
-
-                if (BigDecimalUtils.compare(current, priceLimitWarning) == 0) {
-                    log.info("【{}】出发预警，预警价格：【{}】", code, priceLimitWarning);
-                    result.add(priceWarningEntity);
-                    priceWarningService.updateIsAlert(priceWarningEntity);
-                    continue;
-                }
-
-                //向下预警
-                if (BigDecimalUtils.compare(current, priceLimitWarning) > 0 && BigDecimalUtils.compare(buy5, priceLimitWarning) <= 0) {
-                    log.info("【{}】出发预警，预警价格：【{}】", code, priceLimitWarning);
-                    result.add(priceWarningEntity);
-                    priceWarningService.updateIsAlert(priceWarningEntity);
-                    continue;
-                }
-
-                //向上预警
-                if (BigDecimalUtils.compare(current, priceLimitWarning) < 0 && BigDecimalUtils.compare(sell5, priceLimitWarning) >= 0) {
-                    log.info("【{}】出发预警，预警价格：【{}】", code, priceLimitWarning);
-                    result.add(priceWarningEntity);
-                    priceWarningService.updateIsAlert(priceWarningEntity);
-                    continue;
-                }
-
-   /*             if (BigDecimalUtils.compare(priceLimitWarning, sell5) <= 0) {
-                    log.info("【{}】出发预警，预警价格：【{}】", code, priceLimitWarning);
-                    result.add(priceWarningEntity);
-                    priceWarningService.updateIsAlert(priceWarningEntity);
-                }*/
+                current = ssgpDto.getCurrent();
+                buy5 = ssgpDto.getBuy5();
+                sell5 = ssgpDto.getSell5();
+            } catch (Exception e) {
+                log.error("【{}】执行同步线程发生异常，跳过本次运行", code);
+                continue;
             }
-        });
+
+            priceWarningService.updateCurrent(priceWarningEntity.getId(),current);
+
+            if (BigDecimalUtils.compare(current, priceLimitWarning) == 0) {
+                log.info("【{}】出发预警，预警价格：【{}】", code, priceLimitWarning);
+                result.add(priceWarningEntity);
+                priceWarningService.updateIsAlert(priceWarningEntity);
+                continue;
+            }
+
+            //向下预警
+            if (BigDecimalUtils.compare(current, priceLimitWarning) > 0 && BigDecimalUtils.compare(buy5, priceLimitWarning) <= 0) {
+                log.info("【{}】出发预警，预警价格：【{}】", code, priceLimitWarning);
+                result.add(priceWarningEntity);
+                priceWarningService.updateIsAlert(priceWarningEntity);
+                continue;
+            }
+
+            //向上预警
+            if (BigDecimalUtils.compare(current, priceLimitWarning) < 0 && BigDecimalUtils.compare(sell5, priceLimitWarning) >= 0) {
+                log.info("【{}】出发预警，预警价格：【{}】", code, priceLimitWarning);
+                result.add(priceWarningEntity);
+                priceWarningService.updateIsAlert(priceWarningEntity);
+                continue;
+            }
+        }
+
 
         return result;
     }

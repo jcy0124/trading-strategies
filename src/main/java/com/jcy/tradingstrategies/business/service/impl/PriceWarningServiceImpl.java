@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,6 +61,11 @@ public class PriceWarningServiceImpl implements IPriceWarningService {
         LambdaQueryWrapper<PriceWarningEntity> lqw = new LambdaQueryWrapper<>();
         lqw.eq(PriceWarningEntity::getIsAlert, "0");
         return priceWarningDao.selectList(lqw);
+    }
+
+    @Override
+    public void updateCurrent(Integer id, BigDecimal current) {
+        priceWarningDao.updateCurrent(id,current);
     }
 }
 

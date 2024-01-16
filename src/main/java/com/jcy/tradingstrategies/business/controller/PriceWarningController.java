@@ -24,14 +24,14 @@ public class PriceWarningController {
     private IPriceWarningService priceWarningService;
 
     @PostMapping("add")
-    @ApiOperation(value = "新增最低价位预警")
+    @ApiOperation(value = "新增价位预警")
     public Result add(@RequestBody List<PriceWarningReq> list) {
 
-        log.info("开始新增最低价位预警");
+        log.info("开始新增价位预警");
 
         priceWarningService.insertBatch(list);
 
-        log.info("结束新增最低价位预警");
+        log.info("结束新增价位预警");
         return Result.ok();
     }
 

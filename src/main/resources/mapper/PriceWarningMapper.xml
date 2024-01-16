@@ -13,5 +13,9 @@
     <update id="updateAlert">
         update price_warning set is_alert = '1',update_time = now() where id = #{id}
     </update>
+
+    <update id="updateCurrent">
+        update price_warning set current = #{current} where id = #{id}
+    </update>
 </mapper>
 

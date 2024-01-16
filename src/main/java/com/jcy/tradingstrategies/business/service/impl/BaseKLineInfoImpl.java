@@ -2,6 +2,7 @@ package com.jcy.tradingstrategies.business.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.util.concurrent.RateLimiter;
 import com.jcy.tradingstrategies.business.dao.BaseKLineInfoDao;
 import com.jcy.tradingstrategies.business.domain.dto.BaseKLineInfoDto;
 import com.jcy.tradingstrategies.business.domain.vo.req.BaseKLineReq;
@@ -74,9 +75,12 @@ public class BaseKLineInfoImpl implements IBaseKLineInfoService {
         long t1 = System.currentTimeMillis();
         log.info("多线程发起http同步请求，需同步数量：{}", codeList.size());
 
+        // 设置每秒最多允许40个请求
+        RateLimiter rateLimiter = RateLimiter.create(40.0);
+
         for (String code : codeList) {
             executor.submit(() -> {
-
+                rateLimiter.acquire();
                 try {
                     BaseKLineInfoDto kLine = getKLine(code, date);
                     result.put(code, kLine);
