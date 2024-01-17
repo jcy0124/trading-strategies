@@ -45,10 +45,10 @@ public class ScheduledServiceImpl implements IScheduledService {
     private TransactionTemplate transactionTemplate;
 
     @Override
-    @Scheduled(cron = "0/10 30/1 9,10,11 ? * 1-5 ")
+    @Scheduled(cron = "0/10 0-59 9,10,11 ? * 1-5 ")
     public void lowWarningMorning() {
         String time = DateUtil.getTime();
-        if (time.compareTo("11:30:00") >= 0) {
+        if (time.compareTo("11:30:00") >= 0 || time.compareTo("09:30:00") <= 0) {
             return;
         }
         log.info("发起定时任务，执行上午预警");
@@ -152,7 +152,7 @@ public class ScheduledServiceImpl implements IScheduledService {
                 continue;
             }
 
-            priceWarningService.updateCurrent(priceWarningEntity.getId(),current);
+            priceWarningService.updateCurrent(priceWarningEntity.getId(), current);
 
             if (BigDecimalUtils.compare(current, priceLimitWarning) == 0) {
                 log.info("【{}】出发预警，预警价格：【{}】", code, priceLimitWarning);
