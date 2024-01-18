@@ -85,7 +85,7 @@ public class ScheduledServiceImpl implements IScheduledService {
             return sb.append(code).append("   ").append(name).append("   ").append(priceLimitWarning).append("   ").append(reason).toString();
         }).collect(Collectors.toList());
 
-        executor.execute(()->{
+        executor.execute(() -> {
             JOptionPaneUtil.showMessageDialogWithList("预警", msg);
         });
     }
@@ -127,15 +127,13 @@ public class ScheduledServiceImpl implements IScheduledService {
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("InterruptedException:", e);
         }
-
 
         long t2 = System.currentTimeMillis();
         log.info("多线程结束http同步请求，同步时间：{}，同步数量：{}", (t2 - t1), ssgpDtoMap.size());
 
         List<PriceWarningEntity> result = new ArrayList<>();
-
 
         for (PriceWarningEntity priceWarningEntity : priceWarningEntityList) {
             String code = null;
@@ -177,15 +175,11 @@ public class ScheduledServiceImpl implements IScheduledService {
                 log.info("【{}】出发预警，预警价格：【{}】", code, priceLimitWarning);
                 result.add(priceWarningEntity);
                 priceWarningService.updateIsAlert(priceWarningEntity);
-                continue;
             }
         }
 
-
         return result;
     }
-
-
 }
 
 
