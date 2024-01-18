@@ -55,6 +55,7 @@ public class ScheduledServiceImpl implements IScheduledService {
         List<PriceWarningEntity> list = lowWarning();
 
         buildMessage(list);
+
         log.info("结束定时任务，执行上午预警");
     }
 
@@ -84,7 +85,9 @@ public class ScheduledServiceImpl implements IScheduledService {
             return sb.append(code).append("   ").append(name).append("   ").append(priceLimitWarning).append("   ").append(reason).toString();
         }).collect(Collectors.toList());
 
-        JOptionPaneUtil.showMessageDialogWithList("预警", msg);
+        executor.execute(()->{
+            JOptionPaneUtil.showMessageDialogWithList("预警", msg);
+        });
     }
 
     private List<PriceWarningEntity> lowWarning() {
