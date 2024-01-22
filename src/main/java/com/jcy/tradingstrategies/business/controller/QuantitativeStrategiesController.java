@@ -13,6 +13,7 @@ import com.jcy.tradingstrategies.common.base.Result;
 import com.jcy.tradingstrategies.common.base.ResultEnum;
 import com.jcy.tradingstrategies.common.constant.TimeConstant;
 import com.jcy.tradingstrategies.common.util.FIleUtil;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -53,6 +54,7 @@ public class QuantitativeStrategiesController {
      */
     @GetMapping("quantitativeStrategiesV1/{date}")
     @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
+    @ApiOperation(value = "涨停双响炮策略")
     public Result quantitativeStrategiesV1(@PathVariable String date) {
 
         List<CommonDto> commonDtoList = quantitativeStrategiesV1Service.quantitativeStrategiesV1(date);
@@ -67,8 +69,7 @@ public class QuantitativeStrategiesController {
             @Override
             public void run() {
                 List<String> codeList = resp.stream().map(CommonResp::getCode).collect(Collectors.toList());
-                String newTxtFilePath = String.format(qs1FilePath, "【" + date + "】qs1股票策略");
-                BufferedWriter bw;
+                String newTxtFilePath = String.format(qs1FilePath, "【" + date + "】涨停双响炮策略");
                 try {
                     FIleUtil.writeTxt(codeList, newTxtFilePath);
                 } catch (IOException e) {
@@ -87,6 +88,7 @@ public class QuantitativeStrategiesController {
      */
     @GetMapping("quantitativeStrategiesV2/{date}")
     @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
+    @ApiOperation(value = "涨停后横盘策略")
     public Result quantitativeStrategiesV2(@PathVariable String date) {
 
         String startDate = date;
@@ -107,8 +109,7 @@ public class QuantitativeStrategiesController {
             @Override
             public void run() {
                 List<String> codeList = resp.stream().map(CommonResp::getCode).collect(Collectors.toList());
-                String newTxtFilePath = String.format(qs2FilePath, "【" + date + "】qs2股票策略");
-                BufferedWriter bw;
+                String newTxtFilePath = String.format(qs2FilePath, "【" + date + "】涨停后横盘策略");
                 try {
                     FIleUtil.writeTxt(codeList, newTxtFilePath);
                 } catch (IOException e) {
