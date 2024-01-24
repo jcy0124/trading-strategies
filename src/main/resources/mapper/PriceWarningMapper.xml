@@ -4,10 +4,15 @@
 
 
     <insert id="insertBatch">
-        insert into price_warning(code,name,time,price_limit_warning,reason,is_alert,create_time) values
+        insert into price_warning(code,name,time,price_limit_warning,reason,is_alert,create_time) value
         <foreach collection="list" separator="," item="item">
             (#{item.code},#{item.name},#{time},#{item.priceLimitWarning},#{item.reason},"0",now())
         </foreach>
+    </insert>
+
+    <insert id="insertOne">
+        insert into price_warning(code,name,time,current,price_limit_warning,reason,is_alert,create_time) values
+        (#{item.code},#{item.name},#{time},#{item.current},#{item.priceLimitWarning},#{item.reason},"0",now())
     </insert>
 
     <update id="updateAlert">
@@ -16,6 +21,14 @@
 
     <update id="updateCurrent">
         update price_warning set current = #{current} where id = #{id}
+    </update>
+
+    <update id="update">
+        update price_warning set
+                                 price_limit_warning = #{item.priceLimitWarning},
+                                 reason = #{item.reason} ,
+                                 is_alert = "0"
+                                 where id = #{item.id}
     </update>
 </mapper>
 

@@ -1,6 +1,7 @@
 package com.jcy.tradingstrategies.business.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jcy.tradingstrategies.business.domain.entity.UserTradeInfoEntity;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserInfoInsertReq;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserInfoUpdateReq;
@@ -15,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("userinfo")
@@ -58,6 +62,28 @@ public class UserInfoController {
         log.info("结束新增用户信息");
         return Result.ok(result);
     }
+
+
+    @PostMapping("web/add")
+    @ApiOperation(value = "用户交易信息")
+    public Result add(@RequestBody UserTradeInfoReq req) {
+
+        log.info("开始新增用户信息");
+        UserTradeInfoEntity result = userTradeInfoService.add(req);
+        log.info("结束新增用户信息");
+        return Result.ok(result);
+    }
+
+    @PostMapping("web/page")
+    @ApiOperation(value = "查看用户交易信息")
+    public Result page(@RequestParam Map<String,String> map) {
+
+        log.info("开始新增用户信息");
+        IPage<UserTradeInfoEntity> result = userTradeInfoService.page(map);
+        log.info("结束新增用户信息");
+        return Result.ok(result);
+    }
+
 
 }
 

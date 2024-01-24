@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>价格预警列表</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/layui/css/layui.css" rel="stylesheet">
+
+    <style type="text/css">
+        .container {
+            padding: 20px;
+        }
+
+        .search {
+            padding-bottom: 20px;
+            border-bottom: 1.5px solid #ddd;
+        }
+
+        #add {
+            margin-right: 5em;
+        }
+
+        #search {
+            margin-left: 0.5em;
+        }
+
+        .pagination {
+            display: flex;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .pagination > li:last-child > a, .pagination > li:last-child > span {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .pagination > li:first-child > a, .pagination > li:first-child > span {
+            margin-left: 0;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .pagination > li > a, .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <input type="text" id="ctx" hidden="hidden" th:value="${#request.getContextPath()}">
+    <div class="search">
+        <div class="input-group col-md-8">
+
+            <button class="btn btn-success" type="button" id="add"
+                    onclick="window.location.href='addpricewarning.html'">
+                新增
+            </button>
+
+            <input class="form-control" type="text" id="name" placeholder="请输入股票名称">
+
+            <select class="form-select" aria-label="是否提示" id="isAlert">
+                <option selected value="">--- 是否提示 ---</option>
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+
+            <span class="input-group-btn">
+					<button class="btn btn-primary" type="button" id="search">查询</button>
+			</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet">
+                <div class="category-list">
+                    <table class="table table-striped table-hover" id="dataTable">
+                        <thead>
+                        <tr>
+                            <th>创建时间</th>
+                            <th>股票代码</th>
+                            <th>股票名称</th>
+                            <th>当前价格</th>
+                            <th>预警价格</th>
+                            <th>原因</th>
+                            <th>是否预警</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8" align="center" style="position: fixed; bottom: 20%;">
+            <!-- 分页控件，标签必须是<ul> -->
+            <ul id="pageButton" class="pagination-centered"></ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+<script src="../../static/js/bootstrap-paginator.js"></script>
+<script src="../../static/layui/layui.js"></script>
+
+<script type="text/javascript">
+    //var ctx = $("#ctx").val();
+    var ctx = "http://localhost:8080";
+    $(function () {
+        // 查询第一页数据
+        getPage(1);
+
+
+        // 搜索
+        $("#search").click(function () {
+            getPage(1);
+        });
+    });
+
+
+    setInterval(() => {
+        getPage(1)
+    }, 10000);
+
+    // 获取指定页码的数据
+    function getPage(pageNo) {
+        var dataRow = "";
+        $.ajax({
+                url: ctx + "/pricewarning/web/page",
+                type: "post",
+                data: {
+                    "name": $("#name").val(),
+                    "isAlert": $("#isAlert").val(),
+                    "page": pageNo
+                },
+                dataType: "json",
+                success: function (response) {
+                    dataRow = "";
+                    if (response.data.records.length > 0) {
+                        $.each(response.data.records, function (i, r) {
+                            dataRow
+                                += '<tr><td>'
+                                + r.time
+                                + '</td><td>'
+                                + r.code
+                                + '</td><td>'
+                                + r.name
+                                + '</td><td>'
+                                + r.current
+                                + '</td><td>'
+                                + r.priceLimitWarning
+                                + '</td><td>'
+                                + r.reason
+                                + '</td>';
+
+                            if (r.isAlert === "1") {
+                                dataRow += '<td>是</td>'
+                            }
+                            if (r.isAlert === "0") {
+                                dataRow += '<td>否</td>'
+                            }
+
+
+                            ;
+
+                            dataRow += '<td><a href="javascript:edit(' + r.id + ')" style="color: blue;">编辑' +
+                                '</a>&nbsp;&nbsp;<a href="javascript:remove(' + r.id + ',' + pageNo + ')" style="color: red;">删除</a></td></tr>';
+                        });
+                    }
+
+                    $("#dataTable tbody").empty();
+                    $("#dataTable tbody").append(dataRow);
+                    // 分页按钮
+                    var element = $('#pageButton');
+                    var options = {
+                        bootstrapMajorVersion: 4,
+                        currentPage: pageNo, // 当前页数
+                        numberOfPages: 10, // 显示按钮的数量
+                        totalPages: response.data.pages, // 总页数
+                        current: response.data.current,
+                        itemTexts: function (type, page, current) {
+                            switch (type) {
+                                case "first":
+                                    return "首页";
+                                case "prev":
+                                    return "上一页";
+                                case "next":
+                                    return "下一页";
+                                case "last":
+                                    return "末页";
+                                case "page":
+                                    return page;
+                            }
+                        },
+                        // 点击事件，用于通过Ajax来刷新整个list列表
+                        onPageClicked: function (event, originalEvent, type, page) {
+                            getPage(page);
+                        }
+                    };
+
+                    element.bootstrapPaginator(options);
+                }
+            }
+        )
+    }
+
+    function edit(id) {
+        window.location.href = 'editpricewarning.html?id=' + id;
+    }
+
+    function remove(id, pageNo) {
+        $.ajax({
+            url: "http://localhost:8080/pricewarning/web/delete",
+            type: "post",
+            data: {
+                "id": id
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.code === 200) {
+                    getPage(pageNo)
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

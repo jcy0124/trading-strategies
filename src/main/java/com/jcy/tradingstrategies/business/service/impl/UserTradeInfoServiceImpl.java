@@ -1,7 +1,11 @@
 package com.jcy.tradingstrategies.business.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jcy.tradingstrategies.business.dao.UserTradeInfoDao;
+import com.jcy.tradingstrategies.business.domain.entity.AStockEntity;
 import com.jcy.tradingstrategies.business.domain.entity.UserTradeInfoEntity;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserTradeInfoReq;
 import com.jcy.tradingstrategies.business.service.IAStockService;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -46,6 +51,20 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
         lqw.orderByDesc(UserTradeInfoEntity::getDate);
         lqw.last("limit 1");
         return userTradeInfoDao.selectOne(lqw);
+    }
+
+    @Override
+    public IPage<UserTradeInfoEntity> page(Map<String, String> map) {
+        Long page = Long.valueOf(map.get("page"));
+        String name = map.get("name");
+        String codeStatus = map.get("codeStatus");
+
+        Page<UserTradeInfoEntity> pageInfo = new Page<>(page, 10L);
+        LambdaQueryWrapper<UserTradeInfoEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.orderByDesc(UserTradeInfoEntity::getId);
+        lqw.like(StrUtil.isNotBlank(name),UserTradeInfoEntity::getName,name);
+        lqw.eq(StrUtil.isNotBlank(codeStatus),UserTradeInfoEntity::getCodeStatus,codeStatus);
+        return userTradeInfoDao.selectPage(pageInfo, lqw);
     }
 
     @Override

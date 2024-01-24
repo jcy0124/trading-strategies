@@ -1,8 +1,11 @@
 package com.jcy.tradingstrategies.business.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jcy.tradingstrategies.business.dao.AStockDao;
 import com.jcy.tradingstrategies.business.domain.entity.AStockEntity;
 import com.jcy.tradingstrategies.business.service.IAStockService;
@@ -36,8 +39,6 @@ public class AStockServiceImpl implements IAStockService {
 //    @Async(ThreadPoolConfig.TRADING_STRATEGIES)
     public void insert(String response) {
 
-        aStockDao.deleteAll();
-
         JSONArray data = JsonUtil.getDataArray(response, BaseConstant.QBGP);
         List<AStockEntity> list = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
@@ -54,7 +55,9 @@ public class AStockServiceImpl implements IAStockService {
 //            }
         }
 
-        list = list.stream().sorted(Comparator.comparing(AStockEntity::getCode)).collect(Collectors.toList());
+        list = list.stream().peek(item -> item.setName(item.getName().replaceAll(" ", ""))).sorted(Comparator.comparing(AStockEntity::getCode)).collect(Collectors.toList());
+
+        aStockDao.deleteAll();
         aStockDao.insertBatch(list);
     }
 
@@ -72,6 +75,19 @@ public class AStockServiceImpl implements IAStockService {
         lqw.in(AStockEntity::getCode, codeList);
         List<AStockEntity> aStockEntities = aStockDao.selectList(lqw);
         return aStockEntities.stream().collect(Collectors.toMap(AStockEntity::getCode, AStockEntity::getName));
+    }
+
+    @Override
+    public IPage<AStockEntity> page(Map<String, String> map) {
+        Long page = Long.valueOf(map.get("page"));
+        String name = map.get("name");
+
+        Page<AStockEntity> pageInfo = new Page<>(page, 10L);
+
+        LambdaQueryWrapper<AStockEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.like(StrUtil.isNotBlank(name), AStockEntity::getName, name);
+
+        return aStockDao.selectPage(pageInfo, lqw);
     }
 }
 

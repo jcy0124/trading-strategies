@@ -16,4 +16,6 @@ public class CommonResp {
     private String lastZTDate;
 
     private String nowZTDate;
+
+    private String current;
 }

@@ -33,6 +33,8 @@ public class PriceWarningEntity {
 
     private String reason;
 
+    private String upOrLow;
+
     private String isAlert;
 
     private Date createTime;

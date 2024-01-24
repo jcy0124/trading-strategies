@@ -2,9 +2,14 @@ package com.jcy.tradingstrategies.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jcy.tradingstrategies.business.domain.entity.AStockEntity;
+import com.jcy.tradingstrategies.business.domain.vo.resp.ELBResp;
 import com.jcy.tradingstrategies.business.service.adaptor.LBAdaptor;
 import com.jcy.tradingstrategies.business.service.adaptor.ZTPoolAdaptor;
 import com.jcy.tradingstrategies.common.constant.BaseConstant;
@@ -16,6 +21,7 @@ import com.jcy.tradingstrategies.business.domain.entity.ZTPoolEntity;
 import com.jcy.tradingstrategies.business.service.ICalendarDateService;
 import com.jcy.tradingstrategies.business.service.IZTPoolService;
 import com.jcy.tradingstrategies.business.service.cache.ZTPoolCache;
+import com.jcy.tradingstrategies.common.util.DateUtil;
 import com.jcy.tradingstrategies.common.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +82,7 @@ public class ZTPoolServiceImpl implements IZTPoolService {
 
         List<ZTPoolDto> ztPoolDtoList = BeanUtil.copyToList(ztPoolEntityList, ZTPoolDto.class);
 
-        return ztPoolDtoList.stream().filter(item -> Objects.equals(1,item.getLbNum())).collect(Collectors.toList());
+        return ztPoolDtoList.stream().filter(item -> Objects.equals(1, item.getLbNum())).collect(Collectors.toList());
     }
 
     /**
@@ -146,17 +152,59 @@ public class ZTPoolServiceImpl implements IZTPoolService {
     }
 
     @Override
-    public ZTPoolDto selectLastZTByCode(String code,String date) {
-        return ztPoolDao.selectLastZTByCode(code,date);
+    public ZTPoolDto selectLastZTByCode(String code, String date) {
+        return ztPoolDao.selectLastZTByCode(code, date);
     }
 
     @Override
     public ZTPoolDto selectByCodeAndDate(String code, String lastWorkDay) {
         LambdaQueryWrapper<ZTPoolEntity> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(ZTPoolEntity::getCode,code)
-                .eq(ZTPoolEntity::getTime,lastWorkDay);
+        lqw.eq(ZTPoolEntity::getCode, code)
+                .eq(ZTPoolEntity::getTime, lastWorkDay);
         ZTPoolEntity ztPoolEntity = ztPoolDao.selectOne(lqw);
         return BeanUtil.copyProperties(ztPoolEntity, ZTPoolDto.class);
+    }
+
+    @Override
+    public IPage<ZTPoolEntity> ztpage(Map<String, String> map) {
+        Long page = Long.valueOf(map.get("page"));
+        String time = map.get("time");
+        boolean workDay = calendarDateService.selectWorkDayByDate(time);
+        if (!workDay || (time.compareTo(DateUtil.getToday()) == 0 && DateUtil.getTime().compareTo("15:30:00") <= 0)) {
+            time = calendarDateService.selectLastWorkDay(time);
+        }
+        String name = map.get("name");
+        LambdaQueryWrapper<ZTPoolEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ZTPoolEntity::getTime, time);
+        lqw.like(StrUtil.isNotBlank(name), ZTPoolEntity::getName, name);
+
+        Page<ZTPoolEntity> pageInfo = new Page<>(page, 10L);
+
+        return ztPoolDao.selectPage(pageInfo, lqw);
+    }
+
+    @Override
+    public IPage<ZTPoolEntity> ebpage(Map<String, String> map) {
+        Long page = Long.valueOf(map.get("page"));
+        String time = map.get("time");
+        boolean workDay = calendarDateService.selectWorkDayByDate(time);
+        if (!workDay || (time.compareTo(DateUtil.getToday()) == 0 && DateUtil.getTime().compareTo("15:30:00") <= 0)) {
+            time = calendarDateService.selectLastWorkDay(time);
+        }
+        String name = map.get("name");
+        LambdaQueryWrapper<ZTPoolEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.like(StrUtil.isNotBlank(name), ZTPoolEntity::getName, name);
+        lqw.eq(ZTPoolEntity::getTime, time);
+        lqw.eq(ZTPoolEntity::getLbNum, 2);
+
+        Page<ZTPoolEntity> pageInfo = new Page<>(page, 10L);
+
+        return ztPoolDao.selectPage(pageInfo, lqw);
+    }
+
+    @Override
+    public ZTPoolEntity getById(String id) {
+        return ztPoolDao.selectById(id);
     }
 }
 

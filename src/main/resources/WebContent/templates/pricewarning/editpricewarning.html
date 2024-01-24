@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>编辑预警列表</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/layui/css/layui.css" rel="stylesheet">
+    <style type="text/css">
+        .container {
+            padding: 20px;
+        }
+
+        .search {
+            padding-bottom: 20px;
+            border-bottom: 1.5px solid #ddd;
+        }
+
+        #add {
+            margin-right: 5em;
+        }
+
+        #search {
+            margin-left: 0.5em;
+        }
+
+        .pagination {
+            display: flex;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .pagination > li:last-child > a, .pagination > li:last-child > span {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .pagination > li:first-child > a, .pagination > li:first-child > span {
+            margin-left: 0;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .pagination > li > a, .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<form>
+    <div class="mb-3">
+        <label for="code" class="form-label">股票代码</label><span class="required-red" style="color:red">*</span>
+        <input type="text" maxlength="6" class="form-control" id="code" required="required" readonly="readonly">
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">股票名称</label>
+        <input type="text" class="form-control" id="name" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">当前价位</label>
+        <input type="text" class="form-control" id="current" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="priceLimitWarning" class="form-label">预警价位</label><span class="required-red"
+                                                                                style="color:red">*</span>
+        <input type="text" class="form-control" id="priceLimitWarning" required="required">
+    </div>
+
+    <div class="mb-3">
+        <label for="reason" class="form-label">原因</label>
+        <input type="text" class="form-control" id="reason">
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="edit()">保存</button>
+    <button type="button" class="btn btn-primary" onclick="cancel()">取消</button>
+
+</form>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+<script src="../../static/js/bootstrap-paginator.js"></script>
+<script src="../../static/layui/layui.js"></script>
+
+<script type="text/javascript">
+    //var ctx = $("#ctx").val();
+    var ctx = "http://localhost:8080";
+
+    $(function () {
+        var id = GetRequest().id;
+
+        $.ajax({
+            url: ctx + "/pricewarning/web/getById",
+            type: "post",
+            data: {
+                "id": id,
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.code === 200) {
+                    var code = response.data.code;
+                    var name = response.data.name;
+                    var current = response.data.current;
+                    var priceLimitWarning = response.data.priceLimitWarning;
+                    var reason = response.data.reason;
+                    $("#code").val(code);
+                    $("#name").val(name);
+                    $("#current").val(current);
+                    $("#priceLimitWarning").val(priceLimitWarning);
+                    $("#reason").val(reason);
+                }
+            }
+        })
+
+    });
+
+
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+
+    function cancel() {
+        window.location.href = "pricewarning.html";
+    }
+
+    function edit() {
+        var id = GetRequest().id;
+        var code = $("#code").val();
+        var name = $("#name").val();
+        var priceLimitWarning = $("#priceLimitWarning").val();
+        var reason = $("#reason").val();
+        var current = $("#current").val();
+
+        $.ajax({
+            url: ctx + "/pricewarning/web/edit",
+            type: "post",
+            data: JSON.stringify({
+                "id": id,
+                "code": code,
+                "name": name,
+                "priceLimitWarning": priceLimitWarning,
+                "reason": reason,
+            }),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                if (response.code === 200) {
+                    layer.msg('保存成功', {icon: 1, time: 1000});
+                    window.location.href = "pricewarning.html";
+                }else {
+                    layer.msg('保存失败：'+response.message, {icon: 2, time: 1000});
+                }
+            }
+        })
+    }
+
+
+</script>
+</body>
+</html>

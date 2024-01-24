@@ -16,4 +16,8 @@ public interface PriceWarningDao extends BaseMapper<PriceWarningEntity> {
     void updateAlert(@Param("id") Integer id);
 
     void updateCurrent(@Param("id") Integer id,@Param("current") BigDecimal current);
+
+    void insertOne(@Param("item") PriceWarningReq req, @Param("time") String time);
+
+    void update(@Param("item") PriceWarningReq req);
 }

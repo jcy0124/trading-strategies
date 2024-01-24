@@ -44,7 +44,7 @@ public class GracefulShutdownTomcat implements TomcatConnectorCustomizer, Applic
                     threadPoolExecutor.shutdown();
                 } else {
                     long t1 = System.currentTimeMillis();
-                    log.info("----- Tomcat 优雅停机成功，耗时 {} 毫秒 -----", (t1 - t0));
+                    log.info("----- Tomcat 优雅停机成功，耗时 {} 毫秒 -----", t1 - t0);
                 }
             } catch (InterruptedException e) {
                 log.error("----- tomcat 优雅停机时发生异常 -----", e);

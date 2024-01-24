@@ -1,6 +1,6 @@
 package com.jcy.tradingstrategies.job;
 
-public interface IScheduledService {
+public interface IPriceWarningJobService {
 
     void lowWarningMorning();
 

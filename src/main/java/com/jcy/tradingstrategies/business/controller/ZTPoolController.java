@@ -3,9 +3,12 @@ package com.jcy.tradingstrategies.business.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jcy.tradingstrategies.business.domain.dto.ELBDto;
 import com.jcy.tradingstrategies.business.domain.dto.LBDto;
 import com.jcy.tradingstrategies.business.domain.dto.ZTPoolDto;
+import com.jcy.tradingstrategies.business.domain.entity.AStockEntity;
+import com.jcy.tradingstrategies.business.domain.entity.ZTPoolEntity;
 import com.jcy.tradingstrategies.business.domain.vo.resp.ELBResp;
 import com.jcy.tradingstrategies.business.domain.vo.resp.LBResp;
 import com.jcy.tradingstrategies.business.domain.vo.resp.ZTPoolResp;
@@ -25,10 +28,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -55,13 +61,13 @@ public class ZTPoolController {
      * @param date
      * @return
      */
-    @GetMapping("/getZtPoolByHttp/{date}")
+    @PostMapping("/getZtPoolByHttp")
     @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
     @ApiOperation(value = "http同步涨停股-getZtPoolByHttp")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "date", value = "日期：yyyy-MM-dd", dataType = "String", required = true),
     })
-    public Result getZtPoolByHttp(@PathVariable String date) {
+    public Result getZtPoolByHttp(@RequestParam String date) {
 
         String isExists = ztPoolService.isExistByDate(date);
         if (StrUtil.isNotBlank(isExists)) {
@@ -181,4 +187,43 @@ public class ZTPoolController {
 
         return Result.ok();
     }
+
+    @PostMapping("/web/ztpage")
+    public Result ztpage(@RequestParam Map<String,String> map) {
+
+        IPage<ZTPoolEntity> result = ztPoolService.ztpage(map);
+
+        return Result.ok(result);
+    }
+
+    @PostMapping("/web/ebpage")
+    public Result ebpage(@RequestParam Map<String,String> map) {
+
+        IPage<ZTPoolEntity> result = ztPoolService.ebpage(map);
+
+        return Result.ok(result);
+    }
+
+    @PostMapping("/web/getById")
+    public Result getById(@RequestParam String id) {
+
+        ZTPoolEntity result = ztPoolService.getById(id);
+
+        return Result.ok(result);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

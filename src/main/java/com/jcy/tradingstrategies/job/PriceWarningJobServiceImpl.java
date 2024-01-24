@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class ScheduledServiceImpl implements IScheduledService {
+public class PriceWarningJobServiceImpl implements IPriceWarningJobService {
 
     @Autowired
     private IPriceWarningService priceWarningService;
@@ -61,8 +61,13 @@ public class ScheduledServiceImpl implements IScheduledService {
 
     @Override
     @Scheduled(cron = "0/10 0-59 13,14 ? * 1-5 ")
-//    @Scheduled(cron = "0/5 * * * * ? ")
     public void lowWarningAfternoon() {
+
+        String time = DateUtil.getTime();
+        if (time.compareTo("14:55:00") >= 0) {
+            return;
+        }
+
         log.info("发起定时任务，执行下午预警");
         List<PriceWarningEntity> list = lowWarning();
 

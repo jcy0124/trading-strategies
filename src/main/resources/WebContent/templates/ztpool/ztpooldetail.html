@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>编辑预警列表</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/layui/css/layui.css" rel="stylesheet">
+    <style type="text/css">
+        .container {
+            padding: 20px;
+        }
+
+        .search {
+            padding-bottom: 20px;
+            border-bottom: 1.5px solid #ddd;
+        }
+
+        #add {
+            margin-right: 5em;
+        }
+
+        #search {
+            margin-left: 0.5em;
+        }
+
+        .pagination {
+            display: flex;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .pagination > li:last-child > a, .pagination > li:last-child > span {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .pagination > li:first-child > a, .pagination > li:first-child > span {
+            margin-left: 0;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .pagination > li > a, .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<form>
+    <div class="mb-3">
+        <label for="code" class="form-label">股票代码</label>
+        <input type="text" maxlength="6" class="form-control" id="code" required="required" readonly="readonly">
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">股票名称</label>
+        <input type="text" class="form-control" id="name" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">涨跌幅</label>
+        <input type="text" class="form-control" id="changeRatio" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">最新价</label>
+        <input type="text" class="form-control" id="lastPrice" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">成交额</label>
+        <input type="text" class="form-control" id="amount" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">换手率</label>
+        <input type="text" class="form-control" id="turnoverRatio" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">首次封板时间</label>
+        <input type="text" class="form-control" id="firstCeilingTime" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">最后封板时间</label>
+        <input type="text" class="form-control" id="lastCeilingTime" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">炸版次数</label>
+        <input type="text" class="form-control" id="bombNum" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">连板次数</label>
+        <input type="text" class="form-control" id="lbNum" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">所属行业</label>
+        <input type="text" class="form-control" id="industry" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">时间</label>
+        <input type="text" class="form-control" id="time" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">概念</label>
+        <input type="text" class="form-control" id="gl" readonly="readonly">
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="cancel()">返回</button>
+
+</form>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+<script src="../../static/js/bootstrap-paginator.js"></script>
+<script src="../../static/layui/layui.js"></script>
+
+<script type="text/javascript">
+    //var ctx = $("#ctx").val();
+    var ctx = "http://localhost:8080";
+
+    $(function () {
+        var id = GetRequest().id;
+
+        $.ajax({
+            url: ctx + "/ztpool/web/getById",
+            type: "post",
+            data: {
+                "id": id,
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.code === 200) {
+                    var code = response.data.code;
+                    var name = response.data.name;
+                    var changeRatio = response.data.changeRatio;
+                    changeRatio = changeRatio.slice(0, 4) + "%";
+
+                    var lastPrice = response.data.lastPrice;
+                    var amount = response.data.amount;
+                    var turnoverRatio = response.data.turnoverRatio;
+                    turnoverRatio = turnoverRatio.slice(0, 4) + "%";
+
+                    var firstCeilingTime = response.data.firstCeilingTime;
+                    firstCeilingTime = convertTime(firstCeilingTime)
+
+                    var lastCeilingTime = response.data.lastCeilingTime;
+                    lastCeilingTime = convertTime(lastCeilingTime)
+
+                    var bombNum = response.data.bombNum;
+                    var lbNum = response.data.lbNum;
+                    var industry = response.data.industry;
+                    var time = response.data.time;
+                    var gl = response.data.gl;
+
+                    $("#code").val(code);
+                    $("#name").val(name);
+                    $("#changeRatio").val(changeRatio);
+                    $("#lastPrice").val(lastPrice);
+                    $("#amount").val(amount);
+                    $("#turnoverRatio").val(turnoverRatio);
+                    $("#firstCeilingTime").val(firstCeilingTime);
+                    $("#lastCeilingTime").val(lastCeilingTime);
+                    $("#bombNum").val(bombNum);
+                    $("#lbNum").val(lbNum);
+                    $("#industry").val(industry);
+                    $("#time").val(time);
+                    $("#gl").val(gl);
+
+                }
+            }
+        })
+
+    });
+
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+
+    function cancel() {
+        window.location.href = "ztpool.html";
+    }
+
+    function convertTime(inputTime) {
+        // 确保输入是字符串
+        inputTime = inputTime.toString();
+
+        // 提取小时、分钟和秒
+        var hours = inputTime.substring(0, 2);
+        var minutes = inputTime.substring(2, 4);
+        var seconds = inputTime.substring(4, 6);
+
+        // 构建时间字符串
+        var timeString = hours + ":" + minutes + ":" + seconds;
+
+        return timeString;
+    }
+
+</script>
+</body>
+</html>

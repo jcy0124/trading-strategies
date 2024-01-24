@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>新增价格预警</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/layui/css/layui.css" rel="stylesheet">
+    <style type="text/css">
+        .container {
+            padding: 20px;
+        }
+
+        .search {
+            padding-bottom: 20px;
+            border-bottom: 1.5px solid #ddd;
+        }
+
+        #add {
+            margin-right: 5em;
+        }
+
+        #search {
+            margin-left: 0.5em;
+        }
+
+        .pagination {
+            display: flex;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .pagination > li:last-child > a, .pagination > li:last-child > span {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .pagination > li:first-child > a, .pagination > li:first-child > span {
+            margin-left: 0;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .pagination > li > a, .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<form>
+    <div class="mb-3">
+        <label for="userName" class="form-label">用户名称</label>
+        <input type="text" class="form-control" id="userName" readonly="readonly" value="3w小姜">
+    </div>
+    <div class="mb-3">
+        <label for="code" class="form-label">股票代码</label><span class="required-red" style="color:red">*</span>
+        <input type="text" maxlength="6" class="form-control" id="code" required="required" pattern="^\\d{6}$"
+               onchange="findnameandprice()">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">股票名称</label>
+        <input type="text" class="form-control" id="name">
+    </div>
+
+    <div class="mb-3">
+        <label for="time" class="form-label">日期</label><span class="required-red" style="color:red">*</span>
+        <input id="time" type="text" class="layui-input laydate">
+    </div>
+
+    <div class="mb-3" style="display: none" id="c1">
+        <label for="codeStatus" class="form-label">操作</label><span class="required-red" style="color:red">*</span>
+        <select class="form-control" aria-label="操作" id="codeStatus" required="required">
+            <option selected value="">--- 请选择 ---</option>
+            <option value="1">买入</option>
+            <option value="2">持有</option>
+            <option value="3">卖出</option>
+        </select>
+    </div>
+
+    <div class="mb-3" style="display: none" id="b1">
+        <label for="buyPrice" class="form-label">买入价格</label>
+        <input type="number" class="form-control" id="buyPrice">
+    </div>
+
+    <div class="mb-3" style="display: none" id="b2">
+        <label for="stockNumber" class="form-label">买入数量</label>
+        <input type="number" class="form-control" id="stockNumber">
+    </div>
+
+    <div class="mb-3" style="display: none" id="b3">
+        <label for="lossPoint" class="form-label">止损点位</label>
+        <input type="number" class="form-control" id="lossPoint">
+    </div>
+
+    <div class="mb-3" style="display: none" id="s1">
+        <label for="sellPrice" class="form-label">卖出价格</label>
+        <input type="number" class="form-control" id="sellPrice">
+    </div>
+
+    <div class="mb-3" style="display: none" id="s2">
+        <label for="sellStockNumber" class="form-label">卖出数量</label>
+        <input type="number" class="form-control" id="sellStockNumber">
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="add()">保存</button>
+    <button type="button" class="btn btn-primary" onclick="cancel()">取消</button>
+
+</form>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+<script src="../../static/js/bootstrap-paginator.js"></script>
+<script src="../../static/layui/layui.js"></script>
+
+<script type="text/javascript">
+    //var ctx = $("#ctx").val();
+    var ctx = "http://localhost:8080";
+
+    $("#codeStatus").on("change", function () {
+        $("#b1").attr("style", "display:none;");
+        $("#b2").attr("style", "display:none;");
+        $("#b3").attr("style", "display:none;");
+        $("#s1").attr("style", "display:none;");
+        $("#s2").attr("style", "display:none;");
+
+        var codeStatus = $("#codeStatus").val();
+        if (codeStatus === "1") {
+            $("#b1").attr("style", "display:block;");
+            $("#b2").attr("style", "display:block;");
+            $("#b3").attr("style", "display:block;");
+        }
+        if (codeStatus === "3") {
+            $("#s1").attr("style", "display:block;");
+            $("#s2").attr("style", "display:block;");
+        }
+    })
+
+    layui.use(function () {
+        var laydate = layui.laydate;
+        // 单个渲染
+        laydate.render({
+            elem: document.getElementById('time'),
+            value: getTodayDate(),
+            calendar: true,
+            max: maxDate(),
+            min: '2023-01-01',
+            theme: '#393D49',
+
+        });
+    });
+
+    function getTodayDate() {
+        var today = new Date();
+        var yyyy = today.getFullYear();
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var dd = String(today.getDate()).padStart(2, '0');
+
+        return yyyy + '-' + mm + '-' + dd;
+    }
+
+    // 设置最大可选的日期
+    function maxDate() {
+        var now = new Date();
+        return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+    }
+
+    $(function () {
+    });
+
+    function findnameandprice() {
+        var code = $("#code").val();
+        $("#name").val("");
+        $("#b1").attr("style", "display:none;");
+        $("#b2").attr("style", "display:none;");
+        $("#b3").attr("style", "display:none;");
+        $("#s1").attr("style", "display:none;");
+        $("#s2").attr("style", "display:none;");
+        $("#c1").attr("style", "display:none;");
+
+        if (code.length === 6) {
+
+            var loading = layer.msg('Loading...', {
+                icon: 16
+                , shade: 0.01
+                , time: 10000
+            });
+
+            $.ajax({
+                url: ctx + "/pricewarning/web/findkline",
+                type: "post",
+                data: {
+                    "code": code,
+                },
+                dataType: "json",
+                success: function (response) {
+                    layer.close(loading);
+                    if (response.code === 200) {
+                        var name = response.data.name;
+                        $("#name").val(name)
+                        $("#c1").attr("style", "display:block;");
+                    } else {
+                        $("#name").val("")
+                    }
+                }
+            })
+        }
+    }
+
+    function cancel() {
+        window.location.href = "usertradeinfo.html";
+    }
+
+    function add() {
+        var userName = $("#userName").val();
+        var code = $("#code").val();
+        var date = $("#time").val();
+        var codeStatus = $("#codeStatus").val();
+        if (codeStatus == '') {
+            layer.msg('操作状态不能为空' + response.message, {icon: 0, time: 1000});
+        }
+        var buyPrice = $("#buyPrice").val();
+        var sellPrice = $("#sellPrice").val();
+
+
+        var stockNumber = '';
+        if (codeStatus === "1"){
+             stockNumber = $("#stockNumber").val();
+        }else if (codeStatus === "3"){
+             stockNumber = $("#sellStockNumber").val();
+        }
+
+        var lossPoint = $("#lossPoint").val();
+
+        $.ajax({
+            url: ctx + "/userinfo/web/add",
+            type: "post",
+            data: JSON.stringify({
+                "userName": userName,
+                "code": code,
+                "date": date,
+                "codeStatus": codeStatus,
+                "buyPrice": buyPrice,
+                "sellPrice": sellPrice,
+                "stockNumber": stockNumber,
+                "lossPoint": lossPoint,
+            }),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                if (response.code === 200) {
+                    layer.msg('保存成功', {icon: 1, time: 1000});
+                    window.location.href = "usertradeinfo.html";
+                } else {
+                    layer.msg('保存失败：' + response.message, {icon: 2, time: 1000});
+                }
+            }
+        })
+    }
+
+
+</script>
+</body>
+</html>

@@ -14,6 +14,9 @@ import java.math.BigDecimal;
 @ToString
 public class PriceWarningReq {
 
+
+    private String id;
+
     @ApiModelProperty(name = "股票代码",required = true)
     @NotBlank(message = "股票代码不能为空")
     @Pattern(regexp = BaseConstant.CODE_REGEX, message = "请正确输入六位股票代码")
@@ -27,6 +30,8 @@ public class PriceWarningReq {
 
     @ApiModelProperty(name = "原因",required = false)
     private String reason;
+
+    private BigDecimal current;
 }
 
 
