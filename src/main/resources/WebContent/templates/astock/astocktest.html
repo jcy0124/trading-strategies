@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>价格预警列表</title>
+    <title>A股列表</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../static/layui/css/layui.css" rel="stylesheet">
 
@@ -72,72 +72,104 @@
     <input type="text" id="ctx" hidden="hidden" th:value="${#request.getContextPath()}">
     <div class="search">
         <div class="input-group col-md-8">
-
-            <button class="layui-btn" type="button" id="add"
-                    onclick="window.location.href='addpricewarning.html'">
-                新增
+            <button class="layui-btn" type="button" id="add">
+                同步
             </button>
-
             <input class="form-control" type="text" id="name" placeholder="请输入股票名称">
-
-            <select class="form-select" aria-label="是否提示" id="isAlert">
-                <option selected value="">--- 是否提示 ---</option>
-                <option value="0">否</option>
-                <option value="1">是</option>
-            </select>
-
             <span class="input-group-btn">
 					<button class="layui-btn layui-btn-radius layui-btn-primary layui-border-blue" type="button" id="search">查询</button>
 			</span>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet">
-                <div class="category-list">
-                    <table class="table table-striped table-hover" id="dataTable">
-                        <thead>
-                        <tr>
-                            <th>创建时间</th>
-                            <th>股票代码</th>
-                            <th>股票名称</th>
-                            <th>当前价格</th>
-                            <th>预警价格</th>
-                            <th>原因</th>
-                            <th>是否预警</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <table class="layui-hide" id="table"></table>
+    <script type="text/html" id="ID-table-demo-page-pagebar">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn1">底部按钮1</button>
+            <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn2">底部按钮2</button>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8" align="center" style="position: fixed; bottom: 20%;">
-            <!-- 分页控件，标签必须是<ul> -->
-            <ul id="pageButton" class="pagination-centered"></ul>
-        </div>
-    </div>
 </div>
 
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
 <script src="../../static/js/bootstrap-paginator.js"></script>
 <script src="../../static/layui/layui.js"></script>
-<script src="../../static/js/moment.js"></script>
-
 
 <script type="text/javascript">
+
+    layui.use('table', function(){
+        var table = layui.table;
+
+        // 创建渲染实例
+        table.render({
+            elem: '#table',
+            url:'http://localhost:8080/astock/page', // 此处为静态模拟数据，实际使用时需换成真实接口
+            cols: [[
+                {field:'id', width:150, title: '序号'},
+                {field:'code', width:150, title: '股票代码'},
+                {field:'name', width:150, title: '股票名称'},
+            ]],
+
+            request: {
+                pageName: 'page',//自定义后台接收参数的名字（页码）
+                limitName: 'size' //自定义后台接收参数的名字（每页条数）
+            },
+
+            page: { // 支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
+                curr: 1, //设定初始在第 1 页
+                groups: 1, //只显示 1 个连续页码
+                first: false, //不显示首页
+                last: false //不显示尾页
+            },
+            pagebar: '#ID-table-demo-page-pagebar', // 分页栏模板
+
+        });
+        // 底部分页栏事件
+        table.on('pagebar(table)', function(obj){
+            var eventValue = obj.event; // 获得按钮 lay-event 值
+            layer.msg(eventValue);
+        });
+    });
+
     //var ctx = $("#ctx").val();
     var ctx = "http://localhost:8080";
+
+    function detail(code){
+        window.location.href = 'astockdetail.html?code=' + code;
+    }
+
     $(function () {
         // 查询第一页数据
         getPage(1);
 
+        // 同步
+        $("#add").click(function () {
+
+            var loading = parent.layer.msg('Loading...', {
+                icon: 16
+                , shade: 0.01
+                , time: 10000
+            });
+
+            $.ajax({
+                url: ctx + "/astock/getall",
+                type: "post",
+                data: {},
+                dataType: "json",
+                success: function (response) {
+                    layer.close(loading);
+                    if (response.code == 200){
+                        parent.layer.msg('操作成功', {icon: 1, time: 1000});
+                        $("#dataTable tbody").empty();
+                        getPage(1);
+                    }else {
+                        parent.layer.msg('操作失败：'+response.message, {icon: 2, time: 1000});
+                    }
+                }
+            })
+
+        });
 
         // 搜索
         $("#search").click(function () {
@@ -145,20 +177,14 @@
         });
     });
 
-
-    setInterval(() => {
-        getPage(1)
-    }, 10000);
-
     // 获取指定页码的数据
     function getPage(pageNo) {
         var dataRow = "";
         $.ajax({
-                url: ctx + "/pricewarning/web/page",
+                url: ctx + "/astock/web/page",
                 type: "post",
                 data: {
                     "name": $("#name").val(),
-                    "isAlert": $("#isAlert").val(),
                     "page": pageNo
                 },
                 dataType: "json",
@@ -166,33 +192,19 @@
                     dataRow = "";
                     if (response.data.records.length > 0) {
                         $.each(response.data.records, function (i, r) {
-                            dataRow
-                                += '<tr><td>'
-                                + r.time
-                                + '</td><td>'
+                            dataRow += '<tr>'
+                                + '<td>'
+                                + r.id
+                                + '</td>'
+                                + '<td>'
                                 + r.code
                                 + '</td><td>'
                                 + r.name
-                                + '</td><td>'
-                                + r.current
-                                + '</td><td>'
-                                + r.priceLimitWarning
-                                + '</td><td>'
-                                + r.reason
-                                + '</td>';
-
-                            if (r.isAlert === "1") {
-                                dataRow += '<td>是</td>'
-                            }
-                            if (r.isAlert === "0") {
-                                dataRow += '<td>否</td>'
-                            }
-
-
+                                + '</td>'
                             ;
 
-                            dataRow += '<td><a href="javascript:edit(' + r.id + ')" style="color: blue;">编辑' +
-                                '</a>&nbsp;&nbsp;<a href="javascript:remove(' + r.id + ',' + pageNo + ')" style="color: red;">删除</a></td></tr>';
+                                  dataRow += '<td><a href="javascript:detail(' + r.code + ')" style="color: blue;">查看' +
+                                      '</td></tr>';
                         });
                     }
 
@@ -232,25 +244,7 @@
         )
     }
 
-    function edit(id) {
-        window.location.href = 'editpricewarning.html?id=' + id;
-    }
 
-    function remove(id, pageNo) {
-        $.ajax({
-            url: "http://localhost:8080/pricewarning/web/delete",
-            type: "post",
-            data: {
-                "id": id
-            },
-            dataType: "json",
-            success: function (response) {
-                if (response.code === 200) {
-                    getPage(pageNo)
-                }
-            }
-        })
-    }
 </script>
 </body>
 </html>

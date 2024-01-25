@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedWriter;
@@ -117,6 +119,22 @@ public class QuantitativeStrategiesController {
                 }
             }
         });
+
+        return Result.ok(resp);
+    }
+
+    @PostMapping("/web/quantitativeStrategiesV1")
+    @DateValid(afterTime = TimeConstant.HALF_PAST_THREE)
+    @ApiOperation(value = "涨停双响炮策略")
+    public Result webQuantitativeStrategiesV1(@RequestParam String date) {
+
+        List<CommonDto> commonDtoList = quantitativeStrategiesV1Service.quantitativeStrategiesV1(date);
+
+        if (CollectionUtil.isEmpty(commonDtoList)) {
+            return Result.ok(ResultEnum.NO_TODAY_DATA);
+        }
+
+        List<CommonResp> resp = BeanUtil.copyToList(commonDtoList, CommonResp.class);
 
         return Result.ok(resp);
     }

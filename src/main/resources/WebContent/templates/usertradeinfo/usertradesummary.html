@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>新增价格预警</title>
+    <title>查看用户交易信息</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../static/layui/css/layui.css" rel="stylesheet">
     <style type="text/css">
@@ -70,33 +70,27 @@
 
 <form>
     <div class="mb-3">
-        <label for="code" class="form-label">股票代码</label><span class="required-red" style="color:red">*</span>
-        <input type="text" maxlength="6" class="form-control" id="code" required="required" pattern="^\\d{6}$"
-               onchange="findnameandprice()">
-    </div>
-    <div class="mb-3">
         <label for="name" class="form-label">股票名称</label>
-        <input type="text" class="form-control" id="name">
+        <input type="text" class="form-control" id="name" readonly="readonly">
     </div>
 
     <div class="mb-3">
-        <label for="name" class="form-label">当前价位</label>
-        <input type="text" class="form-control" id="current" readonly="readonly">
+        <label for="codeStatus" class="form-label">操作</label>
+        <input type="text" class="form-control" id="codeStatus" readonly="readonly">
     </div>
 
     <div class="mb-3">
-        <label for="priceLimitWarning" class="form-label">预警价位</label><span class="required-red"
-                                                                                style="color:red">*</span>
-        <input type="text" class="form-control" id="priceLimitWarning" required="required">
+        <label for="date" class="form-label">日期</label>
+        <input type="text" class="form-control" id="date" readonly="readonly">
     </div>
 
     <div class="mb-3">
-        <label for="reason" class="form-label">原因</label>
-        <input type="text" class="form-control" id="reason">
+        <label for="summary" class="form-label">总结</label>
+        <textarea  class="layui-textarea" id="summary" ></textarea>
     </div>
 
     <button type="button" class="btn btn-primary" onclick="add()">保存</button>
-    <button type="button" class="btn btn-primary" onclick="cancel()">取消</button>
+    <button type="button" class="btn btn-primary" onclick="cancel()">返回</button>
 
 </form>
 
@@ -108,78 +102,81 @@
 <script type="text/javascript">
     //var ctx = $("#ctx").val();
     var ctx = "http://localhost:8080";
+
     $(function () {
-    });
 
-    function findnameandprice() {
-        var code = $("#code").val();
-
-        if (code.length === 6) {
-
-            var loading = parent.layer.msg('Loading...', {
-                icon: 16
-                , shade: 0.01
-                , time: 10000
-            });
-
-            $.ajax({
-                url: ctx + "/pricewarning/web/findkline",
-                type: "post",
-                data: {
-                    "code": code,
-                },
-                dataType: "json",
-                success: function (response) {
-                    parent.layer.close(loading);
-                    if (response.code === 200) {
-                        var name = response.data.name;
-                        var current = response.data.current;
-                        $("#name").val(name)
-                        $("#current").val(current)
-                    } else {
-                        $("#name").val("")
-                        $("#current").val("")
-                    }
-                }
-            })
-        }
-    }
-
-    function cancel() {
-        window.location.href = "pricewarning.html";
-    }
-
-    function add() {
-        var code = $("#code").val();
-        var name = $("#name").val();
-        var priceLimitWarning = $("#priceLimitWarning").val();
-        var reason = $("#reason").val();
-        var current = $("#current").val();
+        var id = GetRequest().id;
 
         $.ajax({
-            url: ctx + "/pricewarning/web/add",
+            url: ctx + "/userinfo/web/getbyid",
             type: "post",
-            data: JSON.stringify({
-                "code": code,
-                "name": name,
-                "priceLimitWarning": priceLimitWarning,
-                "reason": reason,
-                "current": current
-            }),
-            contentType: "application/json",
+            data: {
+                "id": id,
+            },
             dataType: "json",
             success: function (response) {
                 if (response.code === 200) {
-                    layer.msg('保存成功', {icon: 1, time: 1000});
-                    window.location.href = "pricewarning.html";
-                }else {
-                    layer.msg('保存失败：'+response.message, {icon: 2, time: 1000});
+                    var name = response.data.name;
+                    var date = response.data.date;
+                    var codeStatus = response.data.codeStatus;
+                    var summary = response.data.summary;
+
+                    if (codeStatus === "1") {
+                        codeStatus = "买入"
+                    } else if (codeStatus === "2") {
+                        codeStatus = "持有"
+                    } else if (codeStatus === "3") {
+                        codeStatus = "卖出"
+                    }
+
+                    $("#name").val(name);
+                    $("#date").val(date);
+                    $("#codeStatus").val(codeStatus);
+                    $("#summary").val(summary);
+
+                }
+            }
+        })
+
+    });
+
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+
+    function cancel() {
+        window.location.href = "usertradeinfo.html";
+    }
+
+    function add() {
+        var summary = $("#summary").val();
+
+        $.ajax({
+            url: ctx + "/usersummary/web/update",
+            type: "post",
+            data: {
+                "userTradeInfoId": GetRequest().id,
+                "summary": summary,
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.code === 200) {
+                    parent.layer.msg('保存成功', {icon: 1, time: 1000});
+                } else {
+                    parent.layer.msg('保存失败：' + response.message, {icon: 2, time: 1000});
                 }
             }
         })
     }
-
-
 </script>
 </body>
 </html>

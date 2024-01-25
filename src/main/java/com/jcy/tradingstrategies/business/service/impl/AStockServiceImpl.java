@@ -89,6 +89,13 @@ public class AStockServiceImpl implements IAStockService {
 
         return aStockDao.selectPage(pageInfo, lqw);
     }
+
+    @Override
+    public AStockEntity getByCode(String code) {
+        LambdaQueryWrapper<AStockEntity> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(AStockEntity::getCode,code);
+        return aStockDao.selectOne(lqw);
+    }
 }
 
 

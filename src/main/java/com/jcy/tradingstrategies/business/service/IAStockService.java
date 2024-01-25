@@ -15,4 +15,6 @@ public interface IAStockService {
     Map<String, String> selectNameByCodeList(List<String> codeList);
 
     IPage<AStockEntity> page(Map<String, String> map);
+
+    AStockEntity getByCode(String code);
 }

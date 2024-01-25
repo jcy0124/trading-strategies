@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>新增价格预警</title>
+    <title>新增用户交易信息</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../static/layui/css/layui.css" rel="stylesheet">
     <style type="text/css">
@@ -201,7 +201,7 @@
 
         if (code.length === 6) {
 
-            var loading = layer.msg('Loading...', {
+            var loading = parent.layer.msg('Loading...', {
                 icon: 16
                 , shade: 0.01
                 , time: 10000
@@ -215,7 +215,7 @@
                 },
                 dataType: "json",
                 success: function (response) {
-                    layer.close(loading);
+                    parent.layer.close(loading);
                     if (response.code === 200) {
                         var name = response.data.name;
                         $("#name").val(name)
@@ -245,10 +245,10 @@
 
 
         var stockNumber = '';
-        if (codeStatus === "1"){
-             stockNumber = $("#stockNumber").val();
-        }else if (codeStatus === "3"){
-             stockNumber = $("#sellStockNumber").val();
+        if (codeStatus === "1") {
+            stockNumber = $("#stockNumber").val();
+        } else if (codeStatus === "3") {
+            stockNumber = $("#sellStockNumber").val();
         }
 
         var lossPoint = $("#lossPoint").val();
@@ -270,10 +270,10 @@
             dataType: "json",
             success: function (response) {
                 if (response.code === 200) {
-                    layer.msg('保存成功', {icon: 1, time: 1000});
+                    parent.layer.msg('保存成功', {icon: 1, time: 1000});
                     window.location.href = "usertradeinfo.html";
                 } else {
-                    layer.msg('保存失败：' + response.message, {icon: 2, time: 1000});
+                    parent.layer.msg('保存失败：' + response.message, {icon: 2, time: 1000});
                 }
             }
         })

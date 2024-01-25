@@ -1,9 +1,11 @@
 package com.jcy.tradingstrategies.business.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.jcy.tradingstrategies.business.domain.dto.SSGPDto;
 import com.jcy.tradingstrategies.business.domain.entity.AStockEntity;
 import com.jcy.tradingstrategies.business.service.IAStockService;
 import com.jcy.tradingstrategies.business.service.IBaseService;
+import com.jcy.tradingstrategies.business.service.IWudangService;
 import com.jcy.tradingstrategies.common.base.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +32,10 @@ public class AStockController {
     @Autowired
     private IBaseService baseService;
 
+    @Autowired
+    private IWudangService wudangService;
+
+
     @PostMapping("getall")
     @ApiOperation(value = "http同步全量a股市场股票")
     public Result getAllAStock() {
@@ -54,6 +60,29 @@ public class AStockController {
         return Result.ok(result);
     }
 
+    @PostMapping("/web/getbycode")
+    @ApiOperation(value = "获取全量a股市场股票")
+    public Result getByCode(@RequestParam String code) {
+
+        log.info("开始获取全部a股市场股票");
+
+        AStockEntity result = aStockService.getByCode(code);
+
+        log.info("结束获取全部a股市场股票");
+        return Result.ok(result);
+    }
+
+    @PostMapping("/web/current")
+    @ApiOperation(value = "获取全量a股市场股票")
+    public Result current(@RequestParam String code) {
+
+        log.info("开始获取全部a股市场股票");
+
+        SSGPDto ssgp = wudangService.getSSGP(code);
+
+        log.info("结束获取全部a股市场股票");
+        return Result.ok(ssgp);
+    }
 }
 
 

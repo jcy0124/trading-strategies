@@ -72,12 +72,13 @@
     <input type="text" id="ctx" hidden="hidden" th:value="${#request.getContextPath()}">
     <div class="search">
         <div class="input-group col-md-8">
-            <button class="btn btn-success" type="button" id="add">
+            <button class="layui-btn" type="button" id="add">
                 同步
             </button>
             <input class="form-control" type="text" id="name" placeholder="请输入股票名称">
             <span class="input-group-btn">
-					<button class="btn btn-primary" type="button" id="search">查询</button>
+					<button class="layui-btn layui-btn-radius layui-btn-primary layui-border-blue" type="button"
+                            id="search">查询</button>
 			</span>
         </div>
     </div>
@@ -119,6 +120,11 @@
 <script type="text/javascript">
     //var ctx = $("#ctx").val();
     var ctx = "http://localhost:8080";
+
+    function detail(code, name) {
+        window.location.href = 'astockdetail.html?code=' + code + '&name=' + name;
+    }
+
     $(function () {
         // 查询第一页数据
         getPage(1);
@@ -126,7 +132,7 @@
         // 同步
         $("#add").click(function () {
 
-            var loading = layer.msg('Loading...', {
+            var loading = parent.layer.msg('Loading...', {
                 icon: 16
                 , shade: 0.01
                 , time: 10000
@@ -139,12 +145,12 @@
                 dataType: "json",
                 success: function (response) {
                     layer.close(loading);
-                    if (response.code == 200){
-                        layer.msg('操作成功'+response.message, {icon: 1, time: 1000});
+                    if (response.code == 200) {
+                        parent.layer.msg('操作成功', {icon: 1, time: 1000});
                         $("#dataTable tbody").empty();
                         getPage(1);
-                    }else {
-                        layer.msg('操作失败：'+response.message, {icon: 2, time: 1000});
+                    } else {
+                        parent.layer.msg('操作失败：' + response.message, {icon: 2, time: 1000});
                     }
                 }
             })
@@ -180,13 +186,12 @@
                                 + r.code
                                 + '</td><td>'
                                 + r.name
-                                /*   + '</td><td>'
-                                   +  r.gl*/
-                                + '</td></tr>'
+                                + '</td>'
                             ;
 
-                            /*      dataRow += '<td>' + new Date(r.createTime).Format("yyyy-MM-dd hh:mm:ss") + '</td><td><a href="javascript:remove(' + r.id + ')" style="color: #CA0C16;">删除' +
-                                      '</a>&nbsp;&nbsp;<a href="javascript:edit(' + r.id + ')">编辑</a></td></tr>';*/
+                            dataRow += '<td><a href="javascript:void(0)" onclick=detail("' + r.code + '","' + r.name + '") style="color: blue;">查看' +
+
+                                '</td></tr>';
                         });
                     }
 

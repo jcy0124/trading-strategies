@@ -2,6 +2,7 @@ package com.jcy.tradingstrategies.business.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.jcy.tradingstrategies.business.domain.dto.UserTradeInfoDto;
 import com.jcy.tradingstrategies.business.domain.entity.UserTradeInfoEntity;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserInfoInsertReq;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserInfoUpdateReq;
@@ -73,6 +74,28 @@ public class UserInfoController {
         log.info("结束新增用户信息");
         return Result.ok(result);
     }
+
+    @PostMapping("web/getbyid")
+    @ApiOperation(value = "用户交易信息")
+    public Result getById(@RequestParam String id) {
+
+        log.info("开始查询用户信息");
+        UserTradeInfoDto result = userTradeInfoService.getById(id);
+        log.info("结束查询用户信息");
+        return Result.ok(result);
+    }
+
+
+    @PostMapping("web/delete")
+    @ApiOperation(value = "用户交易信息")
+    public Result delete(@RequestParam String id) {
+
+        log.info("开始删除用户信息");
+         userTradeInfoService.delete(id);
+        log.info("结束删除用户信息");
+        return Result.ok();
+    }
+
 
     @PostMapping("web/page")
     @ApiOperation(value = "查看用户交易信息")

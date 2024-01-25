@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcy.tradingstrategies.business.dao.UserSummaryDao">
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" >
+        insert into user_summary(user_trade_info_id,create_time) values (#{userTradeInfoId},now())
+    </insert>
+
+    <update id="updateSummary">
+       update user_summary set summary = #{summary} , update_time = now() where user_trade_info_id = #{userTradeInfoId}
+    </update>
+</mapper>
+

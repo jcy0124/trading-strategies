@@ -1,14 +1,17 @@
 package com.jcy.tradingstrategies.business.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jcy.tradingstrategies.business.dao.UserTradeInfoDao;
-import com.jcy.tradingstrategies.business.domain.entity.AStockEntity;
+import com.jcy.tradingstrategies.business.domain.dto.UserTradeInfoDto;
+import com.jcy.tradingstrategies.business.domain.entity.UserSummaryEntity;
 import com.jcy.tradingstrategies.business.domain.entity.UserTradeInfoEntity;
 import com.jcy.tradingstrategies.business.domain.vo.req.UserTradeInfoReq;
 import com.jcy.tradingstrategies.business.service.IAStockService;
+import com.jcy.tradingstrategies.business.service.IUserSummaryService;
 import com.jcy.tradingstrategies.business.service.IUserTradeInfoService;
 import com.jcy.tradingstrategies.business.service.pattern.usertrade.UserTradeInfoStrategy;
 import com.jcy.tradingstrategies.business.service.pattern.usertrade.UserTradeInfoStrategyHolder;
@@ -34,6 +37,9 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
 
     @Autowired
     private UserTradeInfoStrategyHolder userTradeInfoStrategyHolder;
+
+    @Autowired
+    private IUserSummaryService userSummaryService;
 
     @Override
     public List<UserTradeInfoEntity> getAll() {
@@ -62,9 +68,14 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
         Page<UserTradeInfoEntity> pageInfo = new Page<>(page, 10L);
         LambdaQueryWrapper<UserTradeInfoEntity> lqw = new LambdaQueryWrapper<>();
         lqw.orderByDesc(UserTradeInfoEntity::getId);
-        lqw.like(StrUtil.isNotBlank(name),UserTradeInfoEntity::getName,name);
-        lqw.eq(StrUtil.isNotBlank(codeStatus),UserTradeInfoEntity::getCodeStatus,codeStatus);
+        lqw.like(StrUtil.isNotBlank(name), UserTradeInfoEntity::getName, name);
+        lqw.eq(StrUtil.isNotBlank(codeStatus), UserTradeInfoEntity::getCodeStatus, codeStatus);
         return userTradeInfoDao.selectPage(pageInfo, lqw);
+    }
+
+    @Override
+    public void delete(String id) {
+        userTradeInfoDao.deleteById(id);
     }
 
     @Override
@@ -78,7 +89,23 @@ public class UserTradeInfoServiceImpl implements IUserTradeInfoService {
             return null;
         }
 
-        return userTradeInfoStrategy.addUserTradeInfo(req);
+        UserTradeInfoEntity userTradeInfoEntity = userTradeInfoStrategy.addUserTradeInfo(req);
+        userSummaryService.insert(userTradeInfoEntity.getId());
+
+        return userTradeInfoEntity;
+    }
+
+    @Override
+    public UserTradeInfoDto getById(String id) {
+        UserTradeInfoEntity userTradeInfoEntity = userTradeInfoDao.selectById(id);
+        UserSummaryEntity userSummaryEntity = userSummaryService.getByUserTradeId(id);
+        if (Objects.isNull(userSummaryEntity)){
+            userSummaryEntity = userSummaryService.insert(userTradeInfoEntity.getId());
+        }
+        UserTradeInfoDto userTradeInfoDto = BeanUtil.copyProperties(userTradeInfoEntity, UserTradeInfoDto.class);
+        userTradeInfoDto.setSummary(userSummaryEntity.getSummary());
+        return userTradeInfoDto;
+
     }
 }
 

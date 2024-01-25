@@ -72,13 +72,16 @@
     <input type="text" id="ctx" hidden="hidden" th:value="${#request.getContextPath()}">
     <div class="search">
         <div class="input-group col-md-8">
-            <button class="btn btn-success" type="button" id="add">
+            <button class="layui-btn " type="button" id="export" >
+                导出
+            </button>
+            <button class="layui-btn" type="button" id="add">
                 同步
             </button>
             <input class="form-control" type="text" id="name" placeholder="请输入股票名称">
             <input id="time" type="text" class="layui-input laydate" style="width:120px">
             <span class="input-group-btn">
-					<button class="btn btn-primary" type="button" id="search">查询</button>
+					<button class="layui-btn layui-btn-radius layui-btn-primary layui-border-blue" type="button" id="search">查询</button>
 			</span>
         </div>
     </div>
@@ -150,11 +153,15 @@
         // 查询第一页数据
         getPage(1);
 
+        $("#export").click(function (){
+
+        })
+
         // 同步
         $("#add").click(function () {
 
 
-            var loading = layer.msg('Loading...', {
+            var loading = parent.layer.msg('Loading...', {
                 icon: 16
                 , shade: 0.01
                 , time: 10000
@@ -171,11 +178,11 @@
                 success: function (response) {
                     layer.close(loading);
                     if (response.code == 200) {
-                        layer.msg('操作成功', {icon: 1, time: 1000});
+                        parent.layer.msg('操作成功', {icon: 1, time: 1000});
                         $("#dataTable tbody").empty();
                         getPage(1);
                     }else {
-                        layer.msg('操作失败：'+response.message, {icon: 2, time: 2000});
+                        parent.layer.msg('操作失败：'+response.message, {icon: 2, time: 2000});
                     }
                 }
             })

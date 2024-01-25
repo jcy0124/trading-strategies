@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>查看用户交易信息</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/layui/css/layui.css" rel="stylesheet">
+    <style type="text/css">
+        .container {
+            padding: 20px;
+        }
+
+        .search {
+            padding-bottom: 20px;
+            border-bottom: 1.5px solid #ddd;
+        }
+
+        #add {
+            margin-right: 5em;
+        }
+
+        #search {
+            margin-left: 0.5em;
+        }
+
+        .pagination {
+            display: flex;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .pagination > li:last-child > a, .pagination > li:last-child > span {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .pagination > li:first-child > a, .pagination > li:first-child > span {
+            margin-left: 0;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .pagination > li > a, .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<form>
+    <div class="mb-3">
+        <label for="userName" class="form-label">用户名称</label>
+        <input type="text" class="form-control" id="userName" readonly="readonly" value="3w小姜">
+    </div>
+    <div class="mb-3">
+        <label for="code" class="form-label">股票代码</label>
+        <input type="text" maxlength="6" class="form-control" id="code" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">股票名称</label>
+        <input type="text" class="form-control" id="name" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="codeStatus" class="form-label">操作</label>
+        <input type="text" class="form-control" id="codeStatus" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="date" class="form-label">日期</label>
+        <input type="text" class="form-control" id="date" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="buyPrice" class="form-label">买入价格</label>
+        <input type="text" class="form-control" id="buyPrice" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="stockNumber" class="form-label">买入数量</label>
+        <input type="text" class="form-control" id="stockNumber" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="todayClosePrice" class="form-label">当日收盘价</label>
+        <input type="text" class="form-control" id="todayClosePrice" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="todayProfit" class="form-label">当日盈亏</label>
+        <input type="text" class="form-control" id="todayProfit" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="totalProfit" class="form-label">总盈亏</label>
+        <input type="text" class="form-control" id="totalProfit" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="lossPoint" class="form-label">止损价格</label>
+        <input type="text" class="form-control" id="lossPoint" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="lossRatio" class="form-label">止损点</label>
+        <input type="text" class="form-control" id="lossRatio" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="lossPrice" class="form-label">止损金额</label>
+        <input type="text" class="form-control" id="lossPrice" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="profitPoint" class="form-label">建议获利离场价格</label>
+        <input type="text" class="form-control" id="profitPoint" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="profitRatio" class="form-label">建议获利离场点</label>
+        <input type="text" class="form-control" id="profitRatio" readonly="readonly">
+    </div>
+
+    <div class="mb-3">
+        <label for="profitPrice" class="form-label">建议获利离场金额</label>
+        <input type="text" class="form-control" id="profitPrice" readonly="readonly">
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="cancel()">返回</button>
+
+</form>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+<script src="../../static/js/bootstrap-paginator.js"></script>
+<script src="../../static/layui/layui.js"></script>
+
+<script type="text/javascript">
+    //var ctx = $("#ctx").val();
+    var ctx = "http://localhost:8080";
+
+    $(function () {
+
+        var id = GetRequest().id;
+
+        $.ajax({
+            url: ctx + "/userinfo/web/getbyid",
+            type: "post",
+            data: {
+                "id": id,
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.code === 200) {
+                    var code = response.data.code;
+                    var name = response.data.name;
+                    var date = response.data.date;
+                    var codeStatus = response.data.codeStatus;
+                    if (codeStatus === "1") {
+                        codeStatus = "买入"
+                    } else if (codeStatus === "2") {
+                        codeStatus = "持有"
+                    } else if (codeStatus === "3") {
+                        codeStatus = "卖出"
+                    }
+
+                    var buyPrice = response.data.buyPrice;
+                    var todayClosePrice = response.data.todayClosePrice;
+                    var sellPrice = response.data.sellPrice;
+                    var stockNumber = response.data.stockNumber;
+                    var todayProfit = response.data.todayProfit;
+                    var totalProfit = response.data.totalProfit;
+                    var lossPoint = response.data.lossPoint;
+                    var lossRatio = response.data.lossRatio;
+                    var lossPrice = response.data.lossPrice;
+                    var profitPoint = response.data.profitPoint;
+                    var profitRatio = response.data.profitRatio;
+                    var profitPrice = response.data.profitPrice;
+                    $("#code").val(code);
+                    $("#name").val(name);
+                    $("#date").val(date);
+                    $("#codeStatus").val(codeStatus);
+                    $("#buyPrice").val(buyPrice);
+                    $("#todayClosePrice").val(todayClosePrice);
+                    $("#sellPrice").val(sellPrice);
+                    $("#stockNumber").val(stockNumber);
+                    $("#todayProfit").val(todayProfit);
+                    $("#totalProfit").val(totalProfit);
+                    $("#lossPoint").val(lossPoint);
+                    $("#lossRatio").val(lossRatio);
+                    $("#lossPrice").val(lossPrice);
+                    $("#profitPoint").val(profitPoint);
+                    $("#profitRatio").val(profitRatio);
+                    $("#profitPrice").val(profitPrice);
+                }
+            }
+        })
+
+    });
+
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+
+    function cancel() {
+        window.location.href = "usertradeinfo.html";
+    }
+
+</script>
+</body>
+</html>

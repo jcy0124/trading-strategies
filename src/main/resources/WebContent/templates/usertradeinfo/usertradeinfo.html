@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>用户交易信息列表</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/layui/css/layui.css" rel="stylesheet">
+
 
     <style type="text/css">
         .container {
@@ -71,7 +73,7 @@
     <input type="text" id="ctx" hidden="hidden" th:value="${#request.getContextPath()}">
     <div class="search">
         <div class="input-group col-md-8">
-            <button class="btn btn-success" type="button" id="add"
+            <button class="layui-btn"  type="button" id="add"
                     onclick="window.location.href='addusertradeinfo.html'">
                 新增
             </button>
@@ -85,7 +87,7 @@
             </select>
 
             <span class="input-group-btn">
-					<button class="btn btn-primary" type="button" id="search">查询</button>
+					<button class="layui-btn layui-btn-radius layui-btn-primary layui-border-blue" type="button" id="search">查询</button>
 			</span>
         </div>
     </div>
@@ -125,6 +127,8 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
 <script src="../../static/js/bootstrap-paginator.js"></script>
+<script src="../../static/layui/layui.js"></script>
+
 
 <script type="text/javascript">
     //var ctx = $("#ctx").val();
@@ -189,7 +193,9 @@
                             }
                             ;
 
-                            dataRow += '<td><a href="javascript:edit(' + r.id + ')" style="color: blue;">编辑' +
+                            dataRow += '<td><a href="javascript:summary(' + r.id + ')" style="color: blue;">总结' +
+                                '</a>&nbsp;&nbsp;<a href="javascript:detail(' + r.id + ')" style="color: blue;">查看' +
+                                '</a>&nbsp;&nbsp;<a href="javascript:edit(' + r.id + ')" style="color: blue;">编辑' +
                                 '</a>&nbsp;&nbsp;<a href="javascript:remove(' + r.id + ',' + pageNo + ')" style="color: red;">删除</a></td></tr>';
                         });
                     }
@@ -230,20 +236,31 @@
         )
     }
 
+    function detail(id){
+        window.location.href = 'detailusertradeinfo.html?id=' + id;
+    }
+
+    function summary(id){
+        window.location.href = 'usertradesummary.html?id=' + id;
+
+    }
+
     function remove(id, pageNo) {
-        console.log(pageNo)
-        $.ajax({
-            url: "http://localhost:8080/pricewarning/web/delete",
-            type: "post",
-            data: {
-                "id": id
-            },
-            dataType: "json",
-            success: function (response) {
-                if (response.code === 200) {
-                    getPage(pageNo)
+        parent.layer.confirm('确认删除？', function (index) {
+            $.ajax({
+                url: "http://localhost:8080/userinfo/web/delete",
+                type: "post",
+                data: {
+                    "id": id
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.code === 200) {
+                        parent.layer.close(index);
+                        getPage(pageNo)
+                    }
                 }
-            }
+            })
         })
     }
 
