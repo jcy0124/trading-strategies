@@ -147,7 +147,21 @@
 
 
     setInterval(() => {
+        moment.locale('zh-cn');         // zh-cn
+
+        var startTimeN = moment('09:30:00', 'HH:mm:ss');
+        var endTimeN = moment('11:30:00', 'HH:mm:ss');
+
+        var startTimeA = moment('13:00:00', 'HH:mm:ss');
+        var endTimeA = moment('14:55:00', 'HH:mm:ss');
+
+        var currentTime = moment();
+        var bool1 = currentTime.isBetween(startTimeN, endTimeN, null, '[]');
+        var bool2 = currentTime.isBetween(startTimeA, endTimeA, null, '[]');
+
+        if (bool1 || bool2){
         getPage(1)
+        }
     }, 10000);
 
     // 获取指定页码的数据

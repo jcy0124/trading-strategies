@@ -229,6 +229,7 @@
                             ;
 
                                dataRow += '<td><a href="javascript:detail(' + r.id + ')" style="color: blue;">详情' +
+                                   '</a>&nbsp;&nbsp;<a href="javascript:void(0)" onclick=today("' + r.code + '","' + r.name + '") style="color: blue">查看'+
                                       '</a>&nbsp;&nbsp;<a href="javascript:warning(' + r.id + ')" style="color: red">预警</a></td></tr>';
                         });
                     }
@@ -286,6 +287,9 @@
         window.location.href = 'ztpoolpricewarning.html?id=' + id;
     }
 
+    function today(code, name) {
+        window.location.href = '../astock/astockdetail.html?code=' + code + '&name=' + name;
+    }
 
 
 </script>
