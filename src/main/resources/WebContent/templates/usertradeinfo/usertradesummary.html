@@ -8,6 +8,8 @@
     <title>查看用户交易信息</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../static/layui/css/layui.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/editor/css/editormd.min.css">
+    <link rel="stylesheet" href="../../static/editor/css/editormd.css">
     <style type="text/css">
         .container {
             padding: 20px;
@@ -84,10 +86,17 @@
         <input type="text" class="form-control" id="date" readonly="readonly">
     </div>
 
+    <!--    <div class="mb-3">-->
+    <!--        <label for="summary" class="form-label">总结</label>-->
+    <!--        <textarea  class="layui-textarea" id="summary" ></textarea>-->
+    <!--    </div>-->
     <div class="mb-3">
         <label for="summary" class="form-label">总结</label>
-        <textarea  class="layui-textarea" id="summary" ></textarea>
+        <div id="md-summary" style="z-index: 1 !important">
+            <textarea id="summary" name="content" placeholder="博客内容" style="display: none"></textarea>
+        </div>
     </div>
+
 
     <button type="button" class="btn btn-primary" onclick="add()">保存</button>
     <button type="button" class="btn btn-primary" onclick="cancel()">返回</button>
@@ -98,12 +107,45 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
 <script src="../../static/js/bootstrap-paginator.js"></script>
 <script src="../../static/layui/layui.js"></script>
+<script src="../../static/editor/editormd.min.js"></script>
 
 <script type="text/javascript">
     //var ctx = $("#ctx").val();
     var ctx = "http://localhost:8080";
 
+    // 初始化markdown编辑器
+    var contentEditor;
+    // $(function () {
+    //     //md-content必须和页面区域的最外层div的id相同
+    //     contentEditor = editormd("md-summary", {
+    //         // 在页面显示的宽度
+    //         width: "100%",
+    //         // 高度
+    //         height: 500,
+    //         // 单滚动条
+    //         syncScrolling: "single",
+    //         // lib资源的路径
+    //         path: "../../static/editor/lib/"
+    //     });
+    // });
+
+    function initEdit(){
+        contentEditor = editormd("md-summary", {
+            // 在页面显示的宽度
+            width: "100%",
+            // 高度
+            height: 500,
+            // 单滚动条
+            syncScrolling: "single",
+            // lib资源的路径
+            path: "../../static/editor/lib/"
+        });
+    }
+
+
     $(function () {
+
+        initEdit();
 
         var id = GetRequest().id;
 
