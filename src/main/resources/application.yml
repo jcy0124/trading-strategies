@@ -16,6 +16,11 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
+    static-path-pattern: /**
+
+  web:
+    resources:
+      static-locations: classpath:/WebContent/
 
 
 mybatis-plus:
