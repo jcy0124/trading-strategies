@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>查看用户交易信息</title>
-    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/bootstrap-4.6.2-dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../static/layui/css/layui.css" rel="stylesheet">
     <link rel="stylesheet" href="../../static/editor/css/editormd.min.css">
     <link rel="stylesheet" href="../../static/editor/css/editormd.css">
@@ -93,7 +93,7 @@
     <div class="mb-3">
         <label for="summary" class="form-label">总结</label>
         <div id="md-summary" style="z-index: 1 !important">
-            <textarea id="summary" name="content" placeholder="博客内容" style="display: none"></textarea>
+            <textarea id="summary" name="content" style="display: none"></textarea>
         </div>
     </div>
 
@@ -103,8 +103,8 @@
 
 </form>
 
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+<script src="../../static/js/jquery.min.js"></script>
+<script src="../../static/bootstrap-4.6.2-dist/js/bootstrap.min.js"></script>
 <script src="../../static/js/bootstrap-paginator.js"></script>
 <script src="../../static/layui/layui.js"></script>
 <script src="../../static/editor/editormd.min.js"></script>
@@ -115,31 +115,21 @@
 
     // 初始化markdown编辑器
     var contentEditor;
-    // $(function () {
-    //     //md-content必须和页面区域的最外层div的id相同
-    //     contentEditor = editormd("md-summary", {
-    //         // 在页面显示的宽度
-    //         width: "100%",
-    //         // 高度
-    //         height: 500,
-    //         // 单滚动条
-    //         syncScrolling: "single",
-    //         // lib资源的路径
-    //         path: "../../static/editor/lib/"
-    //     });
-    // });
 
-    function initEdit(){
+    function initEdit() {
         contentEditor = editormd("md-summary", {
             // 在页面显示的宽度
             width: "100%",
             // 高度
-            height: 500,
+            height: 400,
             // 单滚动条
             syncScrolling: "single",
             // lib资源的路径
-            path: "../../static/editor/lib/"
+            path: "../../static/editor/lib/",
+            emoji : true,
+
         });
+        // contentEditor.previewing();//预览效果
     }
 
 
@@ -147,38 +137,46 @@
 
         initEdit();
 
-        var id = GetRequest().id;
 
-        $.ajax({
-            url: ctx + "/userinfo/web/getbyid",
-            type: "post",
-            data: {
-                "id": id,
-            },
-            dataType: "json",
-            success: function (response) {
-                if (response.code === 200) {
-                    var name = response.data.name;
-                    var date = response.data.date;
-                    var codeStatus = response.data.codeStatus;
-                    var summary = response.data.summary;
+        setTimeout(function (){
+            var id = GetRequest().id;
+            $.ajax({
+                url: ctx + "/userinfo/web/getbyid",
+                type: "post",
+                data: {
+                    "id": id,
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.code === 200) {
+                        var name = response.data.name;
+                        var date = response.data.date;
+                        var codeStatus = response.data.codeStatus;
+                        var summary = response.data.summary;
 
-                    if (codeStatus === "1") {
-                        codeStatus = "买入"
-                    } else if (codeStatus === "2") {
-                        codeStatus = "持有"
-                    } else if (codeStatus === "3") {
-                        codeStatus = "卖出"
+                        if (codeStatus === "1") {
+                            codeStatus = "买入"
+                        } else if (codeStatus === "2") {
+                            codeStatus = "持有"
+                        } else if (codeStatus === "3") {
+                            codeStatus = "卖出"
+                        }
+
+                        $("#name").val(name);
+                        $("#date").val(date);
+                        $("#codeStatus").val(codeStatus);
+
+                        if (summary != null){
+                            contentEditor.setValue(summary);
+                        }
+                        // $("#summary").val(summary);
+
                     }
-
-                    $("#name").val(name);
-                    $("#date").val(date);
-                    $("#codeStatus").val(codeStatus);
-                    $("#summary").val(summary);
-
                 }
-            }
-        })
+            })
+        },100)
+
+
 
     });
 
