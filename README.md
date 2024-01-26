@@ -2,13 +2,14 @@
 
 # trading-strategies
 
-相关技术栈：jdk17，springboot，mybatis-plus，hutool，mysql，caffeine，线程池等。项目中所有技术点纯个人搭建，技术不复杂，以策略为主。
+相关技术栈：jdk17，springboot，mybatis-plus，mysql，bootstrap。
 
 其他具体量化策略相关接口以及交易策略目前暂时不提供，如果有兴趣，可以自己实现IQuantitativeStrategiesService，写自己的策略。
 
 由于token是付费获取，所以当前工程中没有提供token，如果想使用该工程，请联系微信。
 
 新增接口文档支持~：http://127.0.0.1:8080/doc.html#/home
+项目启动后前端页面访问地址~：http://127.0.0.1:8080/templates/index.html
 
 如有喜欢做交易志同道合的朋友可以加V：Jiangcy233
 
