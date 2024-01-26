@@ -174,9 +174,12 @@ public class ZTPoolServiceImpl implements IZTPoolService {
             time = calendarDateService.selectLastWorkDay(time);
         }
         String name = map.get("name");
+        String lbNum = map.get("lbNum");
         LambdaQueryWrapper<ZTPoolEntity> lqw = new LambdaQueryWrapper<>();
+
         lqw.eq(ZTPoolEntity::getTime, time);
         lqw.like(StrUtil.isNotBlank(name), ZTPoolEntity::getName, name);
+        lqw.eq(StrUtil.isNotBlank(lbNum),ZTPoolEntity::getLbNum,lbNum);
 
         Page<ZTPoolEntity> pageInfo = new Page<>(page, 10L);
 

@@ -79,6 +79,7 @@
                 同步
             </button>
             <input class="form-control" type="text" id="name" placeholder="请输入股票名称">
+            <input class="form-control" type="number" id="lbNum" placeholder="请输入连扳次数" min="1">
             <input id="time" type="text" class="layui-input laydate" style="width:120px">
             <span class="input-group-btn">
 					<button class="layui-btn layui-btn-radius layui-btn-primary layui-border-blue" type="button" id="search">查询</button>
@@ -204,6 +205,7 @@
                 data: {
                     "name": $("#name").val(),
                     "time": $("#time").val(),
+                    "lbNum":$("#lbNum").val(),
                     "page": pageNo
                 },
                 dataType: "json",
